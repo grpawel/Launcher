@@ -8,6 +8,10 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 SetCapsLockState, AlwaysOff
 
+
+#Include %A_ScriptDir%\src\Commands.ahk
+CreateCommands()
+
 ; #InstallKeybdHook
 
 ;-------------------------------------------------------
