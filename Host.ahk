@@ -23,7 +23,7 @@ return
 ;-------------------------------------------------------
 
 ; Load the GUI code
-#Include %A_ScriptDir%\GUI\GUI.ahk
+#Include %A_ScriptDir%\src\GuiLauncher.ahk
 
 ; General settings
-#Include %A_ScriptDir%\Miscellaneous\miscellaneous.ahk
+#Include %A_ScriptDir%\src\Utils.ahk

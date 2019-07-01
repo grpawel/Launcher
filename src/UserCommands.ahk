@@ -147,7 +147,7 @@ else if Pedersen = host ; Edit host script
 else if Pedersen = user ; Edit GUI user commands
 {
     gui_destroy()
-    run, notepad.exe "%A_ScriptDir%\GUI\UserCommands.ahk"
+    run, notepad.exe "%A_ScriptDir%\src\UserCommands.ahk"
 }
 
 
