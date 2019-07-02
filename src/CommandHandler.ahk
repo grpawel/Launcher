@@ -1,4 +1,4 @@
-﻿ResetCommands() {
+ResetCommands() {
     global Commands
     global currentList := Commands["topLevel"]
 
@@ -12,3 +12,17 @@ GetTitle() {
     }
     return title
 }
+
+RunCommand(input) {
+    global currentList
+    commands := currentList["commands"]
+    if (commands.HasKey(input)) {
+        command := commands[input]
+        action := command[1]
+        param := command[2]
+        %action%(param)
+        return "success"
+    }
+    return "not found"
+}
+

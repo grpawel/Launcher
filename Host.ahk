@@ -13,6 +13,8 @@ SetCapsLockState, AlwaysOff
 CreateCommands()
 
 #Include %A_ScriptDir%\src\CommandHandler.ahk
+#Include %A_ScriptDir%\src\CommonActions.ahk
+
 ; #InstallKeybdHook
 
 ;-------------------------------------------------------

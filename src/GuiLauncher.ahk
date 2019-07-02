@@ -1,4 +1,4 @@
-; Created by Asger Juul Brunshøj
+﻿; Created by Asger Juul Brunshøj
 
 ; Note: Save with encoding UTF-8 with BOM if possible.
 ; I had issues with special characters like in ¯\_(ツ)_/¯ that wouldn't work otherwise.
@@ -46,7 +46,7 @@ gui_spawn:
     }
 
     gui_state = main
-
+    ResetCommands()
     Gui, Margin, 16, 16
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
@@ -60,7 +60,7 @@ GuiAddInput() {
     title := GetTitle()
     Gui, Add, Text, %gui_control_options% vgui_main_title, %title%
     Gui, Font, s10, Segoe UI
-    Gui, Add, Edit, %gui_control_options% vPedersen gFindus
+    Gui, Add, Edit, %gui_control_options% vPedersen gInputCallback
     return
 }
 
@@ -73,8 +73,12 @@ GuiEscape:
     return
 
 ; The callback function when the text changes in the input field.
-Findus:
+InputCallback:
     Gui, Submit, NoHide
+    result := RunCommand(Pedersen)
+    if (result == "success") {
+        gui_destroy()
+    }
     #Include %A_ScriptDir%\src\UserCommands.ahk
     return
 
