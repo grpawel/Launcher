@@ -1,6 +1,6 @@
 ﻿ResetCommands() {
     global Commands
-    global currentList := Commands["topLevel"]
+    global currentList := Commands
     global previousInputs := []
 }
 
@@ -37,17 +37,5 @@ DefaultTitleFactory(previousCommands, currentList) {
 RunCommand(input) {
     global currentList
     global previousInputs
-    commands := currentList["commands"]
-    if (commands.HasKey(input)) {
-        command := commands[input]
-        action := command[1]
-        param := command[2]
-        previousInputs.Push({input: input, action: action, param: param})
-        result := %action%(param)
-        if (result == "") {
-            return [true, "found"]
-        }
-        return result
-    }
-    return [false, "not found"]
+    return currentList.Execute(input)
 }

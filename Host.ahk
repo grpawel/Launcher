@@ -1,4 +1,4 @@
-; Created by Asger Juul Brunshøj
+﻿; Created by Asger Juul Brunshøj
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
@@ -8,12 +8,14 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 SetCapsLockState, AlwaysOff
 
+#Include %A_ScriptDir%\src\Commands\CommandSet.ahk
 
 #Include %A_ScriptDir%\UserCommands.ahk
-CreateCommands()
+global Commands := CreateCommands()
 
 #Include %A_ScriptDir%\src\CommandHandler.ahk
 Initialize()
+
 #Include %A_ScriptDir%\src\CommonActions.ahk
 
 ; #InstallKeybdHook
