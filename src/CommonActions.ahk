@@ -1,4 +1,4 @@
-open(param) {
+﻿open(param) {
     run, %param%
 }
 

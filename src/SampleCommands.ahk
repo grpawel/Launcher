@@ -1,4 +1,4 @@
-CreateCommands() {
+﻿CreateCommands() {
     global Commands
     Commands := { topLevel: { title: "Enter anything"
                             , commands: { google: ["open", "http://google.com"]
