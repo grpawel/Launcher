@@ -51,12 +51,17 @@ gui_spawn:
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
     Gui, Font, s11, Segoe UI
-    Gui, Add, Text, %gui_control_options% vgui_main_title, ¯\_(ツ)_/¯
-    Gui, Font, s10, Segoe UI
-    Gui, Add, Edit, %gui_control_options% vPedersen gFindus
+    GuiAddInput()
     Gui, Show,, myGUI
     return
 
+GuiAddInput() {
+    global Gui
+    Gui, Add, Text, %gui_control_options%, v%title%, %title%
+    Gui, Font, s10, Segoe UI
+    Gui, Add, Edit, %gui_control_options% vPedersen gFindus
+    return
+}
 ;-------------------------------------------------------------------------------
 ; GUI FUNCTIONS AND SUBROUTINES
 ;-------------------------------------------------------------------------------
