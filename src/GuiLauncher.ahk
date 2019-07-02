@@ -1,4 +1,4 @@
-﻿; Created by Asger Juul Brunshøj
+; Created by Asger Juul Brunshøj
 
 ; Note: Save with encoding UTF-8 with BOM if possible.
 ; I had issues with special characters like in ¯\_(ツ)_/¯ that wouldn't work otherwise.
@@ -64,6 +64,13 @@ GuiAddInput() {
     return
 }
 
+GuiResetInput() {
+    global Gui
+    title := GetTitle()
+    GuiControl, Text, Pedersen, 
+    GuiControl, Text, gui_main_title, %title%
+}
+
 ;-------------------------------------------------------------------------------
 ; GUI FUNCTIONS AND SUBROUTINES
 ;-------------------------------------------------------------------------------
@@ -76,7 +83,7 @@ GuiEscape:
 InputCallback:
     Gui, Submit, NoHide
     result := RunCommand(Pedersen)
-    if (result == "success") {
+    if (result[1] == True) {
         gui_destroy()
     }
     #Include %A_ScriptDir%\src\UserCommands.ahk

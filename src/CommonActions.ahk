@@ -1,4 +1,4 @@
-﻿open(param) {
+open(param) {
     run, %param%
 }
 
@@ -10,6 +10,6 @@ enter(param) {
     global currentList
     global Commands
     currentList := Commands[param]
-    GuiAddInput()
-    return
+    GuiResetInput()
+    return [false, "next command"]
 }

@@ -20,9 +20,12 @@ RunCommand(input) {
         command := commands[input]
         action := command[1]
         param := command[2]
-        %action%(param)
-        return "success"
+        result := %action%(param)
+        if (result == "") {
+            return [true, "found"]
+        }
+        return result
     }
-    return "not found"
+    return [false, "not found"]
 }
 
