@@ -86,7 +86,7 @@ InputCallback:
     if (result[1] == True) {
         gui_destroy()
     }
-    #Include %A_ScriptDir%\src\UserCommands.ahk
+    #Include %A_ScriptDir%\UserCommands.ahk
     return
 
 ;
@@ -188,7 +188,7 @@ gui_commandlibrary:
     tooltiptext =
     maxpadding = 0
     StringCaseSense, Off ; Matching to both if/If in the IfInString command below
-    Loop, read, %A_ScriptDir%/src/UserCommands.ahk
+    Loop, read, %A_ScriptDir%\UserCommands.ahk
     {
         ; search for the string If Pedersen =, but search for each word individually because spacing between words might not be consistent. (might be improved with regex)
         If Substr(A_LoopReadLine, 1, 1) != ";" ; Do not display commented commands
