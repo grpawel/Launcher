@@ -1,4 +1,4 @@
-﻿; Created by Asger Juul Brunshøj
+; Created by Asger Juul Brunshøj
 
 ; Note: Save with encoding UTF-8 with BOM if possible.
 ; I had issues with special characters like in ¯\_(ツ)_/¯ that wouldn't work otherwise.
@@ -56,12 +56,14 @@ gui_spawn:
     return
 
 GuiAddInput() {
-    global Gui
-    Gui, Add, Text, %gui_control_options%, v%title%, %title%
+    global
+    title := GetTitle()
+    Gui, Add, Text, %gui_control_options% vgui_main_title, %title%
     Gui, Font, s10, Segoe UI
     Gui, Add, Edit, %gui_control_options% vPedersen gFindus
     return
 }
+
 ;-------------------------------------------------------------------------------
 ; GUI FUNCTIONS AND SUBROUTINES
 ;-------------------------------------------------------------------------------
