@@ -10,14 +10,14 @@ enter(newExecutable) {
     global currentExecutable := newExecutable
     global level := level + 1
     GuiAddInput("eachKey")
-    return [false, "next command"]
+    return false
 }
 
 search(searchExecutable) {
     global currentExecutable := searchExecutable
     global level := level + 1
     GuiAddInput("onlyEnter")
-    return [false, "next command"]
+    return false
 }
 
 class WebSearch extends Executable {
@@ -28,6 +28,6 @@ class WebSearch extends Executable {
     Execute(query) {
         url := StrReplace(this._urlTemplate, "REPLACEME", query)
         run, %url%
-        return [true]
+        return true
     }
 }

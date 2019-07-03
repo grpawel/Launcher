@@ -8,7 +8,7 @@ class CommandSet extends Executable {
     Execute(input) {
         global previousInputs
         if (not this.commands.HasKey(input)) {
-            return [false, "not found"]
+            return false
         }
         command := this.commands[input]
         action := command[1]
@@ -16,7 +16,7 @@ class CommandSet extends Executable {
         previousInputs.Push({input: input, action: action, param: param})
         result := %action%(param)
         if (result == "") {
-            return [true, "found"]
+            return true
         }
         return result
     }

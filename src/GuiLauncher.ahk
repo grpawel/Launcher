@@ -94,10 +94,10 @@ GuiEscape:
 
 ; The callback function when the text changes in the input field.
 InputCallback:
-    Gui, Submit, NoHide
+    Gui, Submit, NoHide  
     inputVar := getCurrentInputVar()
     result := RunCommand(%inputVar%)
-    if (result[1] == True) {
+    if (result == true) {
         gui_destroy()
     }
     return
