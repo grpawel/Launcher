@@ -5,7 +5,7 @@
     
     topLevel.title := "Enter anything"
     topLevel.commands :=    { google: ["open", "http://google.com"]
-                            , "g ": ["search", "http://google.com/search?q=REPLACEME"]
+                            , "g ": ["search", new WebSearch("http://google.com/search?q=REPLACEME", "Search in Google")]
                             , chr: ["open", "chrome"]
                             , fire: ["open", "firefox"]
                             , goto0: ["enter", topLevel]

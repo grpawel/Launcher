@@ -51,24 +51,37 @@ gui_spawn:
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
     Gui, Font, s11, Segoe UI
-    GuiAddInput()
+    global level = 1
+    GuiAddInput("eachKey")
     Gui, Show,, myGUI
     return
 
-GuiAddInput() {
-    global
-    title := GetTitle()
-    Gui, Add, Text, %gui_control_options% vgui_main_title, %title%
-    Gui, Font, s10, Segoe UI
-    Gui, Add, Edit, %gui_control_options% vPedersen gInputCallback
+
+GuiAddInput(submitAction) {
+    global ; global gui_control_options does not work
+    if (submitAction <> "eachKey" && submitAction <> "onlyEnter") {
+        throw Exception("submitAction must be ""eachKey"" or ""onlyEnter""")
+    }
+    local title := GetTitle()
+    local previousInputVar := "input" (level - 1)
+    local currentInputVar := getCurrentInputVar()
+    Gui, Add, Text, %gui_control_options% vTitle%level%, %title%
+
+    if (submitAction == "eachKey") {
+        Gui, Add, Edit, %gui_control_options% v%currentInputVar% gInputCallback
+    } 
+    else if (submitAction == "onlyEnter") {
+        Gui, Add, Edit, %gui_control_options% v%currentInputVar% -WantReturn
+        Gui, Add, Button, x-10 y-10 w1 h1 +default gInputCallback
+    }
+    GuiControl, Disable, %previousInputVar%
+    Gui, Show, AutoSize
     return
 }
 
-GuiResetInput() {
-    global Gui
-    title := GetTitle()
-    GuiControl, Text, Pedersen, 
-    GuiControl, Text, gui_main_title, %title%
+getCurrentInputVar() {
+    global level
+    return "input" level
 }
 
 ;-------------------------------------------------------------------------------
@@ -82,11 +95,11 @@ GuiEscape:
 ; The callback function when the text changes in the input field.
 InputCallback:
     Gui, Submit, NoHide
-    result := RunCommand(Pedersen)
+    inputVar := getCurrentInputVar()
+    result := RunCommand(%inputVar%)
     if (result[1] == True) {
         gui_destroy()
     }
-    #Include %A_ScriptDir%\UserCommands.ahk
     return
 
 ;
