@@ -65,7 +65,9 @@ GuiAddInput(submitAction) {
     local title := GetTitle()
     local previousInputVar := "input" (level - 1)
     local currentInputVar := getCurrentInputVar()
-    Gui, Add, Text, %gui_control_options% vTitle%level%, %title%
+    if (title <> "") {
+        Gui, Add, Text, %gui_control_options% vTitle%level%, %title%
+    }
 
     if (submitAction == "eachKey") {
         Gui, Add, Edit, %gui_control_options% v%currentInputVar% gInputCallback
