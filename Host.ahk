@@ -11,7 +11,7 @@ SetCapsLockState, AlwaysOff
 #Include %A_ScriptDir%\src\Commands\CommandSet.ahk
 
 #Include %A_ScriptDir%\UserCommands.ahk
-global Commands := CreateCommands()
+global topLevelExecutable := CreateCommands()
 
 #Include %A_ScriptDir%\src\CommandHandler.ahk
 Initialize()

@@ -6,23 +6,21 @@ reload(param) {
     Reload
 }
 
-enter(param) {
-    global currentList
-    currentList := param
+enter(newExecutable) {
+    global currentExecutable := newExecutable
     global level := level + 1
     GuiAddInput("eachKey")
     return [false, "next command"]
 }
 
-search(searchObject) {
-    global currentList
-    currentList := searchObject
+search(searchExecutable) {
+    global currentExecutable := searchExecutable
     global level := level + 1
     GuiAddInput("onlyEnter")
     return [false, "next command"]
 }
 
-class WebSearch extends BaseCommandSet {
+class WebSearch extends Executable {
     __New(urlTemplate, title) {
         this._urlTemplate := urlTemplate
         this.title := title

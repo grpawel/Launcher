@@ -1,29 +1,29 @@
 ﻿ResetCommands() {
-    global Commands
-    global currentList := Commands
     global previousInputs := []
+    global topLevelExecutable
+    global currentExecutable := topLevelExecutable
 }
 
 Initialize() {
-    global previousInputs := []
+    ResetCommands()
 }
 
 GetTitle() {
-    global currentList
+    global currentExecutable
     global previousInputs
-    title := currentList["title"]
-    titleFactory := currentList["titleFactory"]
+    title := currentExecutable["title"]
+    titleFactory := currentExecutable["titleFactory"]
     
     if (titleFactory <> "") {
         return %titleFactory%(previousInputs)
     } else if (title <> "") {
         return title
     } else {
-        return DefaultTitleFactory(previousInputs, currentList)
+        return DefaultTitleFactory(previousInputs, currentExecutable)
     }
 }
 
-DefaultTitleFactory(previousCommands, currentList) {
+DefaultTitleFactory(previousCommands, currentExecutable) {
     if (previousCommands == "" || previousCommands.Length == 0) {
         return "¯\_(ツ)_/¯"
     }
@@ -35,7 +35,6 @@ DefaultTitleFactory(previousCommands, currentList) {
 }
 
 RunCommand(input) {
-    global currentList
-    global previousInputs
-    return currentList.Execute(input)
+    global currentExecutable
+    return currentExecutable.Execute(input)
 }

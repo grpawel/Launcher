@@ -1,10 +1,10 @@
-﻿class BaseCommandSet {
+﻿class Executable {
     Execute(input) {
         return false
     }
 }
 
-class CommandSet extends BaseCommandSet {
+class CommandSet extends Executable {
     Execute(input) {
         global previousInputs
         if (not this.commands.HasKey(input)) {
