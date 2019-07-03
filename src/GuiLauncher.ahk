@@ -50,7 +50,7 @@ gui_spawn:
     Gui, Margin, 16, 16
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
-    Gui, Font, s11, Segoe UI
+    Gui, Font, s10, Segoe UI
     global level = 1
     GuiAddInput("eachKey")
     Gui, Show,, myGUI
