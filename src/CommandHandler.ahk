@@ -1,5 +1,4 @@
 ﻿ResetCommands() {
-    global previousInputs := []
     global topLevelExecutable
     global currentExecutable := topLevelExecutable
 }
