@@ -1,8 +1,4 @@
-﻿class Executable {
-    Execute(input) {
-        return false
-    }
-}
+﻿#Include %A_ScriptDir%\src\Executables\Executable.ahk
 
 class CommandSet extends Executable {
     Execute(input) {
