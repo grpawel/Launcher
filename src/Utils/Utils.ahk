@@ -1,4 +1,6 @@
-﻿; Allow normal CapsLock functionality to be toggled by Alt+CapsLock:
+﻿#Include %A_ScriptDir%\src\Utils\Range.ahk
+
+; Allow normal CapsLock functionality to be toggled by Alt+CapsLock:
 !CapsLock::
     GetKeyState, capsstate, CapsLock, T ;(T indicates a Toggle. capsstate is an arbitrary varible name)
     if capsstate = U
@@ -23,6 +25,13 @@ uriEncode(str) {
     Return, pr . str
 }
 
+MergeArrays(arrays*) {
+    result := {}
+    for arrayIndex, array in arrays 
+        for key, value in array
+            result[key] := value
+    return result
+}
 ; from https://www.autohotkey.com/boards/viewtopic.php?p=255613#p255613
 Obj2String(Obj,FullPath:=1,BottomBlank:=0){
 	static String,Blank

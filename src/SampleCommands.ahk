@@ -23,5 +23,10 @@
                         , goto1: [a.enter, test1]
                         , goto2: [a.enter, test2]}
 
+    for i in range(Asc("a"), Asc("m") + 1) {
+        driveLetter := Chr(i)
+        topLevel.commands[driveLetter "/"] := new Open(driveLetter ":\")
+    }
+
     return topLevel
 }

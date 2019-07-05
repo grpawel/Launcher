@@ -35,4 +35,4 @@ return
 #Include %A_ScriptDir%\src\GuiLauncher.ahk
 
 ; General settings
-#Include %A_ScriptDir%\src\Utils.ahk
+#Include %A_ScriptDir%\src\Utils\Utils.ahk
