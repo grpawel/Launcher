@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%\src\Executables\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Executables\CommandSet\Command.ahk
 
 class Open extends Command {
     __New(toRun) {
