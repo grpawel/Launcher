@@ -81,6 +81,53 @@ GuiAddInput(submitAction) {
     return
 }
 
+GuiSetInput(input) {
+    global
+    inputVar := "input" level
+    GuiControl, Text, %inputVar%, %input%
+}
+
+GuiShowListView() {
+    global
+    local listViewVar := "listView" level
+    try {
+        Gui, Add, ListView, r5  w300 %gui_control_options% gHelpGui v%listViewVar%, Command|Title
+        LV_ModifyCol()
+        Gui, Show, AutoSize 
+    } catch e {
+        GuiControl, Show, %listViewVar%
+        Gui, Show, AutoSize
+    }
+    return false
+}
+
+GuiPopulateListView(rows) {
+    for index, row in rows {
+        LV_Add("", row[1], row[2])
+    }
+    LV_ModifyCol()
+}
+
+GuiRemoveRowsListView() {
+    LV_Delete()
+}
+
+GuiRemoveListView() {
+    global level
+    listViewVar := "listView" level
+    GuiControl, Hide, %listViewVar%
+    Gui, Show, AutoSize
+    return false
+}
+
+HelpGui() {
+    if (A_GuiEvent = "DoubleClick") {
+        LV_GetText(RowText, A_EventInfo)
+        ToolTip You double-clicked row number %A_EventInfo%. Text: "%RowText%"
+    }
+    return
+}
+
 getCurrentInputVar() {
     global level
     return "input" level
@@ -116,6 +163,10 @@ gui_destroy() {
     ; Forget search title variable so the next search does not re-use it
     ; in case the next search does not set its own:
     gui_search_title =
+    for i in range(0, 10) {
+        listViewVar := "listView" i
+        %listViewVar% := 
+    }
 
     ; Clear the tooltip
     Gosub, gui_tooltip_clear

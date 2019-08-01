@@ -57,3 +57,7 @@ Debug(obj) {
     string := Obj2String(obj)
     MsgBox, %string%
 }
+
+StartsWith(haystack, needle) {
+    return InStr(haystack, needle) == 1
+}

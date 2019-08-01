@@ -7,4 +7,8 @@ class Open extends Command {
     Run() {
         run, % this._toRun
     }
+
+    GetTitle() {
+        return "Open " this._toRun
+    }
 }
