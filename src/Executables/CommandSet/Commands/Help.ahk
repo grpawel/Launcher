@@ -48,4 +48,8 @@ class HelpExecutable extends Executable {
         GuiRemoveRowsListView()
         GuiPopulateListView(rows)
     }
+
+    OnBeforeExecutableChanged() {
+        GuiRemoveListView()
+    }
 }

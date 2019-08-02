@@ -9,6 +9,7 @@ class ExecutableService {
     }
 
     ChangeExecutable(newExecutable) {
+        this._currentExecutable.OnBeforeExecutableChanged()
         this._currentExecutable := newExecutable
     }
 
