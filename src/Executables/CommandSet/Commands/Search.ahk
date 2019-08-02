@@ -5,6 +5,7 @@ class Search extends Command {
     __New(urlTemplate, title) {
         this._searchExecutable := new WebSearchExecutable(urlTemplate, title)
     }
+
     Run() {
         global executableService
         executableService.ChangeExecutable(this._searchExecutable)
@@ -15,6 +16,8 @@ class Search extends Command {
 }
 
 class WebSearchExecutable extends Executable {
+    subscribedTo := ["returnPressed"]
+
     __New(urlTemplate, title) {
         this._urlTemplate := urlTemplate
         this.title := title

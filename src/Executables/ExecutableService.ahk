@@ -13,8 +13,11 @@ class ExecutableService {
         this._currentExecutable := newExecutable
     }
 
-    Execute(param) {
-        return this._currentExecutable.Execute(param)
+    Execute(param, method) {
+        executable := this._currentExecutable
+        if (ArrayContains(executable.subscribedTo, method)) {
+            return executable.Execute(param, method)
+        }
     }
 
     GetCurrentExecutable() {

@@ -25,6 +25,8 @@ class Help extends Command {
 }
 
 class HelpExecutable extends Executable {
+    subscribedTo := ["keyPressed", "returnPressed", "rowDoubleClicked"]
+
     __New(commandSet) {
         this._commandSet := commandSet
     }

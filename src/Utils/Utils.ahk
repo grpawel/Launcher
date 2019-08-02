@@ -61,3 +61,11 @@ Debug(obj) {
 StartsWith(haystack, needle) {
     return InStr(haystack, needle) == 1
 }
+
+ArrayContains(array, searched) {
+    for index, value in array {
+        if (value == searched)
+            return true
+    }
+    return false
+}

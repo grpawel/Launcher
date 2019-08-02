@@ -1,4 +1,4 @@
-; Created by Asger Juul Brunshøj
+﻿; Created by Asger Juul Brunshøj
 
 ; Note: Save with encoding UTF-8 with BOM if possible.
 ; I had issues with special characters like in ¯\_(ツ)_/¯ that wouldn't work otherwise.
@@ -60,24 +60,18 @@ gui_spawn:
 
 GuiAddInput(submitAction) {
     global ; global gui_control_options does not work
-    if (submitAction <> "eachKey" && submitAction <> "onlyEnter") {
-        throw Exception("submitAction must be ""eachKey"" or ""onlyEnter""")
-    }
     local title := executableService.GetTitle()
     local previousInputVar := "input" (level - 1)
     local currentInputVar := getCurrentInputVar()
     if (title <> "") {
         Gui, Add, Text, %gui_control_options% vTitle%level%, %title%
     }
-
-    if (submitAction == "eachKey") {
-        Gui, Add, Edit, %gui_control_options% v%currentInputVar% gInputCallback
-    } 
-    else if (submitAction == "onlyEnter") {
-        Gui, Add, Edit, %gui_control_options% v%currentInputVar% -WantReturn
-        Gui, Add, Button, x-10 y-10 w1 h1 +default gInputCallback
-    }
+    Gui, Show, AutoSize
+    Gui, Add, Edit, %gui_control_options% v%currentInputVar% gKeyPressed -WantReturn
+    Gui, Add, Button, x-10 y-10 w1 h1 v%currentInputVar%Button +default gReturnPressed
     GuiControl, Disable, %previousInputVar%
+    GuiControl, Disable, %previousInputVar%Button
+    GuiControl, Focus, %currentInputVar%
     Gui, Show, AutoSize
     return
 }
@@ -92,13 +86,16 @@ GuiShowListView() {
     global
     local listViewVar := "listView" level
     try {
-        Gui, Add, ListView, r5 w300 -Hdr %gui_control_options% gHelpGui v%listViewVar%, Command|Title
+        ; initial height must be 0, because next input positions itself with initial position regardless of changes
+        ; so adding next input creates empty space where listview is hidden, even if listview height is changed to 0
+        ; TODO: remove margin around
+        Gui, Add, ListView, h0 -Hdr %gui_control_options% gHelpGui v%listViewVar%, Command|Title
         LV_ModifyCol()
-        Gui, Show, AutoSize 
     } catch e {
         GuiControl, Show, %listViewVar%
-        Gui, Show, AutoSize
     }
+    GuiControl, Move, %listViewVar%, h150
+    Gui, Show, AutoSize 
     return false
 }
 
@@ -114,7 +111,7 @@ GuiRemoveRowsListView() {
 }
 
 GuiRemoveListView() {
-    global level
+    global level 
     listViewVar := "listView" level
     GuiControl, Hide, %listViewVar%
     Gui, Show, AutoSize
@@ -124,7 +121,7 @@ GuiRemoveListView() {
 HelpGui() {
     if (A_GuiEvent = "DoubleClick") {
         LV_GetText(RowText, A_EventInfo)
-        ToolTip You double-clicked row number %A_EventInfo%. Text: "%RowText%"
+        Execute(RowText, "rowDoubleClicked")
     }
     return
 }
@@ -134,6 +131,14 @@ getCurrentInputVar() {
     return "input" level
 }
 
+Execute(input, method) {
+    global executableService
+    result := executableService.Execute(input, method)
+    if (result == true) {
+        gui_destroy()
+    }
+    return
+}
 ;-------------------------------------------------------------------------------
 ; GUI FUNCTIONS AND SUBROUTINES
 ;-------------------------------------------------------------------------------
@@ -146,13 +151,23 @@ GuiEscape:
 InputCallback:
     Gui, Submit, NoHide  
     inputVar := getCurrentInputVar()
-    global executableService
-    result := executableService.Execute(%inputVar%)
+    Execute(%inputVar%, "keyPressed")
     if (result == true) {
         gui_destroy()
     }
     return
 
+KeyPressed:
+    Gui, Submit, NoHide
+    inputVar := getCurrentInputVar()
+    Execute(%inputVar%, "keyPressed")
+    return
+
+ReturnPressed:
+    Gui, Submit, NoHide
+    inputVar := getCurrentInputVar()
+    Execute(%inputVar%, "returnPressed")
+    return
 ;
 ; gui_destroy: Destroy the GUI after use.
 ;
