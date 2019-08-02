@@ -1,4 +1,4 @@
-﻿; Created by Asger Juul Brunshøj
+; Created by Asger Juul Brunshøj
 
 ; Note: Save with encoding UTF-8 with BOM if possible.
 ; I had issues with special characters like in ¯\_(ツ)_/¯ that wouldn't work otherwise.
@@ -92,7 +92,7 @@ GuiShowListView() {
     global
     local listViewVar := "listView" level
     try {
-        Gui, Add, ListView, r5  w300 %gui_control_options% gHelpGui v%listViewVar%, Command|Title
+        Gui, Add, ListView, r5 w300 -Hdr %gui_control_options% gHelpGui v%listViewVar%, Command|Title
         LV_ModifyCol()
         Gui, Show, AutoSize 
     } catch e {
