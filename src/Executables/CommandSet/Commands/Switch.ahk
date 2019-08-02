@@ -5,7 +5,8 @@ class Switch extends Command {
        this._newCommandSet := newCommandSet
     }
     Run() {
-        global currentExecutable := this._newCommandSet
+        global executableService
+        executableService.ChangeExecutable(this._newCommandSet)
         global level := level +1
         GuiAddInput("eachKey")
         return false

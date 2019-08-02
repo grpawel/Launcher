@@ -6,7 +6,8 @@ class Search extends Command {
         this._searchExecutable := new WebSearchExecutable(urlTemplate, title)
     }
     Run() {
-        global currentExecutable := this._searchExecutable
+        global executableService
+        executableService.ChangeExecutable(this._searchExecutable)
         global level := level + 1
         GuiAddInput("onlyEnter")
         return false

@@ -6,14 +6,16 @@ class Help extends Command {
         this._active := false
     }
     Run() {
-        global currentExecutable
+        global executableService
+        currentExecutable := executableService.GetCurrentExecutable()
         if (this._active) {
             GuiRemoveListView()
-            currentExecutable := this._originalExecutable
+            executableService.ChangeExecutable(this._originalExecutable)
             this._active := false
         } else {
             this._originalExecutable := currentExecutable
-            currentExecutable := new HelpExecutable(this._originalExecutable)
+            helpWrapper := new HelpExecutable(this._originalExecutable)
+            executableService.ChangeExecutable(helpWrapper)
             GuiShowListView()
             this._active := true
         }

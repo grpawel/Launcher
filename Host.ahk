@@ -11,11 +11,10 @@ SetCapsLockState, AlwaysOff
 #Include %A_ScriptDir%\src\Executables\CommandSet\ImportCommands.ahk
 
 #Include %A_ScriptDir%\UserCommands.ahk
-global topLevelExecutable := CreateCommands()
+topLevelExecutable := CreateCommands()
 
-#Include %A_ScriptDir%\src\CommandHandler.ahk
-Initialize()
-
+#Include %A_ScriptDir%\src\Executables\ExecutableService.ahk
+global executableService := new ExecutableService(topLevelExecutable)
 
 ; #InstallKeybdHook
 

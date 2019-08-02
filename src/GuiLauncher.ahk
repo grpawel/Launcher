@@ -46,7 +46,8 @@ gui_spawn:
     }
 
     gui_state = main
-    ResetCommands()
+    global executableService
+    executableService.ResetExecutable()
     Gui, Margin, 16, 16
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
@@ -62,7 +63,7 @@ GuiAddInput(submitAction) {
     if (submitAction <> "eachKey" && submitAction <> "onlyEnter") {
         throw Exception("submitAction must be ""eachKey"" or ""onlyEnter""")
     }
-    local title := GetTitle()
+    local title := executableService.GetTitle()
     local previousInputVar := "input" (level - 1)
     local currentInputVar := getCurrentInputVar()
     if (title <> "") {
@@ -145,7 +146,8 @@ GuiEscape:
 InputCallback:
     Gui, Submit, NoHide  
     inputVar := getCurrentInputVar()
-    result := RunCommand(%inputVar%)
+    global executableService
+    result := executableService.Execute(%inputVar%)
     if (result == true) {
         gui_destroy()
     }
