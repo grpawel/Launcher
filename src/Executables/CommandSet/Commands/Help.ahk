@@ -2,22 +2,18 @@
 #Include %A_ScriptDir%\src\Executables\Executable.ahk
 
 class Help extends Command {
-    __New() {
-        this._active := false
-    }
     Run() {
         global executableService
         currentExecutable := executableService.GetCurrentExecutable()
-        if (this._active) {
-            GuiRemoveListView()
-            executableService.ChangeExecutable(this._originalExecutable)
-            this._active := false
-        } else {
+        isActive := currentExecutable.base.__Class == "HelpExecutable"
+        if (!isActive) {
             this._originalExecutable := currentExecutable
             helpWrapper := new HelpExecutable(this._originalExecutable)
             executableService.ChangeExecutable(helpWrapper)
             GuiShowListView()
-            this._active := true
+        } else {
+            GuiRemoveListView()
+            executableService.ChangeExecutable(this._originalExecutable)
         }
         GuiSetInput("")
         return false
