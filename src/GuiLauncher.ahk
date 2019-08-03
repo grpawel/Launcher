@@ -66,7 +66,6 @@ GuiAddInput(submitAction) {
     if (title <> "") {
         Gui, Add, Text, %gui_control_options% vTitle%level%, %title%
     }
-    Gui, Show, AutoSize
     Gui, Add, Edit, %gui_control_options% v%currentInputVar% gKeyPressed -WantReturn
     Gui, Add, Button, x-10 y-10 w1 h1 v%currentInputVar%Button +default gReturnPressed
     GuiControl, Disable, %previousInputVar%
