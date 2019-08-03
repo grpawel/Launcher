@@ -3,3 +3,5 @@
 #Include %A_ScriptDir%\src\Executables\CommandSet\Commands\Reload.ahk
 #Include %A_ScriptDir%\src\Executables\CommandSet\Commands\Search.ahk
 #Include %A_ScriptDir%\src\Executables\CommandSet\Commands\Switch.ahk
+
+#Include %A_ScriptDir%\src\Executables\CommandSet\Operations\Sequence.ahk
