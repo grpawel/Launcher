@@ -25,6 +25,6 @@ class ExecutableService {
     }
 
     GetTitle() {
-        return this._currentExecutable["title"]
+        return this._currentExecutable.GetTitle()
     }
 }

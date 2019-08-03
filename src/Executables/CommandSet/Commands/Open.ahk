@@ -3,12 +3,10 @@
 class Open extends Command {
     __New(toRun) {
         this._toRun := toRun
-    }
-    Run() {
-        run, % this._toRun
+        this.description := "Open " this._toRun
     }
 
-    GetTitle() {
-        return "Open " this._toRun
+    Run() {
+        run, % this._toRun
     }
 }

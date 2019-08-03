@@ -2,6 +2,8 @@
 #Include %A_ScriptDir%\src\Executables\Executable.ahk
 
 class Help extends Command {
+    description := "Show/hide help"
+
     Run() {
         global executableService
         currentExecutable := executableService.GetCurrentExecutable()
@@ -35,10 +37,7 @@ class HelpExecutable extends Executable {
     _Populate(input) {
         rows := []
         for key, value in this._commandSet.commands {
-            description := value.GetTitle()
-            ;if (description == "") {
-                ;description := value ""
-            ;}
+            description := value.GetDescription()
             if (StartsWith(key, input)) {
                 rows.Push([key, description])
             }

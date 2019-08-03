@@ -4,6 +4,7 @@
 class Search extends Command {
     __New(urlTemplate, title) {
         this._searchExecutable := new WebSearchExecutable(urlTemplate, title)
+        this.description := title
     }
 
     Run() {

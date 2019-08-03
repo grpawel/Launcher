@@ -1,4 +1,6 @@
 class Command {
+    description := "-"
+
     __Call(method, args*) {
         if (method == "Run" || method == "") {
             param := args[1]
@@ -12,5 +14,14 @@ class Command {
 
     Run(param) {
         throw "Not implemented"
+    }
+
+    SetDescription(description) {
+        this.description := description
+        return this
+    }
+
+    GetDescription() {
+        return this.description
     }
 }

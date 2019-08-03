@@ -10,8 +10,9 @@
 
     programs := { fir: new Open("firefox")
                 , chr: new Open("chrome")
-                , calc: new Open("calc")
-                , inco: new Open("""firefox"" ""-private-window""") }
+                , calc: new Open("calc").SetDescription("Calculator")
+                , inco: new Open("""firefox"" ""-private-window""")
+                        .SetDescription("Private firefox window") }
     
     misc :=     { rel: new Reload()
                 , "?": new Help()

@@ -3,6 +3,7 @@
 class Switch extends Command {
     __New(newCommandSet) {
        this._newCommandSet := newCommandSet
+       this.description := "Switch to " newCommandSet.GetTitle()
     }
     Run() {
         global executableService
