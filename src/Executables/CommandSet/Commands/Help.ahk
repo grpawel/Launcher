@@ -29,9 +29,9 @@ class HelpExecutable extends Executable {
         this._commandSet := commandSet
     }
 
-    Execute(input) {
+    Execute(input, environment) {
         this._Populate(input)
-        return this._commandSet.Execute(input)
+        return this._commandSet.Execute(input, environment)
     }
 
     _Populate(input) {

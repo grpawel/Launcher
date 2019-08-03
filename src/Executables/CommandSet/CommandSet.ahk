@@ -2,12 +2,12 @@
 
 class CommandSet extends Executable {
     subscribedTo := ["keyPressed", "returnPressed"]
-    Execute(input) {
+    Execute(input, environment) {
         if (not this.commands.HasKey(input)) {
             return false
         }
         command := this.commands[input]
-        result := %command%()
+        result := %command%(environment)
         if (result == "") {
             return true
         }

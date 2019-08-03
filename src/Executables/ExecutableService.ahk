@@ -1,7 +1,8 @@
 class ExecutableService {
-    __New(topLevelExecutable) {
+    __New(topLevelExecutable, environment) {
         this._topLevelExecutable := topLevelExecutable
         this._currentExecutable := topLevelExecutable
+        this._environment := environment
     }
     
     ResetExecutable() {
@@ -16,7 +17,7 @@ class ExecutableService {
     Execute(param, method) {
         executable := this._currentExecutable
         if (ArrayContains(executable.subscribedTo, method)) {
-            return executable.Execute(param, method)
+            return executable.Execute(param, this._environment)
         }
     }
 
