@@ -3,6 +3,7 @@
 
 class Help extends Command {
     description := "Show/hide help"
+    tags := ["technical"]
 
     Run() {
         global executableService

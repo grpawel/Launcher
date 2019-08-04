@@ -2,6 +2,8 @@
 #Include %A_ScriptDir%\src\Executables\Executable.ahk
 
 class Search extends Command {
+    tags := ["web"]
+
     __New(urlTemplate, title) {
         this._searchExecutable := new WebSearchExecutable(urlTemplate, title)
         this.description := title

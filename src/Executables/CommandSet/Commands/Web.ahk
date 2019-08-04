@@ -1,6 +1,8 @@
 #Include %A_ScriptDir%\src\Executables\CommandSet\Command.ahk
 
 class Web extends Command {
+    tags := ["web"]
+
     __New(url) {
         this._url := url
         this.description := "Open " url

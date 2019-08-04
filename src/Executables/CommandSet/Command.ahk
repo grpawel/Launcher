@@ -1,5 +1,6 @@
 class Command {
     description := "-"
+    tags := []
 
     __Call(method, environment, executableService) {
         if (method == "Run" || method == "") {
@@ -22,5 +23,11 @@ class Command {
 
     GetDescription() {
         return this.description
+    }
+
+    AddTags(tags) {
+        for tag in tags {
+            this.tags.Push(tag)
+        }
     }
 }
