@@ -1,10 +1,9 @@
 class Command {
     description := "-"
 
-    __Call(method, args*) {
+    __Call(method, environment, executableService) {
         if (method == "Run" || method == "") {
-            param := args[1]
-            result := this.Run(param)
+            result := this.Run(environment, executableService)
             if (result == "") {
                 return true
             }
@@ -12,7 +11,7 @@ class Command {
         }
     }
 
-    Run(param) {
+    Run(environment, executableService) {
         throw "Not implemented"
     }
 

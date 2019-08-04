@@ -7,8 +7,7 @@ class Search extends Command {
         this.description := title
     }
 
-    Run() {
-        global executableService
+    Run(environment, executableService) {
         executableService.ChangeExecutable(this._searchExecutable)
         global level := level + 1
         GuiAddInput("onlyEnter")

@@ -69,3 +69,38 @@ ArrayContains(array, searched) {
     }
     return false
 }
+
+; Adds or replaces all keys from `overrides` to `base`. Base object is modified and returned.
+; Example: ObjectDeepAssign( { a: 1, b: {c: 3} }
+;                          , { a: 2, b: {d: 4} } )
+;                         == { a: 2, b: {c: 3, d: 4} }
+ObjectDeepAssign(base, overrides) {
+    for key, value in overrides {
+        if not base.HasKey(key) {
+            base[key] := value
+        } else if not IsObject(value) {
+            base[key] := value
+        } else {
+            base[key] := ObjectDeepAssign(base[key], overrides[key])
+        }
+    }
+    return base
+}
+
+
+; Clones object, works for circular references
+; https://autohotkey.com/board/topic/85201-array-deep-copy-treeview-viewer-and-more/
+; https://rosettacode.org/wiki/Deepcopy#AutoHotkey
+ObjectDeepCopy(Array, Objs=0)
+{
+    if !Objs
+        Objs := {}
+    Obj := Array.Clone()
+    Objs[&Array] := Obj ; Save this new array
+    For Key, Val in Obj
+        if (IsObject(Val)) ; If it is a subarray
+            Obj[Key] := Objs[&Val] ; If we already know of a refrence to this array
+            ? Objs[&Val] ; Then point it to the new array
+            : ObjectDeepCopy(Val,Objs) ; Otherwise, clone this sub-array
+    return Obj
+}

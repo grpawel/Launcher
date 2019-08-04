@@ -1,11 +1,11 @@
 #Include %A_ScriptDir%\src\Environment\Browser.ahk
 
 class Environment {
-    _browser := new Browser()
+    browser := new Browser("""firefox""")
 
-    browser { 
-        get {
-            return this._browser
-        }
+    WithOverrides(overrides) {
+        copy := ObjectDeepCopy(this)
+        overridden := ObjectDeepAssign(copy, overrides)
+        return overridden
     }
 }

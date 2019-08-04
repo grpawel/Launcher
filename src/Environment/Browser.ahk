@@ -1,12 +1,15 @@
 class Browser {
-    _currentBrowser := """firefox"""
-
-    OpenWebsite(url) {
-        command := this._currentBrowser " """ url """"
-        Run %command%
+    __New(browserName) {
+        this._browser := browserName
     }
 
-    ChangeCurrent(newBrowser) {
-        this._currentBrowser := newBrowser
+    OpenWebsite(url) {
+        if (this._browser <> "") {
+            command := this._browser " """ url """"
+        }
+        else {
+            command := url
+        }
+        Run, %command%
     }
 }

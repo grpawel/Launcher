@@ -1,4 +1,9 @@
 ﻿CreateCommands() {
+    browsers := { firefox: new Browser("""firefox""")
+                , chrome: new Browser("""chrome""")
+                , firefoxPrivate: new Browser("""firefox"" ""-private-window""")
+                , default: new Browser("") }
+                    
     topLevel := new CommandSet()
     incognito := new CommandSet()
     
@@ -15,8 +20,8 @@
                 , calc: new Open("calc").SetDescription("Calculator")
                 , inco: new Open("""firefox"" ""-private-window""")
                         .SetDescription("Private firefox window")
-                , setfire: new ChangeBrowser("""firefox""").SetDescription("Change browser to Firefox")
-                , setchr: new ChangeBrowser("""chrome""").SetDescription("Change browser to Chrome") }
+                , setfire: new ChangeEnvironment({ browser: browsers.firefox }).SetDescription("Change browser to Firefox")
+                , setchr: new ChangeEnvironment({ browser: browsers.chrome }).SetDescription("Change browser to Chrome") }
     
     misc :=     { rel: new Reload()
                 , "?": new Help()
@@ -33,9 +38,7 @@
 
     incognito.title := "Incognito mode"
     incognito.commands := websites
-    incognito.commandsBeforeRunning := [ new ChangeBrowser("""firefox"" ""-private-window""") ]
-    incognito.commandsAfterRunning := [ new ChangeBrowser("""firefox""") ]
-    Debug(incognito)
+    incognito.environmentOverride := { browser: browsers.FirefoxPrivate }
 
     return topLevel
 }
