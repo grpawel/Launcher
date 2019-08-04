@@ -1,4 +1,5 @@
-﻿CreateCommands() {
+﻿#Include %A_ScriptDir%\src\Executables\CommandSet\Operations\Filters.ahk
+CreateCommands() {
     browsers := { firefox: new Browser("""firefox""")
                 , chrome: new Browser("""chrome""")
                 , firefoxPrivate: new Browser("""firefox"" ""-private-window""")
@@ -37,7 +38,7 @@
     topLevel.commands := MergeArrays(searches, websites, programs, misc, drives)
 
     incognito.title := "Incognito mode"
-    incognito.commands := websites
+    incognito.commands := topLevel.FilterCommands(HasTag(["web", "technical"])).commands
     incognito.environmentOverride := { browser: browsers.FirefoxPrivate }
 
     return topLevel
