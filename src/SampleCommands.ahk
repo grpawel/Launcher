@@ -1,5 +1,6 @@
 ﻿CreateCommands() {
     topLevel := new CommandSet()
+    incognito := new CommandSet()
     
     topLevel.title := "Enter anything"
     searches := { "g ": new Search("http://google.com/search?q=REPLACEME", "Search in Google")
@@ -19,7 +20,8 @@
     
     misc :=     { rel: new Reload()
                 , "?": new Help()
-                , help: new Help() }
+                , help: new Help()
+                , inco: new Switch(incognito) }
 
     drives :=  { }
     for i in range(Asc("C"), Asc("M") + 1) {
@@ -28,6 +30,12 @@
     }
     
     topLevel.commands := MergeArrays(searches, websites, programs, misc, drives)
+
+    incognito.title := "Incognito mode"
+    incognito.commands := websites
+    incognito.commandsBeforeRunning := [ new ChangeBrowser("""firefox"" ""-private-window""") ]
+    incognito.commandsAfterRunning := [ new ChangeBrowser("""firefox""") ]
+    Debug(incognito)
 
     return topLevel
 }
