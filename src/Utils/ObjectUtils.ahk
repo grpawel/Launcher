@@ -58,10 +58,16 @@ Intersect(array1, array2) {
 ObjectDeepAssign(base, overrides) {
     for key, value in overrides {
         if not base.HasKey(key) {
+            ; key does not exist => assign whatever there is
             base[key] := value
         } else if not IsObject(value) {
+            ; value is a primitive => assign it
+            base[key] := value
+        } else if base[key].base <> value.base {
+            ; different class => assign whole object, not looking inside
             base[key] := value
         } else {
+            ; same class => recurse inside
             base[key] := ObjectDeepAssign(base[key], overrides[key])
         }
     }
