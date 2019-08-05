@@ -2,6 +2,8 @@
 
 class Environment {
     browser := new Opener("")
+    fileOpener := new Opener("")
+    folderOpener := new Opener("explorer")
     defaultOpener := new Opener("")
 
     WithOverrides(overrides) {

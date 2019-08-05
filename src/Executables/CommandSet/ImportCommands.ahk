@@ -1,4 +1,6 @@
 #Include %A_ScriptDir%\src\Executables\CommandSet\Commands\ChangeEnvironment.ahk
+#Include %A_ScriptDir%\src\Executables\CommandSet\Commands\File.ahk
+#Include %A_ScriptDir%\src\Executables\CommandSet\Commands\Folder.ahk
 #Include %A_ScriptDir%\src\Executables\CommandSet\Commands\Help.ahk
 #Include %A_ScriptDir%\src\Executables\CommandSet\Commands\Open.ahk
 #Include %A_ScriptDir%\src\Executables\CommandSet\Commands\Reload.ahk

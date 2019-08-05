@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%\src\Executables\CommandSet\Operations\Filters.ahk
+﻿#Include %A_ScriptDir%\src\Executables\CommandSet\Operations\Filters.ahk
 CreateCommands() {
     browsers := { firefox: new Opener("""firefox""")
                 , chrome: new Opener("""chrome""")
@@ -29,13 +29,17 @@ CreateCommands() {
                 , help: new Help()
                 , inco: new Switch(incognito) }
 
+    folders :=  { user: new Folder("%USERPROFILE%")
+                , doc: new Folder("%USERPROFILE%\Documents") }
+    files :=    { hosts: new File("%SystemRoot%\System32\drivers\etc\hosts") }
+    
     drives :=  { }
     for i in range(Asc("C"), Asc("M") + 1) {
         letter := Chr(i)
-        drives[letter "\"] := new Open(letter ":\")
+        drives[letter "\"] := new Folder(letter ":\")
     }
     
-    topLevel.commands := MergeArrays(searches, websites, programs, misc, drives)
+    topLevel.commands := MergeArrays(searches, websites, programs, misc, drives, folders, files)
 
     incognito.title := "Incognito mode"
     incognito.commands := topLevel.FilterCommands(HasTag(["web", "technical"])).commands
