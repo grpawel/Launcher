@@ -1,7 +1,7 @@
 #Include %A_ScriptDir%\src\Executables\CommandSet\Command.ahk
 
 class File extends Command {
-    tags := ["file"]
+    tags := ["file", "hasPath"]
 
     __New(path) {
         this._path := path

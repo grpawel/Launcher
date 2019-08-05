@@ -1,12 +1,18 @@
 ﻿#Include %A_ScriptDir%\src\Executables\CommandSet\Operations\Filters.ahk
+#Include %A_ScriptDir%\src\Environment\ImportOpeners.ahk
+
 CreateCommands() {
-    browsers := { firefox: new Opener("""firefox""")
-                , chrome: new Opener("""chrome""")
-                , firefoxPrivate: new Opener("""firefox"" ""-private-window""")
-                , default: new Opener("") }
+    browsers := { firefox: new RunOpener("""firefox""")
+                , chrome: new RunOpener("""chrome""")
+                , firefoxPrivate: new RunOpener("""firefox"" ""-private-window""")
+                , default: new RunOpener("") }
+
+    openers :=  { default: new RunOpener("explorer")
+                , copy: new CopyToClipboardOpener() }
                     
     topLevel := new CommandSet()
     incognito := new CommandSet()
+    clip := new CommandSet()
     
     topLevel.title := "Enter anything"
     searches := { "g ": new Search("http://google.com/search?q=REPLACEME", "Search in Google")
@@ -27,7 +33,8 @@ CreateCommands() {
     misc :=     { rel: new Reload()
                 , "?": new Help()
                 , help: new Help()
-                , inco: new Switch(incognito) }
+                , inco: new Switch(incognito)
+                , clip: new Switch(clip) }
 
     folders :=  { user: new Folder("%USERPROFILE%")
                 , doc: new Folder("%USERPROFILE%\Documents") }
@@ -44,6 +51,10 @@ CreateCommands() {
     incognito.title := "Incognito mode"
     incognito.commands := topLevel.FilterCommands(HasTag(["web", "technical"])).commands
     incognito.environmentOverride := { browser: browsers.FirefoxPrivate }
+
+    clip.title := "Copy to clipboard"
+    clip.commands := topLevel.FilterCommands(HasTag(["hasPath"])).commands
+    clip.environmentOverride := { browser: openers.copy, fileOpener: openers.copy, folderOpener: openers.copy, defaultOpener: openers.copy }
 
     return topLevel
 }

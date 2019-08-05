@@ -1,10 +1,10 @@
-#Include %A_ScriptDir%\src\Environment\Opener.ahk
+#Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
 
 class Environment {
-    browser := new Opener("")
-    fileOpener := new Opener("")
-    folderOpener := new Opener("explorer")
-    defaultOpener := new Opener("")
+    browser := new RunOpener("")
+    fileOpener := new RunOpener("")
+    folderOpener := new RunOpener("explorer")
+    defaultOpener := new RunOpener("")
 
     WithOverrides(overrides) {
         copy := ObjectDeepCopy(this)
