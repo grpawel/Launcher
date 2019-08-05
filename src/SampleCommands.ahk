@@ -1,9 +1,9 @@
-﻿#Include %A_ScriptDir%\src\Executables\CommandSet\Operations\Filters.ahk
+#Include %A_ScriptDir%\src\Executables\CommandSet\Operations\Filters.ahk
 CreateCommands() {
-    browsers := { firefox: new Browser("""firefox""")
-                , chrome: new Browser("""chrome""")
-                , firefoxPrivate: new Browser("""firefox"" ""-private-window""")
-                , default: new Browser("") }
+    browsers := { firefox: new Opener("""firefox""")
+                , chrome: new Opener("""chrome""")
+                , firefoxPrivate: new Opener("""firefox"" ""-private-window""")
+                , default: new Opener("") }
                     
     topLevel := new CommandSet()
     incognito := new CommandSet()

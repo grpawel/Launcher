@@ -1,7 +1,8 @@
-#Include %A_ScriptDir%\src\Environment\Browser.ahk
+#Include %A_ScriptDir%\src\Environment\Opener.ahk
 
 class Environment {
-    browser := new Browser("""firefox""")
+    browser := new Opener("")
+    defaultOpener := new Opener("")
 
     WithOverrides(overrides) {
         copy := ObjectDeepCopy(this)
