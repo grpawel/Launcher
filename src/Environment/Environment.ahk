@@ -6,9 +6,18 @@ class Environment {
     folderOpener := new RunOpener("explorer")
     defaultOpener := new RunOpener("")
 
+    ; Returns new `Environment` with values either from this object or `overrides`.
+    ; Existing values are not copied, so changes to them are visible in both objects.
     WithOverrides(overrides) {
-        copy := ObjectDeepCopy(this)
-        overridden := ObjectDeepAssign(copy, overrides)
+        overridden := new Environment()
+        for key, value in this {
+            if (!overrides.HasKey(key)) {
+                overridden[key] := value
+            }
+        }
+        for key, value in overrides {
+            overridden[key] := value
+        }
         return overridden
     }
 }
