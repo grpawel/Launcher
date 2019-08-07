@@ -91,3 +91,9 @@ ObjectDeepCopy(Array, Objs=0)
             : ObjectDeepCopy(Val,Objs) ; Otherwise, clone this sub-array
     return Obj
 }
+
+EnsureArray(ByRef var) {
+    if (!IsArray(var)) {
+        var := [var]
+    }
+}

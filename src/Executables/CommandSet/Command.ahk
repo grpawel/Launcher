@@ -26,8 +26,10 @@ class Command {
     }
 
     AddTags(tags) {
-        for tag in tags {
+        EnsureArray(tags)
+        for i, tag in tags {
             this.tags.Push(tag)
         }
+        return this
     }
 }
