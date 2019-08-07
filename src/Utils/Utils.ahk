@@ -25,9 +25,9 @@ uriEncode(str) {
     Return, pr . str
 }
 
-Debug(obj) {
+Debug(obj, title = "") {
     string := Obj2String(obj)
-    MsgBox, %string%
+    MsgBox, %title% `n %string%
 }
 
 StartsWith(haystack, needle) {
