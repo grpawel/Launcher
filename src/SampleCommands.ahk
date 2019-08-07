@@ -50,11 +50,11 @@ CreateCommands() {
 
     incognito.title := "Incognito mode"
     incognito.commands := topLevel.FilterCommands(HasTag(["web", "technical"])).commands
-    incognito.environmentOverride := { browser: browsers.FirefoxPrivate }
+    incognito.commandsBeforeRunning := [ new ChangeEnvironment({browser: browsers.FirefoxPrivate}, "untilGuiClosed")]
 
     clip.title := "Copy to clipboard"
-    clip.commands := topLevel.FilterCommands(HasTag(["hasPath"])).commands
-    clip.environmentOverride := { browser: openers.copy, fileOpener: openers.copy, folderOpener: openers.copy, defaultOpener: openers.copy }
+    clip.commands := topLevel.FilterCommands(HasTag(["hasPath", "technical"])).commands
+    clip.commandsBeforeRunning := [ new ChangeEnvironment({ browser: openers.copy, fileOpener: openers.copy, folderOpener: openers.copy, defaultOpener: openers.copy }, "untilGuiClosed") ]
 
     return topLevel
 }

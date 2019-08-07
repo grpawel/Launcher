@@ -10,24 +10,19 @@ class CommandSet extends Executable {
     commandsBeforeRunning := []
     commandsAfterRunning := []
 
-    ; Allows to change environment only for this specific CommandSet.
-    ; Special commands eg. in commandsBeforeRunning see those changes.
-    environmentOverride := {}
-
-    Execute(input, baseEnvironment, executableService) {
+    Execute(input, environment, executableService) {
         if (not this.commands.HasKey(input)) {
             return false
         }
-        environment := baseEnvironment.WithOverrides(this.environmentOverride)
         for i, commandBefore in this.commandsBeforeRunning {
-            %commandBefore%(environment)
+            %commandBefore%(executableService.GetEnvironment(), executableService)
         }
 
         command := this.commands[input]
-        result := %command%(environment, executableService)
+        result := %command%(executableService.GetEnvironment(), executableService)
 
         for i, commandAfter in this.commandsAfterRunning {
-            %commandAfter%(environment)
+            %commandAfter%(executableService.GetEnvironment(), executableService)
         }
         if (result == "") {
             return true

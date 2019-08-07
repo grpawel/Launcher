@@ -189,6 +189,8 @@ gui_destroy() {
 
     ; Hide GUI
     Gui, Destroy
+    global eventBus
+    eventBus.Emit("GuiClosed")
 
     ; Bring focus back to another window found on the desktop
     WinActivate
