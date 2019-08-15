@@ -1,8 +1,14 @@
 class ExecutableService {
-    __New(topLevelExecutable, environment) {
-        this._topLevelExecutable := topLevelExecutable
-        this._currentExecutable := topLevelExecutable
+    _topLevelExecutable := {}
+    _currentExecutable := {}
+
+    __New(environment) {
         this._environment := environment
+    }
+    
+    SetTopLevelExecutable(executable) {
+        this._topLevelExecutable := executable
+        this._currentExecutable := executable
     }
     
     ResetExecutable() {

@@ -13,14 +13,19 @@ global eventBus := new EventBus()
 
 #Include %A_ScriptDir%\src\Executables\CommandSet\ImportCommands.ahk
 
-#Include %A_ScriptDir%\UserCommands.ahk
-topLevelExecutable := CreateCommands()
-
 #Include %A_ScriptDir%\src\Environment\Environment.ahk
 environment := new Environment()
 
 #Include %A_ScriptDir%\src\Executables\ExecutableService.ahk
-global executableService := new ExecutableService(topLevelExecutable, environment)
+global executableService := new ExecutableService(environment)
+
+#Include %A_ScriptDir%\src\Extensions\RegisterExtensions.ahk
+RegisterExtensions(executableService)
+
+#Include %A_ScriptDir%\UserCommands.ahk
+topLevelExecutable := CreateCommands()
+
+executableService.SetTopLevelExecutable(topLevelExecutable)
 
 ; #InstallKeybdHook
 
