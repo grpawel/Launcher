@@ -9,6 +9,6 @@ class Web extends Command {
     }
 
     Run(environment) {
-        environment.browser.Open(this._url)
+        environment.Open.Website(this._url, environment)
     }
 }

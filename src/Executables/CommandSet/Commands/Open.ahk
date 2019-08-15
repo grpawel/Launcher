@@ -9,6 +9,6 @@ class Open extends Command {
     }
 
     Run(environment, executableService) {
-        environment.defaultOpener.Open(this._toRun, environment)
+        environment.Open.Default(this._toRun, environment)
     }
 }

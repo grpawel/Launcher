@@ -1,4 +1,13 @@
 class Opener {
-    Open(argument, environment = "") {
+    Default(argument, environment = "") {
+    }
+
+    Website(website, environment = "") {
+    }
+
+    Folder(folder, environment = "") {
+    }
+
+    File(file, environment = "") {
     }
 }

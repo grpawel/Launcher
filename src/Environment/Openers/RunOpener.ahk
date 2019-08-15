@@ -1,13 +1,25 @@
 #Include %A_ScriptDir%\src\Environment\Opener.ahk
 
 class RunOpener extends Opener {
-    __New(programName) {
-        this._programName := programName
+    Default(argument) {
+        this._Open(argument, "")
     }
 
-    Open(argument) {
-        if (this._programName <> "") {
-            command := this._programName " """ argument """"
+    Website(website, environment) {
+        this._Open(website, environment.browser)
+    }
+
+    Folder(folder, environment) {
+        this._Open(folder, environment.folderProgram)
+    }
+
+    File(file, environment) {
+        this._Open(file, environment.fileProgram)
+    }
+
+    _Open(argument, programName) {
+        if (programName != "") {
+            command := programName " """ argument """"
         }
         else {
             command := argument
@@ -15,4 +27,3 @@ class RunOpener extends Opener {
         Run, %command%
     }
 }
-

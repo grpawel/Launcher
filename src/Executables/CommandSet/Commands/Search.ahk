@@ -27,7 +27,7 @@ class WebSearchExecutable extends Executable {
 
     Execute(query, environment) {
         url := StrReplace(this._urlTemplate, "REPLACEME", query)
-        environment.browser.Open(url)
+        environment.Open.Website(url, environment)
         return true
     }
 }

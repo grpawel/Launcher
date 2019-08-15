@@ -2,13 +2,9 @@
 #Include %A_ScriptDir%\src\Environment\ImportOpeners.ahk
 
 CreateCommands() {
-    browsers := { firefox: new RunOpener("""firefox""")
-                , chrome: new RunOpener("""chrome""")
-                , firefoxPrivate: new RunOpener("""firefox"" ""-private-window""")
-                , default: new RunOpener("") }
-
-    openers :=  { default: new RunOpener("explorer")
-                , copy: new CopyToClipboardOpener() }
+    browsers := { firefox: """firefox"""
+                , chrome: """chrome"""
+                , firefoxPrivate: """firefox"" ""-private-window""" }
                     
     topLevel := new CommandSet()
     incognito := new CommandSet()
@@ -54,7 +50,7 @@ CreateCommands() {
 
     clip.title := "Copy to clipboard"
     clip.commands := topLevel.FilterCommands(HasTag(["hasPath", "technical"])).commands
-    clip.commandsBeforeRunning := [ new ChangeEnvironment({ browser: openers.copy, fileOpener: openers.copy, folderOpener: openers.copy, defaultOpener: openers.copy }, "untilGuiClosed") ]
+    clip.commandsBeforeRunning := [ new ChangeEnvironment({ Open: new CopyToClipboardOpener() }, "untilGuiClosed") ]
 
     return topLevel
 }
