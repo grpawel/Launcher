@@ -8,7 +8,7 @@ class Open extends Command {
         this.description := "Open " this._toRun
     }
 
-    Run(environment) {
-        environment.defaultOpener.Open(this._toRun)
+    Run(environment, executableService) {
+        environment.defaultOpener.Open(this._toRun, environment)
     }
 }

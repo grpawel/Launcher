@@ -1,4 +1,4 @@
 class Opener {
-    Open(argument) {
+    Open(argument, environment = "") {
     }
 }

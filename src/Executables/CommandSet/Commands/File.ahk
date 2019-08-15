@@ -9,6 +9,6 @@ class File extends Command {
     }
 
     Run(environment) {
-        environment.fileOpener.Open(this._path)
+        environment.fileOpener.Open(this._path, environment)
     }
 }

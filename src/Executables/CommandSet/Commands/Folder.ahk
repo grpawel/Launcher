@@ -9,6 +9,6 @@ class Folder extends Command {
     }
 
     Run(environment) {
-        environment.folderOpener.Open(this._path)
+        environment.folderOpener.Open(this._path, environment)
     }
 }
