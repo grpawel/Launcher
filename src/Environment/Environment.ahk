@@ -1,7 +1,7 @@
 #Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
 
 class Environment {
-    browser := "firefox"
+    browser := "C:\Program Files\Mozilla Firefox\firefox.exe"
     fileProgram := ""
     folderProgram := "explorer"
     defaultProgram := ""
