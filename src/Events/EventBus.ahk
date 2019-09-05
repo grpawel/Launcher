@@ -5,12 +5,17 @@ class EventBus {
 
     ; Subscribe to all emissions of event named `eventName`.
     ; Returned value can be used to unsubscribe.
+    ;
+    ; Remark:
+    ; When subscriber is added or removed in response to emitted event,
+    ; the subscriber may or may not receive the event.
+    ; Do not rely on observed behavior.
     Subscribe(eventName, subscriber) {
         if (!this._subscribers.HasKey(eventName)) {
-            this._subscribers[eventName] := new this._Event()
+            this._subscribers[eventName] := new this._SubscriberList()
         }
         key := RandomString(8) ; for 1000 subscribers collision probability is ~ 1e-8 - acceptable risk
-        subscriberList := this._subscribers[eventName].everytime[key] := subscriber
+        this._subscribers[eventName].everytime[key] := subscriber
         return { eventName: eventName, key: key, kind: "everytime" }
     }
 
@@ -27,11 +32,10 @@ class EventBus {
     ; Returned value can be used to unsubscribe before the event is emitted.
     SubscribeOnce(eventName, subscriber) {
         if (!this._subscribers.HasKey(eventName)) {
-            this._subscribers[eventName] := new this._Event()
+            this._subscribers[eventName] := new this._SubscriberList()
         }
-        this._subscribers[eventName].once[key] := subscriber
         key := RandomString(8)
-        subscriberList := this._subscribers[eventName].once[key] := subscriber
+        this._subscribers[eventName].once[key] := subscriber
         return { eventName: eventName, key: key, kind: "once" }
     }
 
@@ -39,17 +43,20 @@ class EventBus {
         if (!this._subscribers.hasKey(eventName)) {
             return
         }
-        for i, subscriber in this._subscribers[eventName].everytime {
+        subscriberList := this._subscribers[eventName]
+
+        for key, subscriber in subscriberList.everytime.Clone() {
             %subscriber%(payload)
         }
-        for i, subscriber in this._subscribers[eventName].once {
+        oneTimeSubscribers := subscriberList.once.Clone()
+        for key, subscriber in oneTimeSubscribers {
             %subscriber%(payload)
+            subscriberList.once.Delete(key)
         }
-        this._subscribers[eventName].once := []
     }
 
-    class _Event {
-        everytime := []
-        once := []
+    class _SubscriberList {
+        everytime := {}
+        once := {}
     }
 }
