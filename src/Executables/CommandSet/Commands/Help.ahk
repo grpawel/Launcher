@@ -6,16 +6,16 @@ class Help extends Command {
     tags := ["technical"]
 
     Run(mainController) {
-        currentExecutable := mainController.GetCurrentExecutable()
-        isActive := currentExecutable.base.__Class == "HelpExecutable"
+        activeCommand := mainController.GetActiveCommand()
+        isActive := activeCommand.base.__Class == "HelpExecutable"
         if (!isActive) {
-            this._originalExecutable := currentExecutable
-            helpWrapper := new HelpExecutable(this._originalExecutable)
-            mainController.ChangeExecutable(helpWrapper)
+            this._originalCommand := activeCommand
+            helpWrapper := new HelpExecutable(this._originalCommand)
+            mainController.SetActiveCommand(helpWrapper)
             GuiShowListView()
         } else {
             GuiRemoveListView()
-            mainController.ChangeExecutable(this._originalExecutable)
+            mainController.SetActiveCommand(this._originalCommand)
         }
         GuiSetInput("")
         return false
@@ -46,7 +46,7 @@ class HelpExecutable extends Executable {
         GuiPopulateListView(rows)
     }
 
-    OnBeforeExecutableChanged() {
+    Deactivate() {
         GuiRemoveListView()
     }
 }

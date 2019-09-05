@@ -1,38 +1,38 @@
 class MainController {
-    _topLevelExecutable := {}
-    _currentExecutable := {}
+    _rootCommand := {}
+    _activeCommand := {}
 
     __New(environment) {
         this._environment := environment
     }
     
-    SetTopLevelExecutable(executable) {
-        this._topLevelExecutable := executable
-        this._currentExecutable := executable
+    SetRootCommand(rootCommand) {
+        this._rootCommand := rootCommand
+        this._activeCommand := rootCommand
     }
     
-    ResetExecutable() {
-        this._currentExecutable := this._topLevelExecutable
+    ResetToRoot() {
+        this._activeCommand := this._rootCommand
     }
 
-    ChangeExecutable(newExecutable) {
-        this._currentExecutable.OnBeforeExecutableChanged()
-        this._currentExecutable := newExecutable
+    SetActiveCommand(newCommand) {
+        this._activeCommand.Deactivate(this)
+        this._activeCommand := newCommand
+        this._activeCommand.Activate(this)
     }
 
     Execute(param, method) {
-        executable := this._currentExecutable
-        if (ArrayContains(executable.subscribedTo, method)) {
-            return executable.Execute(param, this)
+        if (ArrayContains(this._activeCommand.subscribedTo, method)) {
+            return this._activeCommand.Execute(param, this)
         }
     }
 
-    GetCurrentExecutable() {
-        return this._currentExecutable
+    GetActiveCommand() {
+        return this._activeCommand
     }
 
     GetTitle() {
-        return this._currentExecutable.GetTitle()
+        return this._activeCommand.GetTitle()
     }
 
     GetEnvironment() {

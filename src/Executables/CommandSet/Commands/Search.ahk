@@ -10,7 +10,7 @@ class Search extends Command {
     }
 
     Run(mainController) {
-        mainController.ChangeExecutable(this._searchExecutable)
+        mainController.SetActiveCommand(this._searchExecutable)
         global level := level + 1
         GuiAddInput("onlyEnter")
         return false

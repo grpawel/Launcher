@@ -23,9 +23,9 @@ global mainController := new MainController(environment)
 RegisterExtensions(mainController)
 
 #Include %A_ScriptDir%\UserCommands.ahk
-topLevelExecutable := CreateCommands()
+rootCommand := CreateCommands()
 
-mainController.SetTopLevelExecutable(topLevelExecutable)
+mainController.SetRootCommand(rootCommand)
 
 ; #InstallKeybdHook
 

@@ -47,7 +47,7 @@ gui_spawn:
 
     gui_state = main
     global mainController
-    mainController.ResetExecutable()
+    mainController.ResetToRoot()
     Gui, Margin, 16, 16
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
