@@ -1,4 +1,4 @@
-﻿#Include %A_ScriptDir%\src\Executables\CommandSet\Operations\Filters.ahk
+﻿#Include %A_ScriptDir%\src\Commands\Filters.ahk
 #Include %A_ScriptDir%\src\Environment\ImportOpeners.ahk
 
 CreateCommands() {

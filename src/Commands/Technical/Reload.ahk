@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%\src\Executables\CommandSet\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class Reload extends Command {
     description := "Reload script"

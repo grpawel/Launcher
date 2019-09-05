@@ -1,4 +1,4 @@
-﻿#Include %A_ScriptDir%\src\Executables\Executable.ahk
+﻿#Include %A_ScriptDir%\src\Commands\Executable.ahk
 
 class CommandSet extends Executable {
     commands := {}

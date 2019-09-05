@@ -1,6 +1,6 @@
 #Include <windows-desktop-switcher/functions>
  
-#Include %A_ScriptDir%\src\Executables\CommandSet\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class ChangeDesktop extends Command {
     __New(num) {

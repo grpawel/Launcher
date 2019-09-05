@@ -11,12 +11,12 @@ SetCapsLockState, AlwaysOff
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
 global eventBus := new EventBus()
 
-#Include %A_ScriptDir%\src\Executables\CommandSet\ImportCommands.ahk
+#Include %A_ScriptDir%\src\Commands\ImportCommands.ahk
 
 #Include %A_ScriptDir%\src\Environment\Environment.ahk
 environment := new Environment()
 
-#Include %A_ScriptDir%\src\Executables\MainController.ahk
+#Include %A_ScriptDir%\src\MainController.ahk
 global mainController := new MainController(environment)
 
 #Include %A_ScriptDir%\src\Extensions\RegisterExtensions.ahk

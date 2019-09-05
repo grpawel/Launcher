@@ -1,5 +1,5 @@
-#Include %A_ScriptDir%\src\Executables\CommandSet\Command.ahk
-#Include %A_ScriptDir%\src\Executables\Executable.ahk
+#Include %A_ScriptDir%\src\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Executable.ahk
 
 class Search extends Command {
     tags := ["web", "hasPath"]

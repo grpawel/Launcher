@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%\src\Executables\CommandSet\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Command.ahk
 
 ; Runs sequence of commands one after another.
 class Sequence extends Command {
