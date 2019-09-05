@@ -52,14 +52,14 @@ gui_spawn:
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
     Gui, Font, s10, Segoe UI
-    global level = 1
-    GuiAddInput("eachKey")
+    global level = 0
     Gui, Show,, myGUI
     return
 
 
-GuiAddInput(submitAction) {
+GuiAddInput() {
     global ; global gui_control_options does not work
+    level += 1
     local title := mainController.GetTitle()
     local previousInputVar := "input" (level - 1)
     local currentInputVar := getCurrentInputVar()

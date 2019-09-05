@@ -8,8 +8,7 @@ class Switch extends Command {
 
     Run(mainController) {
         mainController.SetActiveCommand(this._newCommandSet)
-        global level := level +1
-        GuiAddInput("eachKey")
+        GuiAddInput()
         return false
     }
 }
