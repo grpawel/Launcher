@@ -7,7 +7,7 @@ class ChangeDesktop extends Command {
         this._number := num
     }
 
-    Run(environment, executableService) {
+    Run(executableService) {
         SwitchDesktopByNumber(this._number)
     }
 }

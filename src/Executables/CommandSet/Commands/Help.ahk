@@ -5,8 +5,7 @@ class Help extends Command {
     description := "Show/hide help"
     tags := ["technical"]
 
-    Run() {
-        global executableService
+    Run(executableService) {
         currentExecutable := executableService.GetCurrentExecutable()
         isActive := currentExecutable.base.__Class == "HelpExecutable"
         if (!isActive) {
@@ -30,9 +29,9 @@ class HelpExecutable extends Executable {
         this._commandSet := commandSet
     }
 
-    Execute(input, environment, executableService) {
+    Execute(input, executableService) {
         this._Populate(input)
-        return this._commandSet.Execute(input, environment, executableService)
+        return this._commandSet.Execute(input, executableService)
     }
 
     _Populate(input) {

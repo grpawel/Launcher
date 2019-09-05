@@ -9,7 +9,7 @@ class Search extends Command {
         this.description := title
     }
 
-    Run(environment, executableService) {
+    Run(executableService) {
         executableService.ChangeExecutable(this._searchExecutable)
         global level := level + 1
         GuiAddInput("onlyEnter")
@@ -25,9 +25,10 @@ class WebSearchExecutable extends Executable {
         this.title := title
     }
 
-    Execute(query, environment) {
+    Execute(query, executableService) {
         url := StrReplace(this._urlTemplate, "REPLACEME", query)
-        environment.Open.Website(url, environment)
+        env := executableService.GetEnvironment()
+        env.Open.Website(url, env)
         return true
     }
 }

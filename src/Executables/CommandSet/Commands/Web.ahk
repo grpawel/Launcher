@@ -8,7 +8,8 @@ class Web extends Command {
         this.description := "Open " url
     }
 
-    Run(environment) {
-        environment.Open.Website(this._url, environment)
+    Run(executableService) {
+        env := executableService.GetEnvironment()
+        env.Open.Website(this._url, env)
     }
 }

@@ -13,7 +13,7 @@ class ChangeEnvironment extends Command {
         this._mode := mode
     }
 
-    Run(environment, executableService) {
+    Run(executableService) {
         if (this._mode == "permanent") {
             executableService.UpdateEnvironment(this._changes)
         }

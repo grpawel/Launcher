@@ -4,7 +4,7 @@ class Reload extends Command {
     description := "Reload script"
     tags := ["technical"]
 
-    Run() {
+    Run(executableService) {
         Reload
     }
 }

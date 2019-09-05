@@ -6,10 +6,10 @@ class Sequence extends Command {
         this._commands := commands
     }
 
-    Run(environment, executableService) {
+    Run(executableService) {
         result := true
         for index, command in this._commands {
-            singleResult := %command%(environment, executableService)
+            singleResult := %command%(executableService)
             result := result && singleResult
         }
         return result

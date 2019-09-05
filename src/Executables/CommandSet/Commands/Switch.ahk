@@ -6,7 +6,7 @@ class Switch extends Command {
        this.description := "Switch to " newCommandSet.GetTitle()
     }
 
-    Run(environment, executableService) {
+    Run(executableService) {
         executableService.ChangeExecutable(this._newCommandSet)
         global level := level +1
         GuiAddInput("eachKey")

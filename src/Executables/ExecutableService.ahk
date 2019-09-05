@@ -23,7 +23,7 @@ class ExecutableService {
     Execute(param, method) {
         executable := this._currentExecutable
         if (ArrayContains(executable.subscribedTo, method)) {
-            return executable.Execute(param, this._environment, this)
+            return executable.Execute(param, this)
         }
     }
 

@@ -8,7 +8,8 @@ class File extends Command {
         this.description := "Open file " path
     }
 
-    Run(environment) {
-        environment.Open.File(this._path, environment)
+    Run(executableService) {
+        env := executableService.GetEnvironment()
+        env.Open.File(this._path, env)
     }
 }
