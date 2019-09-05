@@ -10,19 +10,19 @@ class CommandSet extends Executable {
     commandsBeforeRunning := []
     commandsAfterRunning := []
 
-    Execute(input, executableService) {
+    Execute(input, mainController) {
         if (not this.commands.HasKey(input)) {
             return false
         }
         for i, commandBefore in this.commandsBeforeRunning {
-            %commandBefore%(executableService)
+            %commandBefore%(mainController)
         }
 
         command := this.commands[input]
-        result := %command%(executableService)
+        result := %command%(mainController)
 
         for i, commandAfter in this.commandsAfterRunning {
-            %commandAfter%(executableService)
+            %commandAfter%(mainController)
         }
         if (result == "") {
             return true

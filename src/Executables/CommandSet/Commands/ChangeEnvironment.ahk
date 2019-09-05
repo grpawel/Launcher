@@ -13,18 +13,18 @@ class ChangeEnvironment extends Command {
         this._mode := mode
     }
 
-    Run(executableService) {
+    Run(mainController) {
         if (this._mode == "permanent") {
-            executableService.UpdateEnvironment(this._changes)
+            mainController.UpdateEnvironment(this._changes)
         }
         else if (this._mode == "untilGuiClosed") {
-            oldValues := executableService.UpdateEnvironment(this._changes)
+            oldValues := mainController.UpdateEnvironment(this._changes)
             global eventBus
-            eventBus.SubscribeOnce("GuiClosed", ChangeEnvironment._Revert.Bind(this, oldValues, executableService))
+            eventBus.SubscribeOnce("GuiClosed", ChangeEnvironment._Revert.Bind(this, oldValues, mainController))
         }
     }
 
-    _Revert(oldValues, executableService) {
-        executableService.UpdateEnvironment(oldValues)
+    _Revert(oldValues, mainController) {
+        mainController.UpdateEnvironment(oldValues)
     }
 }

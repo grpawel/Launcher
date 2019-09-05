@@ -8,8 +8,8 @@ class Folder extends Command {
         this.description := "Open folder" path
     }
 
-    Run(executableService) {
-        env := executableService.GetEnvironment()
+    Run(mainController) {
+        env := mainController.GetEnvironment()
         env.Open.Folder(this._path, env)
     }
 }

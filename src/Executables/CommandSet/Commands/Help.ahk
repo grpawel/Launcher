@@ -5,17 +5,17 @@ class Help extends Command {
     description := "Show/hide help"
     tags := ["technical"]
 
-    Run(executableService) {
-        currentExecutable := executableService.GetCurrentExecutable()
+    Run(mainController) {
+        currentExecutable := mainController.GetCurrentExecutable()
         isActive := currentExecutable.base.__Class == "HelpExecutable"
         if (!isActive) {
             this._originalExecutable := currentExecutable
             helpWrapper := new HelpExecutable(this._originalExecutable)
-            executableService.ChangeExecutable(helpWrapper)
+            mainController.ChangeExecutable(helpWrapper)
             GuiShowListView()
         } else {
             GuiRemoveListView()
-            executableService.ChangeExecutable(this._originalExecutable)
+            mainController.ChangeExecutable(this._originalExecutable)
         }
         GuiSetInput("")
         return false
@@ -29,9 +29,9 @@ class HelpExecutable extends Executable {
         this._commandSet := commandSet
     }
 
-    Execute(input, executableService) {
+    Execute(input, mainController) {
         this._Populate(input)
-        return this._commandSet.Execute(input, executableService)
+        return this._commandSet.Execute(input, mainController)
     }
 
     _Populate(input) {

@@ -1,4 +1,4 @@
-class ExecutableService {
+class MainController {
     _topLevelExecutable := {}
     _currentExecutable := {}
 

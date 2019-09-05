@@ -1,14 +1,12 @@
 #Include <windows-desktop-switcher/functions>
 
-#Include %A_ScriptDir%\src\Executables\ExecutableService.ahk
-
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Executables\CommandSet\Commands\ChangeDesktop.ahk
 
-DesktopsExtension(executableService) {
-    executableService.base.GetDesktop := Func("executableService_GetDesktop")
+DesktopsExtension(mainController) {
+    mainController.base.GetDesktop := Func("mainController_GetDesktop")
 }
 
-executableService_GetDesktop(self) {
+mainController_GetDesktop(self) {
     mapDesktopsFromRegistry()
     global CurrentDesktop
     return CurrentDesktop

@@ -8,8 +8,8 @@ class Open extends Command {
         this.description := "Open " this._toRun
     }
 
-    Run(executableService) {
-        env := executableService.GetEnvironment()
+    Run(mainController) {
+        env := mainController.GetEnvironment()
         env.Open.Default(this._toRun, env)
     }
 }

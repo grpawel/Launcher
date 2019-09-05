@@ -2,9 +2,9 @@ class Command {
     description := "-"
     tags := []
 
-    __Call(method, executableService) {
+    __Call(method, mainController) {
         if (method == "Run" || method == "") {
-            result := this.Run(executableService)
+            result := this.Run(mainController)
             if (result == "") {
                 return true
             }
@@ -12,7 +12,7 @@ class Command {
         }
     }
 
-    Run(executableService) {
+    Run(mainController) {
         throw "Not implemented"
     }
 

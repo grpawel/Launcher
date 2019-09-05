@@ -9,8 +9,8 @@ class Search extends Command {
         this.description := title
     }
 
-    Run(executableService) {
-        executableService.ChangeExecutable(this._searchExecutable)
+    Run(mainController) {
+        mainController.ChangeExecutable(this._searchExecutable)
         global level := level + 1
         GuiAddInput("onlyEnter")
         return false
@@ -25,9 +25,9 @@ class WebSearchExecutable extends Executable {
         this.title := title
     }
 
-    Execute(query, executableService) {
+    Execute(query, mainController) {
         url := StrReplace(this._urlTemplate, "REPLACEME", query)
-        env := executableService.GetEnvironment()
+        env := mainController.GetEnvironment()
         env.Open.Website(url, env)
         return true
     }

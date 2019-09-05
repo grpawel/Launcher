@@ -16,16 +16,16 @@ global eventBus := new EventBus()
 #Include %A_ScriptDir%\src\Environment\Environment.ahk
 environment := new Environment()
 
-#Include %A_ScriptDir%\src\Executables\ExecutableService.ahk
-global executableService := new ExecutableService(environment)
+#Include %A_ScriptDir%\src\Executables\MainController.ahk
+global mainController := new MainController(environment)
 
 #Include %A_ScriptDir%\src\Extensions\RegisterExtensions.ahk
-RegisterExtensions(executableService)
+RegisterExtensions(mainController)
 
 #Include %A_ScriptDir%\UserCommands.ahk
 topLevelExecutable := CreateCommands()
 
-executableService.SetTopLevelExecutable(topLevelExecutable)
+mainController.SetTopLevelExecutable(topLevelExecutable)
 
 ; #InstallKeybdHook
 

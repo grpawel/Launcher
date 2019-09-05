@@ -1,4 +1,4 @@
-﻿; Created by Asger Juul Brunshøj
+; Created by Asger Juul Brunshøj
 
 ; Note: Save with encoding UTF-8 with BOM if possible.
 ; I had issues with special characters like in ¯\_(ツ)_/¯ that wouldn't work otherwise.
@@ -46,8 +46,8 @@ gui_spawn:
     }
 
     gui_state = main
-    global executableService
-    executableService.ResetExecutable()
+    global mainController
+    mainController.ResetExecutable()
     Gui, Margin, 16, 16
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
@@ -60,7 +60,7 @@ gui_spawn:
 
 GuiAddInput(submitAction) {
     global ; global gui_control_options does not work
-    local title := executableService.GetTitle()
+    local title := mainController.GetTitle()
     local previousInputVar := "input" (level - 1)
     local currentInputVar := getCurrentInputVar()
     if (title <> "") {
@@ -131,8 +131,8 @@ getCurrentInputVar() {
 }
 
 Execute(input, method) {
-    global executableService
-    result := executableService.Execute(input, method)
+    global mainController
+    result := mainController.Execute(input, method)
     if (result == true) {
         gui_destroy()
     }

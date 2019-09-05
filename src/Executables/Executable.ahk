@@ -4,7 +4,7 @@ class Executable {
     ; possible values: ["keyPressed", "returnPressed", "rowDoubleClicked"]
     subscribedTo := []
 
-    Execute(input, executableService) {
+    Execute(input, mainController) {
         return false
     }
 
