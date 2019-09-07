@@ -1,14 +1,11 @@
 class Command {
     description := "-"
     tags := []
+    doesNeedGui := false
 
     __Call(method, mainController) {
         if (method == "Run" || method == "") {
-            result := this.Run(mainController)
-            if (result == "") {
-                return true
-            }
-            return result
+            this.Run(mainController)
         }
     }
 

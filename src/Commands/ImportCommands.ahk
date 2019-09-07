@@ -10,4 +10,3 @@
 #Include %A_ScriptDir%\src\Commands\Technical\ChangeEnvironment.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\Help.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\Reload.ahk
-#Include %A_ScriptDir%\src\Commands\Technical\Switch.ahk

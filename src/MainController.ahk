@@ -8,23 +8,19 @@ class MainController {
     
     SetRootCommand(rootCommand) {
         this._rootCommand := rootCommand
-        this._activeCommand := rootCommand
     }
     
     ResetToRoot() {
-        this._activeCommand := this._rootCommand
+        this.SetActiveCommand(this._rootCommand)
     }
 
     SetActiveCommand(newCommand) {
-        this._activeCommand.Deactivate(this)
+        oldCommand := this._activeCommand
+        oldCommand.Deactivate(this)
+        global eventBus
+        eventBus.Emit("CommandDeactivated", oldCommand)
         this._activeCommand := newCommand
         this._activeCommand.Activate(this)
-    }
-
-    Execute(param, method) {
-        if (ArrayContains(this._activeCommand.subscribedTo, method)) {
-            return this._activeCommand.Execute(param, this)
-        }
     }
 
     GetActiveCommand() {
@@ -55,4 +51,3 @@ class MainController {
         return oldChangedValues
     }
 }
-

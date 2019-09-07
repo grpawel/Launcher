@@ -4,39 +4,31 @@
 class Help extends Command {
     description := "Show/hide help"
     tags := ["technical"]
+    doesNeedGui := true
+
+    _keyPressSubscription :=
+    _commandDeactivatedSubscription :=
 
     Run(mainController) {
+        global eventBus
         activeCommand := mainController.GetActiveCommand()
-        isActive := activeCommand.base.__Class == "HelpExecutable"
-        if (!isActive) {
-            this._originalCommand := activeCommand
-            helpWrapper := new HelpExecutable(this._originalCommand)
-            mainController.SetActiveCommand(helpWrapper)
+        if (!activeCommand.isHelpOpened) {
+            activeCommand.isHelpOpened := true
+            this._keyPressSubscription := eventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, activeCommand.commands), "HELP")
+            this._commandDeactivatedSubscription := eventBus.SubscribeOnce("CommandDeactivated", this._OnCommandDeactivated.Bind(this))
             GuiShowListView()
         } else {
+            command.isHelpOpened := false
             GuiRemoveListView()
-            mainController.SetActiveCommand(this._originalCommand)
+            eventBus.Unsubscribe(this._keyPressSubscription)
+            eventBus.Unsubscribe(this._commandDeactivatedSubscription)
         }
         GuiSetInput("")
-        return false
-    }
-}
-
-class HelpExecutable extends Executable {
-    subscribedTo := ["keyPressed", "returnPressed", "rowDoubleClicked"]
-
-    __New(commandSet) {
-        this._commandSet := commandSet
     }
 
-    Execute(input, mainController) {
-        this._Populate(input)
-        return this._commandSet.Execute(input, mainController)
-    }
-
-    _Populate(input) {
+    _OnKeyPressed(commands, input) {
         rows := []
-        for key, value in this._commandSet.commands {
+        for key, value in commands {
             description := value.GetDescription()
             if (StartsWith(key, input)) {
                 rows.Push([key, description])
@@ -46,7 +38,8 @@ class HelpExecutable extends Executable {
         GuiPopulateListView(rows)
     }
 
-    Deactivate() {
+    _OnCommandDeactivated(previousCommand) {
+        previousCommand.isHelpOpened := false
         GuiRemoveListView()
     }
 }

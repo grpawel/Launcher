@@ -27,7 +27,7 @@ gui_autoexecute:
     ; -E0x200 removes border around Edit controls
 
     ; Initialize variable to keep track of the state of the GUI
-    gui_state = closed
+    gui_state := "closed"
 
     ; Initialize search_urls as a variable set to zero
     search_urls := 0
@@ -46,14 +46,14 @@ gui_spawn:
     }
 
     gui_state = main
-    global mainController
-    mainController.ResetToRoot()
     Gui, Margin, 16, 16
     Gui, Color, 1d1f21, 282a2e
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
     Gui, Font, s10, Segoe UI
     global level = 0
     Gui, Show,, myGUI
+    global mainController
+    mainController.ResetToRoot()
     return
 
 
@@ -79,6 +79,7 @@ GuiSetInput(input) {
     global
     inputVar := "input" level
     GuiControl, Text, %inputVar%, %input%
+    eventBus.Emit("keyPressed", input)
 }
 
 GuiShowListView() {
@@ -133,6 +134,8 @@ getCurrentInputVar() {
 Execute(input, method) {
     global mainController
     result := mainController.Execute(input, method)
+    global eventBus
+    eventBus.Emit(method, input)
     if (result == true) {
         gui_destroy()
     }

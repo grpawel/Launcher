@@ -2,32 +2,51 @@
 
 class CommandSet extends Executable {
     commands := {}
+    doesNeedGui := true
 
-    subscribedTo := ["keyPressed", "returnPressed"]
+    _keyPressedSubscription :=
 
     ; These commands are run just before and after one selected by user.
     ; Results of these commands are not used.
     commandsBeforeRunning := []
     commandsAfterRunning := []
 
-    Execute(input, mainController) {
+    Run(mainController) {
+        mainController.SetActiveCommand(this)
+    }
+
+    Activate(mainController) {
+        global eventBus
+        this._keyPressedSubscription := eventBus.Subscribe("keyPressed", this._OnUserInput.Bind(this, mainController))
+        GuiAddInput()
+    }
+
+    Deactivate(mainController) {
+        global eventBus
+        eventBus.Unsubscribe(this._keyPressedSubscription)
+    }
+
+    _OnUserInput(mainController, input) {
         if (not this.commands.HasKey(input)) {
-            return false
+            return
         }
+        closeGuiAfter := true
         for i, commandBefore in this.commandsBeforeRunning {
             %commandBefore%(mainController)
+            closeGuiAfter := closeGuiAfter && !commandBefore.doesNeedGui
         }
 
         command := this.commands[input]
-        result := %command%(mainController)
+        %command%(mainController)
+        closeGuiAfter := closeGuiAfter && !command.doesNeedGui
 
         for i, commandAfter in this.commandsAfterRunning {
             %commandAfter%(mainController)
+            closeGuiAfter := closeGuiAfter && !commandAfter.doesNeedGui
         }
-        if (result == "") {
-            return true
+        if (closeGuiAfter) {
+            gui_destroy()
         }
-        return result
     }
 
     ; Returns new empty `CommandSet` with commands matching filter.
