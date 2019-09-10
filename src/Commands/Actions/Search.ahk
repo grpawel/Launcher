@@ -13,14 +13,14 @@ class Search extends Command {
     }
 
     Run(mainController) {
-        global eventBus
-        this._keyPressedSubscription := eventBus.Subscribe("returnPressed", this._OnUserInput.Bind(this, mainController))
+        global globalEventBus
+        this._keyPressedSubscription := globalEventBus.Subscribe("returnPressed", this._OnUserInput.Bind(this, mainController))
         GuiAddInput()
     }
 
     _OnUserInput(mainController, input) {
-        global eventBus
-        eventBus.Unsubscribe(this._keyPressedSubscription)
+        global globalEventBus
+        globalEventBus.Unsubscribe(this._keyPressedSubscription)
         url := StrReplace(this._urlTemplate, "REPLACEME", input)
         env := mainController.GetEnvironment()
         env.Open.Website(url, env)

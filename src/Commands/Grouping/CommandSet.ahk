@@ -12,8 +12,8 @@ class CommandSet extends Command {
     commandsAfterRunning := []
 
     Run(mainController) {
-        global eventBus
-        this._keyPressedSubscription := eventBus.Subscribe("keyPressed", this._OnUserInput.Bind(this, mainController))
+        global globalEventBus
+        this._keyPressedSubscription := globalEventBus.Subscribe("keyPressed", this._OnUserInput.Bind(this, mainController))
         GuiAddInput()
     }
 
@@ -21,8 +21,8 @@ class CommandSet extends Command {
         if (not this.commands.HasKey(input)) {
             return
         }
-        global eventBus
-        eventBus.Unsubscribe(this._keyPressedSubscription)
+        global globalEventBus
+        globalEventBus.Unsubscribe(this._keyPressedSubscription)
         closeGuiAfter := true
         for i, commandBefore in this.commandsBeforeRunning {
             %commandBefore%(mainController)

@@ -79,7 +79,7 @@ GuiSetInput(input) {
     global
     inputVar := "input" level
     GuiControl, Text, %inputVar%, %input%
-    eventBus.Emit("keyPressed", input)
+    globalEventBus.Emit("keyPressed", input)
 }
 
 GuiShowListView() {
@@ -134,8 +134,8 @@ getCurrentInputVar() {
 Execute(input, method) {
     global mainController
     result := mainController.Execute(input, method)
-    global eventBus
-    eventBus.Emit(method, input)
+    global globalEventBus
+    globalEventBus.Emit(method, input)
     if (result == true) {
         gui_destroy()
     }
@@ -192,8 +192,8 @@ gui_destroy() {
 
     ; Hide GUI
     Gui, Destroy
-    global eventBus
-    eventBus.Emit("GuiClosed")
+    global globalEventBus
+    globalEventBus.Emit("GuiClosed")
 
     ; Bring focus back to another window found on the desktop
     WinActivate

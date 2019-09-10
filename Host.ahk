@@ -9,7 +9,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 SetCapsLockState, AlwaysOff
 
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
-global eventBus := new EventBus()
+global globalEventBus := new EventBus()
 
 #Include %A_ScriptDir%\src\Commands\ImportCommands.ahk
 

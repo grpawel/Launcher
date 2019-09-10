@@ -19,8 +19,8 @@ class ChangeEnvironment extends Command {
         }
         else if (this._mode == "untilGuiClosed") {
             oldValues := mainController.UpdateEnvironment(this._changes)
-            global eventBus
-            eventBus.SubscribeOnce("GuiClosed", ChangeEnvironment._Revert.Bind(this, oldValues, mainController))
+            global globalEventBus
+            globalEventBus.SubscribeOnce("GuiClosed", ChangeEnvironment._Revert.Bind(this, oldValues, mainController))
         }
     }
 
