@@ -21,8 +21,7 @@ class CommandSet extends Command {
         if (not this.commands.HasKey(input)) {
             return
         }
-        global globalEventBus
-        globalEventBus.Unsubscribe(this._keyPressedSubscription)
+        this._keyPressedSubscription.Unsubscribe()
         closeGuiAfter := true
         for i, commandBefore in this.commandsBeforeRunning {
             %commandBefore%(mainController)

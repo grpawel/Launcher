@@ -13,14 +13,14 @@ class Help extends Command {
         activeCommand := mainController.GetActiveCommand()
         if (!activeCommand.isHelpOpened) {
             activeCommand.isHelpOpened := true
-            this._keyPressSubscription := globalEventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, activeCommand.commands), "HELP")
+            this._keyPressSubscription := globalEventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, activeCommand.commands))
             this._commandDeactivatedSubscription := globalEventBus.SubscribeOnce("CommandDeactivated", this._OnCommandDeactivated.Bind(this))
             GuiShowListView()
         } else {
             command.isHelpOpened := false
             GuiRemoveListView()
-            globalEventBus.Unsubscribe(this._keyPressSubscription)
-            globalEventBus.Unsubscribe(this._commandDeactivatedSubscription)
+            this._keyPressSubscription.Unsubscribe()
+            this._commandDeactivatedSubscription.Unsubscribe()
         }
         GuiSetInput("")
     }
