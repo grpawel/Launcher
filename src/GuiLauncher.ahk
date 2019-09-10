@@ -10,20 +10,8 @@
 ;-------------------------------------------------------------------------------
 gui_autoexecute:
     ; Tomorrow Night Color Definitions:
-    cBackground := "c" . "1d1f21"
-    cCurrentLine := "c" . "282a2e"
-    cSelection := "c" . "373b41"
-    cForeground := "c" . "c5c8c6"
-    cComment := "c" . "969896"
-    cRed := "c" . "cc6666"
-    cOrange := "c" . "de935f"
-    cYellow := "c" . "f0c674"
-    cGreen := "c" . "b5bd68"
-    cAqua := "c" . "8abeb7"
-    cBlue := "c" . "81a2be"
-    cPurple := "c" . "b294bb"
 
-    gui_control_options := "xm w220 " . cForeground . " -E0x200"
+    gui_control_options := "xm w220 " . (Colors.foreground) . " -E0x200"
     ; -E0x200 removes border around Edit controls
 
     ; Initialize variable to keep track of the state of the GUI
@@ -45,7 +33,9 @@ gui_spawn:
 
     gui_state = main
     Gui, Margin, 16, 16
-    Gui, Color, 1d1f21, 282a2e
+    colorBackground := Colors.background
+    colorCurrentLine := Colors.currentLine
+    Gui, Color, %colorBackground%, %colorCurrentLine%
     Gui, +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
     Gui, Font, s10, Segoe UI
     global level = 0

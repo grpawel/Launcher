@@ -27,6 +27,8 @@ rootCommand := CreateCommands()
 
 mainController.SetRootCommand(rootCommand)
 
+#Include %A_ScriptDir%\src\Gui\Colors.ahk
+
 ; #InstallKeybdHook
 
 ;-------------------------------------------------------
