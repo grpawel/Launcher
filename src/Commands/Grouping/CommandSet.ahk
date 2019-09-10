@@ -1,6 +1,6 @@
-﻿#Include %A_ScriptDir%\src\Commands\Executable.ahk
+﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
 
-class CommandSet extends Executable {
+class CommandSet extends Command {
     commands := {}
     doesNeedGui := true
 
@@ -12,24 +12,17 @@ class CommandSet extends Executable {
     commandsAfterRunning := []
 
     Run(mainController) {
-        mainController.SetActiveCommand(this)
-    }
-
-    Activate(mainController) {
         global eventBus
         this._keyPressedSubscription := eventBus.Subscribe("keyPressed", this._OnUserInput.Bind(this, mainController))
         GuiAddInput()
-    }
-
-    Deactivate(mainController) {
-        global eventBus
-        eventBus.Unsubscribe(this._keyPressedSubscription)
     }
 
     _OnUserInput(mainController, input) {
         if (not this.commands.HasKey(input)) {
             return
         }
+        global eventBus
+        eventBus.Unsubscribe(this._keyPressedSubscription)
         closeGuiAfter := true
         for i, commandBefore in this.commandsBeforeRunning {
             %commandBefore%(mainController)

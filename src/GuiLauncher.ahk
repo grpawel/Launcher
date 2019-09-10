@@ -53,7 +53,7 @@ gui_spawn:
     global level = 0
     Gui, Show,, myGUI
     global mainController
-    mainController.ResetToRoot()
+    mainController.RunRootCommand()
     return
 
 

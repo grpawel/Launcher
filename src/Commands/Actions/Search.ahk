@@ -1,7 +1,6 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
-#Include %A_ScriptDir%\src\Commands\Executable.ahk
 
-class Search extends Executable {
+class Search extends Command {
     tags := ["web", "hasPath"]
     doesNeedGui := true
 
@@ -14,21 +13,14 @@ class Search extends Executable {
     }
 
     Run(mainController) {
-        mainController.SetActiveCommand(this)
-    }
-
-    Activate(mainController) {
         global eventBus
         this._keyPressedSubscription := eventBus.Subscribe("returnPressed", this._OnUserInput.Bind(this, mainController))
         GuiAddInput()
     }
 
-    Deactivate(mainController) {
+    _OnUserInput(mainController, input) {
         global eventBus
         eventBus.Unsubscribe(this._keyPressedSubscription)
-    }
-
-    _OnUserInput(mainController, input) {
         url := StrReplace(this._urlTemplate, "REPLACEME", input)
         env := mainController.GetEnvironment()
         env.Open.Website(url, env)

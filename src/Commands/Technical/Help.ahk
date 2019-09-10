@@ -1,5 +1,4 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
-#Include %A_ScriptDir%\src\Commands\Executable.ahk
 
 class Help extends Command {
     description := "Show/hide help"

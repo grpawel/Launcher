@@ -1,6 +1,5 @@
 class MainController {
     _rootCommand := {}
-    _activeCommand := {}
 
     __New(environment) {
         this._environment := environment
@@ -10,21 +9,9 @@ class MainController {
         this._rootCommand := rootCommand
     }
     
-    ResetToRoot() {
-        this.SetActiveCommand(this._rootCommand)
-    }
-
-    SetActiveCommand(newCommand) {
-        oldCommand := this._activeCommand
-        oldCommand.Deactivate(this)
-        global eventBus
-        eventBus.Emit("CommandDeactivated", oldCommand)
-        this._activeCommand := newCommand
-        this._activeCommand.Activate(this)
-    }
-
-    GetActiveCommand() {
-        return this._activeCommand
+    RunRootCommand() {
+        command := this._rootCommand
+        %command%(this)
     }
 
     GetTitle() {
