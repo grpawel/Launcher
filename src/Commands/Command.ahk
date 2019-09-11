@@ -3,9 +3,9 @@ class Command {
     tags := []
     doesNeedGui := false
 
-    __Call(method, mainController) {
+    __Call(method, mainController, caller="") {
         if (method == "Run" || method == "") {
-            this.Run(mainController)
+            this.Run(mainController, caller)
         }
     }
 

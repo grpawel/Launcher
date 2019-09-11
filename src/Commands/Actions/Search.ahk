@@ -14,8 +14,8 @@ class Search extends Command {
 
     Run(mainController) {
         global globalEventBus
+        guiControl := mainController.GetGui().AddTextInput()
         this._keyPressedSubscription := globalEventBus.Subscribe("returnPressed", this._OnUserInput.Bind(this, mainController))
-        GuiAddInput()
     }
 
     _OnUserInput(mainController, input) {
@@ -23,6 +23,6 @@ class Search extends Command {
         url := StrReplace(this._urlTemplate, "REPLACEME", input)
         env := mainController.GetEnvironment()
         env.Open.Website(url, env)
-        gui_destroy()
+        mainController.GetGui().Hide()
     }
 }

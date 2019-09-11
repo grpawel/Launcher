@@ -17,7 +17,8 @@ global globalEventBus := new EventBus()
 environment := new Environment()
 
 #Include %A_ScriptDir%\src\MainController.ahk
-global mainController := new MainController(environment)
+#Include %A_ScriptDir%\src\Gui\Gui.ahk
+global mainController := new MainController(environment, new Gui())
 
 #Include %A_ScriptDir%\src\Extensions\RegisterExtensions.ahk
 RegisterExtensions(mainController)
@@ -27,24 +28,11 @@ rootCommand := CreateCommands()
 
 mainController.SetRootCommand(rootCommand)
 
-#Include %A_ScriptDir%\src\Gui\Colors.ahk
+CapsLock & Space::
+    mainController.GetGui().ToggleVisibility()
+    if (mainController.GetGui().IsVisible()) {
+        mainController.RunRootCommand()
+    }
+    return
 
-; #InstallKeybdHook
-
-;-------------------------------------------------------
-; AUTO EXECUTE SECTION FOR INCLUDED SCRIPTS
-; Scripts being included need to have their auto execute
-; section in a function or subroutine which is then
-; executed below.
-;-------------------------------------------------------
-Gosub, gui_autoexecute
-;-------------------------------------------------------
-; END AUTO EXECUTE SECTION
-return
-;-------------------------------------------------------
-
-; Load the GUI code
-#Include %A_ScriptDir%\src\GuiLauncher.ahk
-
-; General settings
 #Include %A_ScriptDir%\src\Utils\Utils.ahk

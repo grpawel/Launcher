@@ -1,8 +1,9 @@
 class MainController {
     _rootCommand := {}
 
-    __New(environment) {
+    __New(environment, gui) {
         this._environment := environment
+        this._gui := gui
     }
     
     SetRootCommand(rootCommand) {
@@ -20,6 +21,10 @@ class MainController {
 
     GetEnvironment() {
         return this._environment
+    }
+
+    GetGui() {
+        return this._gui
     }
 
     ; Updates environment with changes. Currently there is no way to remove keys.

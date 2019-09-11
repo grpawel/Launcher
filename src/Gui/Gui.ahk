@@ -44,6 +44,10 @@ class Gui {
         }
     }
 
+    IsVisible() {
+        return this._state == "opened"
+    }
+
     AddTextInput() {
         control := new TextInput(this, this._nextControlName, this._options)
         control.Show(this._nextControlName)

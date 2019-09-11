@@ -13,31 +13,31 @@ class CommandSet extends Command {
 
     Run(mainController) {
         global globalEventBus
-        this._keyPressedSubscription := globalEventBus.Subscribe("keyPressed", this._OnUserInput.Bind(this, mainController))
-        GuiAddInput()
+        guiControl := mainController.GetGui().AddTextInput()
+        this._keyPressedSubscription := globalEventBus.Subscribe("keyPressed", this._OnUserInput.Bind(this, mainController, guiControl))
     }
 
-    _OnUserInput(mainController, input) {
+    _OnUserInput(mainController, guiControl, input) {
         if (not this.commands.HasKey(input)) {
             return
         }
-        this._keyPressedSubscription.Unsubscribe()
         closeGuiAfter := true
         for i, commandBefore in this.commandsBeforeRunning {
-            %commandBefore%(mainController)
+            %commandBefore%(mainController, this)
             closeGuiAfter := closeGuiAfter && !commandBefore.doesNeedGui
         }
 
         command := this.commands[input]
-        %command%(mainController)
+        %command%(mainController, this)
         closeGuiAfter := closeGuiAfter && !command.doesNeedGui
 
         for i, commandAfter in this.commandsAfterRunning {
-            %commandAfter%(mainController)
+            %commandAfter%(mainController, this)
             closeGuiAfter := closeGuiAfter && !commandAfter.doesNeedGui
         }
         if (closeGuiAfter) {
-            gui_destroy()
+            this._keyPressedSubscription.Unsubscribe()
+            mainController.GetGui().Hide()
         }
     }
 

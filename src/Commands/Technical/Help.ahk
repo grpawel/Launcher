@@ -8,24 +8,23 @@ class Help extends Command {
     _keyPressSubscription :=
     _commandDeactivatedSubscription :=
 
-    Run(mainController) {
+    Run(mainController, caller) {
         global globalEventBus
-        activeCommand := mainController.GetActiveCommand()
-        if (!activeCommand.isHelpOpened) {
-            activeCommand.isHelpOpened := true
-            this._keyPressSubscription := globalEventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, activeCommand.commands))
-            this._commandDeactivatedSubscription := globalEventBus.SubscribeOnce("CommandDeactivated", this._OnCommandDeactivated.Bind(this))
-            GuiShowListView()
+        if (!caller.isHelpOpened) {
+            caller.isHelpOpened := true
+            guiControl := mainController.GetGui().AddListView()
+            this._keyPressSubscription := globalEventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, guiControl, caller.commands))
+            this._commandDeactivatedSubscription := globalEventBus.SubscribeOnce("CommandDeactivated", this._OnCommandDeactivated.Bind(this, guiControl))
         } else {
-            command.isHelpOpened := false
-            GuiRemoveListView()
+            caller.isHelpOpened := false
+            ; GuiRemoveListView()
             this._keyPressSubscription.Unsubscribe()
             this._commandDeactivatedSubscription.Unsubscribe()
         }
-        GuiSetInput("")
+        ;GuiSetInput("")
     }
 
-    _OnKeyPressed(commands, input) {
+    _OnKeyPressed(guiControl, commands, input) {
         rows := []
         for key, value in commands {
             description := value.GetDescription()
@@ -33,12 +32,12 @@ class Help extends Command {
                 rows.Push([key, description])
             }
         }
-        GuiRemoveRowsListView()
-        GuiPopulateListView(rows)
+        guiControl.RemoveRows()
+        guiControl.Populate(rows)
     }
 
-    _OnCommandDeactivated(previousCommand) {
+    _OnCommandDeactivated(guiControl, previousCommand) {
         previousCommand.isHelpOpened := false
-        GuiRemoveListView()
+        guiControl.Hide()
     }
 }
