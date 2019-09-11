@@ -13,6 +13,7 @@ class CommandSet extends Command {
 
     Run(mainController) {
         global globalEventBus
+        mainController.GetGui().DisableAll()
         guiControl := mainController.GetGui().AddTextInput({ title: this.title })
         this._keyPressedSubscription := globalEventBus.Subscribe("keyPressed", this._OnUserInput.Bind(this, mainController, guiControl))
     }
