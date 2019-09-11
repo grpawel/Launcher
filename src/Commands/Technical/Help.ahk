@@ -1,4 +1,5 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
 class Help extends Command {
     description := "Show/hide help"
@@ -10,16 +11,24 @@ class Help extends Command {
 
     Run(mainController, caller) {
         global globalEventBus
-        if (!caller.isHelpOpened) {
-            caller.isHelpOpened := true
-            guiControl := mainController.GetGui().AddListView()
-            this._keyPressSubscription := globalEventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, guiControl, caller.commands))
-            this._commandDeactivatedSubscription := globalEventBus.SubscribeOnce("CommandDeactivated", this._OnCommandDeactivated.Bind(this, guiControl))
+        if (caller._helpAttachment == "") {
+            ; Because instance of this command can be added to multiple CommandSets
+            ; and one CommandSet can have multiple Help commands available
+            ; we cannot store any data within this object
+            ; so we attach it to calling CommandSet object
+            ; then any of Help objects can use the same data and eg. toggle visibility
+            caller._helpAttachment := {}
+        }
+        if (!caller._helpAttachment.isOpened) {
+            caller._helpAttachment.isOpened := true
+            caller._helpAttachment.guiControl := mainController.GetGui().AddListView()
+            caller._helpAttachment.keyPressSubscription := globalEventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, caller._helpAttachment.guiControl, caller.commands))
+            caller._helpAttachment.commandDeactivatedSubscription := globalEventBus.SubscribeOnce("CommandDeactivated", this._OnCommandDeactivated.Bind(this, guiControl))
         } else {
-            caller.isHelpOpened := false
-            ; GuiRemoveListView()
-            this._keyPressSubscription.Unsubscribe()
-            this._commandDeactivatedSubscription.Unsubscribe()
+            caller._helpAttachment.isOpened := false
+            caller._helpAttachment.guiControl.Hide()
+            caller._helpAttachment.keyPressSubscription.Unsubscribe()
+            caller._helpAttachment.commandDeactivatedSubscription.Unsubscribe()
         }
         ;GuiSetInput("")
     }
