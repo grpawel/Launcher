@@ -7,7 +7,18 @@ class TextInput {
     }
 
     Show() {
-        global
+        if (!this._isSetup) {
+            this._Setup()
+            this._isSetup := true
+        }
+        guiName := this._gui.GetName()
+        controlName := this._controlName
+        GuiControl, %guiName%: Enable, %controlName%
+        GuiControl, %guiName%: Focus, %controlName%
+        Gui, %guiName%: Show, AutoSize
+    }
+
+    _Setup() {
         local guiName := this._gui.GetName()
         local controlName := this._controlName
         local style := this._options.style

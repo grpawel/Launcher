@@ -21,7 +21,11 @@ class Help extends Command {
         }
         if (!caller._helpAttachment.isOpened) {
             caller._helpAttachment.isOpened := true
-            caller._helpAttachment.guiControl := mainController.GetGui().AddListView()
+            if (caller._helpAttachment.guiControl == "") {
+                caller._helpAttachment.guiControl := mainController.GetGui().AddListView()
+            } else {
+                caller._helpAttachment.guiControl.Show()
+            }
             caller._helpAttachment.keyPressSubscription := globalEventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, caller._helpAttachment.guiControl, caller.commands))
             caller._helpAttachment.commandDeactivatedSubscription := globalEventBus.SubscribeOnce("CommandDeactivated", this._OnCommandDeactivated.Bind(this, guiControl))
         } else {
