@@ -14,7 +14,7 @@ class Search extends Command {
 
     Run(mainController) {
         global globalEventBus
-        guiControl := mainController.GetGui().AddTextInput()
+        guiControl := mainController.GetGui().AddTextInput({ title: this.title })
         this._keyPressedSubscription := globalEventBus.Subscribe("returnPressed", this._OnUserInput.Bind(this, mainController))
     }
 

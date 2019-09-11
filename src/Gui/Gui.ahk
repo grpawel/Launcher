@@ -48,8 +48,11 @@ class Gui {
         return this._state == "opened"
     }
 
-    AddTextInput() {
-        control := new TextInput(this, this._nextControlName, this._options)
+    ; Options:
+    ; title (string) - will be shown above input
+    AddTextInput(options = "") {
+        mergedOptions := MergeArrays(this._options, options)
+        control := new TextInput(this, this._nextControlName, mergedOptions)
         control.Show(this._nextControlName)
         this._nextControlName += 1
         this._controls.Push(control)

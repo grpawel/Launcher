@@ -1,5 +1,5 @@
 class Command {
-    description := "-"
+    description := ""
     tags := []
     doesNeedGui := false
 
