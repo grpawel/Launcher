@@ -6,51 +6,112 @@ class Help extends Command {
     tags := ["technical"]
     doesNeedGui := true
 
-    _keyPressSubscription :=
-    _commandDeactivatedSubscription :=
-
     Run(mainController, caller) {
-        global globalEventBus
         if (caller._helpAttachment == "") {
             ; Because instance of this command can be added to multiple CommandSets
             ; and one CommandSet can have multiple Help commands available
             ; we cannot store any data within this object
             ; so we attach it to calling CommandSet object
             ; then any of Help objects can use the same data and eg. toggle visibility
-            caller._helpAttachment := {}
-        }
-        if (!caller._helpAttachment.isOpened) {
-            caller._helpAttachment.isOpened := true
-            if (caller._helpAttachment.guiControl == "") {
-                caller._helpAttachment.guiControl := mainController.GetGui().AddListView()
-            } else {
-                caller._helpAttachment.guiControl.Show()
-            }
-            caller._helpAttachment.keyPressSubscription := globalEventBus.Subscribe("keyPressed", this._OnKeyPressed.Bind(this, caller._helpAttachment.guiControl, caller.commands))
-            caller._helpAttachment.commandDeactivatedSubscription := globalEventBus.SubscribeOnce("CommandDeactivated", this._OnCommandDeactivated.Bind(this, guiControl))
+            caller._helpAttachment := new this._HelpAttachment(mainController, caller)
+            caller._helpAttachment.AttachAndShow()
         } else {
-            caller._helpAttachment.isOpened := false
-            caller._helpAttachment.guiControl.Hide()
-            caller._helpAttachment.keyPressSubscription.Unsubscribe()
-            caller._helpAttachment.commandDeactivatedSubscription.Unsubscribe()
-        }
-        ;GuiSetInput("")
-    }
-
-    _OnKeyPressed(guiControl, commands, input) {
-        rows := []
-        for key, value in commands {
-            description := value.GetDescription()
-            if (StartsWith(key, input)) {
-                rows.Push([key, description])
+            if (!caller._helpAttachment.isOpened) {
+                caller._helpAttachment.Show()
+            } else {
+                caller._helpAttachment.Hide()
             }
         }
-        guiControl.RemoveRows()
-        guiControl.Populate(rows)
+        caller.GetGuiControl().SetText("")
     }
 
-    _OnCommandDeactivated(guiControl, previousCommand) {
-        previousCommand.isHelpOpened := false
-        guiControl.Hide()
+    ; There are three possible states:
+    ; (D) Detached: user has not opened help yet, closed GUI or opened another CommandSet
+    ; (S) Shown: subscribed to user input and command selection; attached to CommandSet
+    ; (H) Hidden: attached to CommandSet
+    ;
+    ; Possible transitions between those states:
+    ; (CurrentState), event -> (NextState)
+    ; (D), Help.Run() called -> (S)
+    ; (S), Help.Run() called -> (H)
+    ; (H), Help.Run() called -> (S)
+    ; (S/H), command selected -> (D)
+    ; (S/H), GUI closed -> (D)
+    class _HelpAttachment {
+        isOpened := false
+
+        __New(mainController, commandSet) {
+            this._mainController := mainController
+            this._commandSet := commandSet
+        }
+
+        AttachAndShow() {
+            this._SubscribeWhenDetach()
+            this._SubscribeInput()
+            this._guiControl := this._mainController.GetGui().AddListView()
+            this.isOpened := true
+        }
+
+        Show() {
+            this._SubscribeInput()
+            this._guiControl.Show()
+            this.isOpened := true
+        }
+
+        Hide() {
+            this.isOpened := false
+            this._UnsubscribeInput()
+            this._guiControl.Hide()
+        }
+
+        _Detach() {
+            if (this.isOpened) {
+                this._UnsubscribeInput()
+            }
+            this._UnsubscribeWhenDetach()
+            this._guiControl.Hide()
+            this._commandSet._helpAttachment := ""
+        }
+
+        _OnInputChanged(input) {
+            commands := this._commandSet.commands
+            rows := []
+            for key, value in this._commandSet.commands {
+                description := value.GetDescription()
+                if (StartsWith(key, input)) {
+                    rows.Push([key, description])
+                }
+            }
+            this._guiControl.RemoveRows()
+            this._guiControl.Populate(rows)
+        }
+
+        _OnNextCommandRunned(context) {
+            if (context.nextCommand.base.__Class == "Help") {
+                ; nextCommand could be user trying to close help.
+                ; If we call Detach() here,
+                ; Help.Run() would not see the attachment and would create help again.
+            } else {
+                this._Detach()
+            }
+        }
+
+        _SubscribeWhenDetach() {
+            this._commandSelectedSubscription := this._commandSet.SubscribeBeforeNextCommandRunned(this._OnNextCommandRunned.Bind(this))
+            this._guiClosedSubscription := this._mainController.GetGui().SubscribeGuiClosed(this._Detach.Bind(this))
+        }
+
+        _SubscribeInput() {
+            this._inputChangedSubscription := this._commandSet.GetGuiControl().SubscribeInputChanged(this._OnInputChanged.Bind(this))
+        }
+
+        _UnsubscribeInput() {
+            this._inputChangedSubscription.Unsubscribe()
+        }
+
+        _UnsubscribeWhenDetach() {
+            this._commandSelectedSubscription.Unsubscribe()
+            this._guiClosedSubscription.Unsubscribe()
+        }
     }
 }

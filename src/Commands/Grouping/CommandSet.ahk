@@ -4,6 +4,8 @@ class CommandSet extends Command {
     commands := {}
     doesNeedGui := true
 
+    _eventBus := new EventBus()
+    _guiControl :=
     _keyPressedSubscription :=
 
     ; These commands are run just before and after one selected by user.
@@ -12,13 +14,12 @@ class CommandSet extends Command {
     commandsAfterRunning := []
 
     Run(mainController) {
-        global globalEventBus
         mainController.GetGui().DisableAll()
-        guiControl := mainController.GetGui().AddTextInput({ title: this.title })
-        this._keyPressedSubscription := globalEventBus.Subscribe("keyPressed", this._OnUserInput.Bind(this, mainController, guiControl))
+        this._guiControl := mainController.GetGui().AddTextInput({ title: this.title })
+        this._keyPressedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, mainController))
     }
 
-    _OnUserInput(mainController, guiControl, input) {
+    _OnUserInput(mainController, input) {
         if (not this.commands.HasKey(input)) {
             return
         }
@@ -29,6 +30,7 @@ class CommandSet extends Command {
         }
 
         command := this.commands[input]
+        this._eventBus.Emit("BeforeNextCommandRunned", { "nextCommand": command })
         %command%(mainController, this)
         closeGuiAfter := closeGuiAfter && !command.doesNeedGui
 
@@ -56,5 +58,13 @@ class CommandSet extends Command {
         commandSet := new CommandSet()
         commandSet.commands := filtered
         return commandSet
+    }
+
+    GetGuiControl() {
+        return this._guiControl
+    }
+
+    SubscribeBeforeNextCommandRunned(subscriber, duration = "everytime") {
+        return this._eventBus.Subscribe("BeforeNextCommandRunned", subscriber, duration)
     }
 }

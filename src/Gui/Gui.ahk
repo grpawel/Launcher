@@ -1,11 +1,13 @@
 #Include %A_ScriptDir%\src\Gui\TextInput.ahk
 #Include %A_ScriptDir%\src\Gui\ListViewControl.ahk
 #Include %A_ScriptDir%\src\Gui\Colors.ahk
+#Include %A_ScriptDir%\src\Events\EventBus.ahk
 
 class Gui {
     _state := "closed"
     _nextControlName := 0
     _controls := []
+    _eventBus := new EventBus()
     static _nextName := 2
     _options := { style: "xm w220 " . (Colors.foreground) . " -E0x200"
                 , backgroundColor: Colors.background
@@ -31,9 +33,19 @@ class Gui {
     Hide() {
         this._state := "closed"
         name := this._name
+        this._eventBus.Emit("guiClosed") 
         Gui, %name%: Destroy
+        this._nextControlName := 0
+        this._DestroyControls(this._controls)
+        this._controls := []
         #WinActivateForce
         WinActivate
+    }
+
+    _DestroyControls(controls) {
+        for i, control in controls {
+            control.Destroy()
+        }
     }
 
     ToggleVisibility() {
@@ -55,6 +67,7 @@ class Gui {
         control := new TextInput(this, this._nextControlName, mergedOptions)
         control.Show(this._nextControlName)
         this._nextControlName += 1
+
         this._controls.Push(control)
         return control
     }
@@ -76,5 +89,9 @@ class Gui {
     GetName() {
         name := this._name
         return this._name
+    }
+
+    SubscribeGuiClosed(subscriber, duration = "everytime") {
+        return this._eventBus.Subscribe("guiClosed", subscriber, duration)
     }
 }

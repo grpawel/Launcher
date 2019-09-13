@@ -1,5 +1,9 @@
+#Include %A_ScriptDir%\src\Events\EventBus.ahk
+
 class TextInput {
     _isSetup := false
+    _eventBus := new EventBus()
+
     __New(gui, name, options) {
         this._gui := gui
         this._controlName := name
@@ -35,18 +39,24 @@ class TextInput {
         return
     }
 
+    SubscribeInputChanged(subscriber, duration = "everytime") {
+        return this._eventBus.Subscribe("inputChanged", subscriber, duration)
+    }
+
+    SubscribeReturnPressed(subscriber, duration = "everytime") {
+        return this._eventBus.Subscribe("returnPressed", subscriber, duration)
+    }
+
     _OnKeyPressed() {
         controlName := this._controlName
         GuiControlGet, value,, %controlName%
-        global globalEventBus
-        globalEventBus.Emit("keyPressed", value)
+        this._eventBus.Emit("inputChanged", value)
     }
 
     _OnReturnPressed() {
         controlName := this._controlName
         GuiControlGet, value,, %controlName%
-        global globalEventBus
-        globalEventBus.Emit("returnPressed", value)
+        this._eventBus.Emit("returnPressed", value)
     }
 
     SetText(value) {
