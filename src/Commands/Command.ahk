@@ -1,7 +1,11 @@
 class Command {
     description := ""
     tags := []
-    doesNeedGui := false
+    doesNeedGui {
+        get {
+            return false
+        }
+    }
 
     __Call(method, mainController, caller="") {
         if (method == "Run" || method == "") {

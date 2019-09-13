@@ -2,15 +2,22 @@
 
 ; Runs sequence of commands one after another.
 class Sequence extends Command {
+    doesNeedGui {
+        get {
+            for i, command in this._commands {
+                anyCommandNeeds := anyCommandNeeds || command.doesNeedGui
+            }
+            return anyCommandNeeds
+        }
+    }
+
     __New(commands) {
         this._commands := commands
     }
 
     Run(mainController) {
-        result := true
         for index, command in this._commands {
-            singleResult := %command%(mainController)
-            result := result && singleResult
+            %command%(mainController, this)
         }
         return result
     }
