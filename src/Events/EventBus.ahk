@@ -39,18 +39,18 @@ class EventBus {
         this._subscribers[eventName][duration].Delete(key)
     }
 
-    Emit(eventName, payload = "") {
+    Emit(eventName, payload*) {
         if (!this._subscribers.hasKey(eventName)) {
             return
         }
         subscriberList := this._subscribers[eventName]
 
         for key, subscriber in subscriberList.everytime.Clone() {
-            %subscriber%(payload)
+            %subscriber%(payload*)
         }
         oneTimeSubscribers := subscriberList.once.Clone()
         for key, subscriber in oneTimeSubscribers {
-            %subscriber%(payload)
+            %subscriber%(payload*)
             subscriberList.once.Delete(key)
         }
     }

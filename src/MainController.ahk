@@ -1,11 +1,14 @@
+#Include %A_ScriptDir%\src\Events\EventBus.ahk
+
 class MainController {
     _rootCommand := {}
+    _eventBus := new EventBus()
 
     __New(environment, gui) {
         this._environment := environment
         this._gui := gui
     }
-    
+
     SetRootCommand(rootCommand) {
         this._rootCommand := rootCommand
     }
@@ -42,4 +45,13 @@ class MainController {
         this._environment := newEnvironment
         return oldChangedValues
     }
+
+    NotifyCommandAboutToRun(com) {
+        this._eventBus.Emit("commandAboutToRun", { nextCommand: com })
+    }
+
+    SubscribeCommandAboutToRun(subscriber, duration = "everytime") {
+        return this._eventBus.Subscribe("commandAboutToRun", subscriber, duration)
+    }
+
 }

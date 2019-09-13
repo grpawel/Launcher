@@ -17,7 +17,8 @@ class Sequence extends Command {
 
     Run(mainController) {
         for i, com in this._commands {
-            %com%(mainController, this)
+            mainController.NotifyCommandAboutToRun(com)
+            %com%(mainController, { caller: this })
         }
         return result
     }

@@ -7,13 +7,13 @@ class Command {
         }
     }
 
-    __Call(method, mainController, caller="") {
+    __Call(method, mainController, context="") {
         if (method == "Run" || method == "") {
-            this.Run(mainController, caller)
+            this.Run(mainController, context)
         }
     }
 
-    Run(mainController) {
+    Run(mainController, context="") {
         throw "Not implemented"
     }
 

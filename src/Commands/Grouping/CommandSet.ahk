@@ -4,7 +4,6 @@ class CommandSet extends Command {
     commands := {}
     doesNeedGui := true
 
-    _eventBus := new EventBus()
     _guiControl :=
     _keyPressedSubscription :=
 
@@ -21,9 +20,9 @@ class CommandSet extends Command {
         closeGuiAfter := true
 
         matchedCommand := this.commands[input]
-        this._eventBus.Emit("BeforeNextCommandRunned", { "nextCommand": matchedCommand })
         closeGuiAfter := !matchedCommand.doesNeedGui
-        %matchedCommand%(mainController, this)
+        mainController.NotifyCommandAboutToRun(matchedCommand)
+        %matchedCommand%(mainController, { caller: this })
 
         if (closeGuiAfter) {
             this._keyPressedSubscription.Unsubscribe()
@@ -49,9 +48,5 @@ class CommandSet extends Command {
 
     GetGuiControl() {
         return this._guiControl
-    }
-
-    SubscribeBeforeNextCommandRunned(subscriber, duration = "everytime") {
-        return this._eventBus.Subscribe("BeforeNextCommandRunned", subscriber, duration)
     }
 }

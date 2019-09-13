@@ -11,3 +11,17 @@ RandomString(length) {
     }
     return string
 }
+
+Join(stringArray, separator) {
+    joined := ""
+    isFirstElement := true
+    for i, element in stringArray {
+        if (isFirstElement) {
+            joined := element
+            isFirstElement := false
+        } else {
+            joined := joined separator element
+        }
+    }
+    return joined
+}
