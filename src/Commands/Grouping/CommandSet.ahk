@@ -8,11 +8,6 @@ class CommandSet extends Command {
     _guiControl :=
     _keyPressedSubscription :=
 
-    ; These commands are run just before and after one selected by user.
-    ; Results of these commands are not used.
-    commandsBeforeRunning := []
-    commandsAfterRunning := []
-
     Run(mainController) {
         mainController.GetGui().DisableAll()
         this._guiControl := mainController.GetGui().AddTextInput({ title: this.title })
@@ -24,20 +19,12 @@ class CommandSet extends Command {
             return
         }
         closeGuiAfter := true
-        for i, commandBefore in this.commandsBeforeRunning {
-            %commandBefore%(mainController, this)
-            closeGuiAfter := closeGuiAfter && !commandBefore.doesNeedGui
-        }
 
         command := this.commands[input]
         this._eventBus.Emit("BeforeNextCommandRunned", { "nextCommand": command })
+        closeGuiAfter := !command.doesNeedGui
         %command%(mainController, this)
-        closeGuiAfter := closeGuiAfter && !command.doesNeedGui
 
-        for i, commandAfter in this.commandsAfterRunning {
-            %commandAfter%(mainController, this)
-            closeGuiAfter := closeGuiAfter && !commandAfter.doesNeedGui
-        }
         if (closeGuiAfter) {
             this._keyPressedSubscription.Unsubscribe()
             mainController.GetGui().Destroy()

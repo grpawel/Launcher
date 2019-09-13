@@ -22,7 +22,7 @@ CreateCommands() {
     programs := { fir: _.Open("firefox")
                 , chr: _.Open("chrome")
                 , calc: _.Open("calc").SetDescription("Calculator")
-                , inco: _.Open("""firefox"" ""-private-window""")
+                , priv: _.Open("""firefox"" ""-private-window""")
                         .SetDescription("Private firefox window")
                 , setfire: _.ChangeEnvironment({ browser: browsers.firefox }).SetDescription("Change browser to Firefox")
                 , setchr: _.ChangeEnvironment({ browser: browsers.chrome }).SetDescription("Change browser to Chrome") }
@@ -30,8 +30,10 @@ CreateCommands() {
     misc :=     { rel: _.Reload()
                 , "?": _.Help()
                 , help: _.Help()
-                , inco: incognito
-                , clip: clip }
+                , inco: _.Sequence([ _.ChangeEnvironment({browser: browsers.FirefoxPrivate}, "untilGuiClosed")
+                                    , incognito ])
+                , clip: _.Sequence([ _.ChangeEnvironment({ Open: new CopyToClipboardOpener() }, "untilGuiClosed")
+                                    , clip ]) }
 
     folders :=  { user: _.Folder("%USERPROFILE%")
                 , doc: _.Folder("%USERPROFILE%\Documents") }
@@ -47,11 +49,9 @@ CreateCommands() {
 
     incognito.title := "Incognito mode"
     incognito.commands := topLevel.FilterCommands(HasTag(["web", "technical"])).commands
-    incognito.commandsBeforeRunning := [ _.ChangeEnvironment({browser: browsers.FirefoxPrivate}, "untilGuiClosed")]
 
     clip.title := "Copy to clipboard"
     clip.commands := topLevel.FilterCommands(HasTag(["hasPath", "technical"])).commands
-    clip.commandsBeforeRunning := [ _.ChangeEnvironment({ Open: new CopyToClipboardOpener() }, "untilGuiClosed") ]
 
     return topLevel
 }
