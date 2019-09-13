@@ -26,7 +26,7 @@ rootCommand := CreateCommands()
 mainController.SetRootCommand(rootCommand)
 
 CapsLock & Space::
-    mainController.GetGui().ToggleVisibility()
+    mainController.GetGui().ToggleWindow()
     if (mainController.GetGui().IsVisible()) {
         mainController.RunRootCommand()
     }

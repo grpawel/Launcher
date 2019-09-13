@@ -8,6 +8,7 @@ class Gui {
     _nextControlName := 0
     _controls := []
     _eventBus := new EventBus()
+    _isSetup := false
     static _nextName := 2
     _options := { style: "xm w220 " . (Colors.foreground) . " -E0x200"
                 , backgroundColor: Colors.background
@@ -20,6 +21,15 @@ class Gui {
 
     Show() { 
         this._state := "opened"
+        if (!this._isSetup) {
+            this._Setup()
+            this._isSetup := true
+        }
+        name := this._name
+        Gui, %name%: Show,, %name%
+    }
+
+    _Setup() {
         name := this._name
         Gui, %name%: Margin, 16, 16
         colorBackground := this._options.backgroundColor
@@ -27,11 +37,17 @@ class Gui {
         Gui, %name%: Color, %colorBackground%, %colorCurrentLine%
         Gui, %name%: +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
         Gui, %name%: Font, s10, Segoe UI
-        Gui, %name%: Show,, %name%
     }
 
     Hide() {
+        this._state := "hidden"
+        name := this._name
+        Gui, %name%: Hide
+    }
+
+    Destroy() {
         this._state := "closed"
+        this._isSetup := false
         name := this._name
         this._eventBus.Emit("guiClosed") 
         Gui, %name%: Destroy
@@ -48,11 +64,11 @@ class Gui {
         }
     }
 
-    ToggleVisibility() {
-        if (this._state == "closed") {
+    ToggleWindow() {
+        if (this._state == "closed" || this._state == "hidden") {
             this.Show()
         } else {
-            this.Hide()
+            this.Destroy()
         }
     }
 

@@ -23,6 +23,6 @@ class Search extends Command {
         url := StrReplace(this._urlTemplate, "REPLACEME", input)
         env := mainController.GetEnvironment()
         env.Open.Website(url, env)
-        mainController.GetGui().Hide()
+        mainController.GetGui().Destroy()
     }
 }

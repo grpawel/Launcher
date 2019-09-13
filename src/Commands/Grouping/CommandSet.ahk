@@ -40,7 +40,7 @@ class CommandSet extends Command {
         }
         if (closeGuiAfter) {
             this._keyPressedSubscription.Unsubscribe()
-            mainController.GetGui().Hide()
+            mainController.GetGui().Destroy()
         }
     }
 
