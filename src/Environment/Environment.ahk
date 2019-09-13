@@ -1,4 +1,5 @@
 #Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
+#Include %A_ScriptDir%\src\Environment\SendTyper.ahk
 
 class Environment {
     browser := "C:\Program Files\Mozilla Firefox\firefox.exe"
@@ -7,6 +8,7 @@ class Environment {
     defaultProgram := ""
 
     Open := new RunOpener()
+    Type := Func("SendTyper")
 
     ; Returns new `Environment` with values either from this object or `overrides`.
     ; Existing values are not copied, so changes to them are visible in both objects.
