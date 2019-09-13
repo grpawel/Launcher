@@ -6,6 +6,13 @@ MergeArrays(arrays*) {
     return result
 }
 
+AddAll(target, arrays*) {
+    for arrayIndex, array in arrays 
+        for key, value in array
+            target[key] := value
+    return target
+}
+
 ; from https://www.autohotkey.com/boards/viewtopic.php?p=255613#p255613
 Obj2String(Obj,FullPath:=1,BottomBlank:=0){
 	static String,Blank
