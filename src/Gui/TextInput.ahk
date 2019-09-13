@@ -76,4 +76,10 @@ class TextInput {
         GuiControl, %guiName%: -g, %controlName%
         GuiControl, %guiName%: -g, %controlName%Button
     }
+
+    Destroy() {
+        ; Break circular references (https://www.autohotkey.com/docs/Objects.htm#Circular_References).
+        this._gui := ""
+        this._eventBus := ""
+    }
 }

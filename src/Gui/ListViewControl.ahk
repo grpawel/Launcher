@@ -56,6 +56,12 @@ class ListViewControl {
         Gui, %guiName%: Show, AutoSize
     }
 
+    Destroy() {
+        ; Break circular references (https://www.autohotkey.com/docs/Objects.htm#Circular_References).
+        this._gui := ""
+        this._eventBus := ""
+    }
+
     Disable() {
         this.Hide()
     }
