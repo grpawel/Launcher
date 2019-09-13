@@ -9,7 +9,7 @@ class CommandSet extends Command {
 
     Run(mainController) {
         mainController.GetGui().DisableAll()
-        this._guiControl := mainController.GetGui().AddTextInput({ title: this.title })
+        this._guiControl := mainController.GetGui().AddTextInput({ header: this.GetDescription() })
         this._keyPressedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, mainController))
     }
 

@@ -78,7 +78,7 @@ class Gui {
     }
 
     ; Options:
-    ; title (string) - will be shown above input
+    ; header (string) - will be shown above input
     AddTextInput(options = "") {
         mergedOptions := MergeArrays(this._options, options)
         control := new TextInput(this, this._nextControlName, mergedOptions)

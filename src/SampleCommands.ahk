@@ -11,10 +11,10 @@ CreateCommands() {
     incognito := _.CommandSet()
     clip := _.CommandSet()
     
-    topLevel.title := "Enter anything"
-    searches := { "g ": _.Search("http://google.com/search?q=REPLACEME", "Search in Google")
-                , "d " : _.Search("https://duckduckgo.com/?q=REPLACEME", "Search in DuckDuckGo")
-                , "i ": _.Search("""firefox"" ""-private-window"" ""https://duckduckgo.com/?q=REPLACEME""", "Search incognito") }
+    topLevel.SetDescription("Enter anything")
+    searches := { "g ": _.Search("http://google.com/search?q=REPLACEME").SetDescription("Search in Google")
+                , "d " : _.Search("https://duckduckgo.com/?q=REPLACEME").SetDescription("Search in DuckDuckGo")
+                , "i ": _.Search("""firefox"" ""-private-window"" ""https://duckduckgo.com/?q=REPLACEME""").SetDescription("Search incognito") }
 
     websites := { goo: _.Web("http://google.com")
                 , ama: _.Web("http://amazon.com") }
@@ -47,10 +47,10 @@ CreateCommands() {
     
     topLevel.commands := MergeArrays(searches, websites, programs, misc, drives, folders, files)
 
-    incognito.title := "Incognito mode"
+    incognito.SetDescription("Incognito mode")
     incognito.commands := topLevel.FilterCommands(HasTag(["web", "technical"])).commands
 
-    clip.title := "Copy to clipboard"
+    clip.SetDescription("Copy to clipboard")
     clip.commands := topLevel.FilterCommands(HasTag(["hasPath", "technical"])).commands
 
     return topLevel

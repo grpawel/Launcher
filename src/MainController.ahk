@@ -18,10 +18,6 @@ class MainController {
         %rootCommand%(this)
     }
 
-    GetTitle() {
-        return this._activeCommand.GetTitle()
-    }
-
     GetEnvironment() {
         return this._environment
     }

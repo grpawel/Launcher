@@ -32,7 +32,7 @@ class ListViewControl {
         ; because next input position is calculated
         ; using previous control initial position, ignoring further changes.
         ; TODO: remove margin around
-        Gui, %guiName%: Add, ListView, h0 -Hdr %style% v%controlName%, Command|Title
+        Gui, %guiName%: Add, ListView, h0 -Hdr %style% v%controlName%, Command|Description
         GuiControl, %guiName%: +g, %controlName%, %doubleClickHandler%
         LV_ModifyCol()
         GuiControl, %guiName%: Move, %controlName%, h150

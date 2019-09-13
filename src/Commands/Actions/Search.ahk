@@ -6,15 +6,13 @@ class Search extends Command {
 
     _keyPressedSubscription :=
 
-    __New(urlTemplate, title) {
+    __New(urlTemplate) {
         this._urlTemplate := urlTemplate
-        this.title := title
-        this.description := title
     }
 
     Run(mainController) {
         mainController.GetGui().DisableAll()
-        guiControl := mainController.GetGui().AddTextInput({ title: this.title })
+        guiControl := mainController.GetGui().AddTextInput({ header: this.GetDescription() })
         this._keyPressedSubscription := guiControl.SubscribeReturnPressed(this._OnUserInput.Bind(this, mainController))
     }
 

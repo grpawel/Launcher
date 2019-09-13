@@ -28,9 +28,9 @@ class TextInput {
         local style := this._options.style
         local keyPressHandler := this._OnKeyPressed.Bind(this)
         local returnPressHandler := this._OnReturnPressed.Bind(this)
-        if (this._options.title != "") {
-            title := this._options.title
-            Gui, %guiName%: Add, Text, %style% v%controlName%Title, %title%
+        if (this._options.header != "") {
+            header := this._options.header
+            Gui, %guiName%: Add, Text, %style% v%controlName%Header, %header%
         }
         Gui, %guiName%: Add, Edit, %style% v%controlName% -WantReturn
         GuiControl, %guiName%: +g, %controlName%, %keyPressHandler%
@@ -72,7 +72,7 @@ class TextInput {
         local controlName := this._controlName
         GuiControl, %guiName%: Disable, %controlName%
         GuiControl, %guiName%: Disable, %controlName%Button
-        GuiControl, %guiName%: Disable, %controlName%Title
+        GuiControl, %guiName%: Disable, %controlName%Header
         GuiControl, %guiName%: -g, %controlName%
         GuiControl, %guiName%: -g, %controlName%Button
     }
