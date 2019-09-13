@@ -11,8 +11,8 @@
 ; new Open("something")
 ; new Folder("somepath")
 class CommandFactory {
-    __Call(commandName, args*) {
-        command := new %commandName%(args*)
-        return command
+    __Call(commandClassName, args*) {
+        commandObj := new %commandClassName%(args*)
+        return commandObj
     }
 }

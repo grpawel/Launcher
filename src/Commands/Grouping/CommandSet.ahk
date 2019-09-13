@@ -20,10 +20,10 @@ class CommandSet extends Command {
         }
         closeGuiAfter := true
 
-        command := this.commands[input]
-        this._eventBus.Emit("BeforeNextCommandRunned", { "nextCommand": command })
-        closeGuiAfter := !command.doesNeedGui
-        %command%(mainController, this)
+        matchedCommand := this.commands[input]
+        this._eventBus.Emit("BeforeNextCommandRunned", { "nextCommand": matchedCommand })
+        closeGuiAfter := !matchedCommand.doesNeedGui
+        %matchedCommand%(mainController, this)
 
         if (closeGuiAfter) {
             this._keyPressedSubscription.Unsubscribe()
@@ -37,14 +37,14 @@ class CommandSet extends Command {
     ; New `CommandSet` instead of commands only is returned mostly for chaining filters.
     FilterCommands(filter) {
         filtered := {}
-        for name, command in this.commands {
-            if (%filter%(command)) {
-                filtered[name] := command
+        for name, com in this.commands {
+            if (%filter%(com)) {
+                filtered[name] := com
             }
         }
-        commandSet := new CommandSet()
-        commandSet.commands := filtered
-        return commandSet
+        filteredCommandSet := new CommandSet()
+        filteredCommandSet.commands := filtered
+        return filteredCommandSet
     }
 
     GetGuiControl() {

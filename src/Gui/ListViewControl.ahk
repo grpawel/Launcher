@@ -25,8 +25,8 @@ class ListViewControl {
         local doubleClickHandler := this._OnRowDoubleClicked.Bind(this)
         
         Gui, %guiName%: Default
-        colorBackground := this._options.backgroundColor
-        colorCurrentLine := this._options.currentLineColor
+        local colorBackground := this._options.backgroundColor
+        local colorCurrentLine := this._options.currentLineColor
         Gui, %guiName%: Color, %colorBackground%, %colorCurrentLine%
         ; Initial height must be 0, 
         ; because next input position is calculated

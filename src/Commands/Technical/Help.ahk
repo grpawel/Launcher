@@ -12,24 +12,24 @@ class Help extends Command {
         this._commandSet := commandSet
     }
 
-    Run(mainController, caller) {
-        commandSet := this._commandSet != "" ? this._commandSet : caller
-        if (commandSet._helpAttachment == "") {
+    Run(mainController, context) {
+        helped := this._commandSet != "" ? this._commandSet : context.caller
+        if (helped._helpAttachment == "") {
             ; Because instance of this command can be added to multiple CommandSets
             ; and one CommandSet can have multiple Help commands available
             ; we cannot store any data within this object
             ; so we attach it to calling CommandSet object
             ; then any of Help objects can use the same data and eg. toggle visibility
-            commandSet._helpAttachment := new this._HelpAttachment(mainController, commandSet)
-            commandSet._helpAttachment.AttachAndShow()
+            helped._helpAttachment := new this._HelpAttachment(mainController, helped)
+            helped._helpAttachment.AttachAndShow()
         } else {
-            if (!commandSet._helpAttachment.isOpened) {
-                commandSet._helpAttachment.Show()
+            if (!helped._helpAttachment.isOpened) {
+                helped._helpAttachment.Show()
             } else {
-                commandSet._helpAttachment.Hide()
+                helped._helpAttachment.Hide()
             }
         }
-        commandSet.GetGuiControl().SetText("")
+        helped.GetGuiControl().SetText("")
     }
 
     ; There are three possible states:

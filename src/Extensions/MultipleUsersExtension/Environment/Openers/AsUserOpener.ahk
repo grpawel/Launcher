@@ -34,25 +34,25 @@ class AsUserOpener extends Opener {
         }
 
         if (programName != "") {
-            command := programName " """ argument """"
+            target := programName " """ argument """"
         }
         else {
-            command := argument
+            target := argument
         }
 
         if (userName != "") {
-            command := StrReplace(command, """")
-            command := "C:\Windows\System32\runas.exe /user:" userName " /savecreds " """" command """"
+            target := StrReplace(target, """")
+            target := "C:\Windows\System32\runas.exe /user:" userName " /savecreds " """" target """"
         }
-        Run, %command%
+        Run, %target%
     }
 
     _UseFirefoxProfileFix(argument, firefoxPath, userName) {
         if (userName == "") {
-            command := firefoxPath " " argument " -P default-release"
+            target := firefoxPath " " argument " -P default-release"
         } else {
-            command := firefoxPath " " argument " -P " userName
+            target := firefoxPath " " argument " -P " userName
         }
-        Run, %command%
+        Run, %target%
     }
 }

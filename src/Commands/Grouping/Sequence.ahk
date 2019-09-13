@@ -4,8 +4,8 @@
 class Sequence extends Command {
     doesNeedGui {
         get {
-            for i, command in this._commands {
-                anyCommandNeeds := anyCommandNeeds || command.doesNeedGui
+            for i, com in this._commands.Clone() {
+                anyCommandNeeds := anyCommandNeeds || com.doesNeedGui
             }
             return anyCommandNeeds
         }
@@ -16,8 +16,8 @@ class Sequence extends Command {
     }
 
     Run(mainController) {
-        for index, command in this._commands {
-            %command%(mainController, this)
+        for i, com in this._commands {
+            %com%(mainController, this)
         }
         return result
     }

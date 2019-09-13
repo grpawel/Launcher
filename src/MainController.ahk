@@ -11,8 +11,8 @@ class MainController {
     }
     
     RunRootCommand() {
-        command := this._rootCommand
-        %command%(this)
+        rootCommand := this._rootCommand
+        %rootCommand%(this)
     }
 
     GetTitle() {

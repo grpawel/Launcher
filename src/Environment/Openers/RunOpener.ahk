@@ -19,11 +19,11 @@ class RunOpener extends Opener {
 
     _Open(argument, programName) {
         if (programName != "") {
-            command := programName " """ argument """"
+            target := programName " """ argument """"
         }
         else {
-            command := argument
+            target := argument
         }
-        Run, %command%
+        Run, %target%
     }
 }
