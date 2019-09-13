@@ -20,6 +20,7 @@ class Gui {
     }
 
     Show() { 
+        this._eventBus.Emit("guiShowing")
         this._state := "opened"
         if (!this._isSetup) {
             this._Setup()
@@ -49,7 +50,7 @@ class Gui {
         this._state := "closed"
         this._isSetup := false
         name := this._name
-        this._eventBus.Emit("guiClosed") 
+        this._eventBus.Emit("guiClosing") 
         Gui, %name%: Destroy
         this._nextControlName := 0
         this._DestroyControls(this._controls)
@@ -107,7 +108,11 @@ class Gui {
         return this._name
     }
 
-    SubscribeGuiClosed(subscriber, duration = "everytime") {
-        return this._eventBus.Subscribe("guiClosed", subscriber, duration)
+    SubscribeGuiShowing(subscriber, duration = "everytime") {
+        return this._eventBus.Subscribe("guiShowing", subscriber, duration)
+    }
+
+    SubscribeGuiClosing(subscriber, duration = "everytime") {
+        return this._eventBus.Subscribe("guiClosing", subscriber, duration)
     }
 }

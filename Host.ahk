@@ -18,6 +18,8 @@ global main := new MainController(new Environment(), new Gui())
 #Include %A_ScriptDir%\src\Extensions\RegisterExtensions.ahk
 RegisterExtensions(main)
 
+#Include %A_ScriptDir%\UserFunctions.ahk
+UserFunctions(main)
 #Include %A_ScriptDir%\UserCommands.ahk
 main.SetRootCommand(CreateCommands())
 

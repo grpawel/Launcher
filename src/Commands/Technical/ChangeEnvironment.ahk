@@ -19,7 +19,7 @@ class ChangeEnvironment extends Command {
         }
         else if (this._mode == "untilGuiClosed") {
             oldValues := mainController.UpdateEnvironment(this._changes)
-            mainController.GetGui().SubscribeGuiClosed(this._Revert.Bind(this, oldValues, mainController)
+            mainController.GetGui().SubscribeGuiClosing(this._Revert.Bind(this, oldValues, mainController)
                                                       , "once")
         }
     }

@@ -105,7 +105,7 @@ class Help extends Command {
 
         _SubscribeWhenDetach() {
             this._commandSelectedSubscription := this._commandSet.SubscribeBeforeNextCommandRunned(this._OnNextCommandRunned.Bind(this))
-            this._guiClosedSubscription := this._mainController.GetGui().SubscribeGuiClosed(this._Detach.Bind(this))
+            this._guiClosingSubscription := this._mainController.GetGui().SubscribeGuiClosing(this._Detach.Bind(this))
         }
 
         _SubscribeInput() {
@@ -118,7 +118,7 @@ class Help extends Command {
 
         _UnsubscribeWhenDetach() {
             this._commandSelectedSubscription.Unsubscribe()
-            this._guiClosedSubscription.Unsubscribe()
+            this._guiClosingSubscription.Unsubscribe()
         }
     }
 }
