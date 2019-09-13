@@ -1,28 +1,35 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
+; Shows help for  CommandSet given in constructor, or if not
+; then one calling this help.
 class Help extends Command {
     description := "Show/hide help"
     tags := ["technical"]
     doesNeedGui := true
 
+    __New(commandSet = "") {
+        this._commandSet := commandSet
+    }
+
     Run(mainController, caller) {
-        if (caller._helpAttachment == "") {
+        commandSet := this._commandSet != "" ? this._commandSet : caller
+        if (commandSet._helpAttachment == "") {
             ; Because instance of this command can be added to multiple CommandSets
             ; and one CommandSet can have multiple Help commands available
             ; we cannot store any data within this object
             ; so we attach it to calling CommandSet object
             ; then any of Help objects can use the same data and eg. toggle visibility
-            caller._helpAttachment := new this._HelpAttachment(mainController, caller)
-            caller._helpAttachment.AttachAndShow()
+            commandSet._helpAttachment := new this._HelpAttachment(mainController, commandSet)
+            commandSet._helpAttachment.AttachAndShow()
         } else {
-            if (!caller._helpAttachment.isOpened) {
-                caller._helpAttachment.Show()
+            if (!commandSet._helpAttachment.isOpened) {
+                commandSet._helpAttachment.Show()
             } else {
-                caller._helpAttachment.Hide()
+                commandSet._helpAttachment.Hide()
             }
         }
-        caller.GetGuiControl().SetText("")
+        commandSet.GetGuiControl().SetText("")
     }
 
     ; There are three possible states:
