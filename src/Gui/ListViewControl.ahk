@@ -42,10 +42,16 @@ class ListViewControl {
     }
 
     Populate(rows) {
+        guiName := this._gui.GetName()
+        controlName := this._controlName
+        GuiControl, %guiName%: -Redraw, %controlName%
+        rows_total := rows.Length()
+        GuiControl, %guiName%: Count%rows_total%, %controlName%
         for index, row in rows {
             LV_Add("", row[1], row[2])
         }
         LV_ModifyCol()
+        GuiControl, %guiName%: +Redraw, %controlName%
     }
 
     RemoveRows() {

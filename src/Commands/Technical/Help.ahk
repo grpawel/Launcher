@@ -78,15 +78,15 @@ class Help extends Command {
         }
 
         _OnInputChanged(input) {
+            this._guiControl.RemoveRows()
             commands := this._commandSet.commands
             rows := []
             for key, value in this._commandSet.commands {
                 description := value.GetDescription()
-                if (StartsWith(key, input)) {
+                if (input == "" || StartsWith(key, input)) {
                     rows.Push([key, description])
                 }
             }
-            this._guiControl.RemoveRows()
             this._guiControl.Populate(rows)
         }
 
