@@ -23,7 +23,7 @@ class Help extends Command {
             helped._helpAttachment := new this._HelpAttachment(mainController, helped)
             helped._helpAttachment.AttachAndShow()
         } else {
-            if (!helped._helpAttachment.isOpened) {
+            if (helped._helpAttachment.state != "shown") {
                 helped._helpAttachment.Show()
             } else {
                 helped._helpAttachment.Hide()
@@ -45,7 +45,7 @@ class Help extends Command {
     ; (S/H), command selected -> (D)
     ; (S/H), GUI closed -> (D)
     class _HelpAttachment {
-        isOpened := false
+        state := "detached"
 
         __New(mainController, commandSet) {
             this._mainController := mainController
@@ -53,30 +53,26 @@ class Help extends Command {
         }
 
         AttachAndShow() {
-            this._SubscribeWhenDetach()
-            this._SubscribeInput()
+            this._SubscribeWhenToDetach()
             this._guiControl := this._mainController.GetGui().AddListView()
-            this.isOpened := true
+            this._SubscribeInput()
+            this.state := "shown"
         }
 
         Show() {
             this._SubscribeInput()
             this._guiControl.Show()
-            this.isOpened := true
+            this.state := "shown"
         }
 
         Hide() {
-            this.isOpened := false
+            this.state := "hidden"
             this._UnsubscribeInput()
             this._guiControl.Hide()
         }
 
         _Detach() {
-            if (this.isOpened) {
-                this._UnsubscribeInput()
-            }
-            this._UnsubscribeWhenDetach()
-            this._guiControl.Hide()
+            this.state := "detached"
             this._commandSet._helpAttachment := ""
         }
 
@@ -103,7 +99,7 @@ class Help extends Command {
             }
         }
 
-        _SubscribeWhenDetach() {
+        _SubscribeWhenToDetach() {
             this._nextCommandRunningSubscription := this._mainController.SubscribeCommandAboutToRun(this._OnNextCommandRunned.Bind(this))
             this._guiClosingSubscription := this._mainController.GetGui().SubscribeGuiClosing(this._Detach.Bind(this))
         }
@@ -116,7 +112,7 @@ class Help extends Command {
             this._inputChangedSubscription.Unsubscribe()
         }
 
-        _UnsubscribeWhenDetach() {
+        _UnsubscribeWhenToDetach() {
             this._nextCommandRunningSubscription.Unsubscribe()
             this._guiClosingSubscription.Unsubscribe()
         }
