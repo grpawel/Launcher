@@ -9,6 +9,13 @@ class MainController {
         this._gui := gui
     }
 
+    Execute() {
+        this._gui.ToggleWindow()
+        if (this._gui.IsVisible()) {
+            this.RunRootCommand()
+        }
+    }
+
     SetRootCommand(rootCommand) {
         this._rootCommand := rootCommand
     }

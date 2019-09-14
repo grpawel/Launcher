@@ -13,7 +13,7 @@ SetCapsLockState, AlwaysOff
 #Include %A_ScriptDir%\src\MainController.ahk
 #Include %A_ScriptDir%\src\Environment\Environment.ahk
 #Include %A_ScriptDir%\src\Gui\Gui.ahk
-global main := new MainController(new Environment(), new Gui())
+main := new MainController(new Environment(), new Gui())
 
 #Include %A_ScriptDir%\src\Extensions\RegisterExtensions.ahk
 RegisterExtensions(main)
@@ -24,10 +24,6 @@ UserFunctions(main)
 main.SetRootCommand(CreateCommands())
 
 CapsLock & Space::
-    main.GetGui().ToggleWindow()
-    if (main.GetGui().IsVisible()) {
-        main.RunRootCommand()
-    }
-    return
+    main.Execute()
 
 #Include %A_ScriptDir%\src\Gui\CapsLockFunctionality.ahk
