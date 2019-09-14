@@ -30,4 +30,4 @@ CapsLock & Space::
     }
     return
 
-#Include %A_ScriptDir%\src\Utils\Utils.ahk
+#Include %A_ScriptDir%\src\Gui\CapsLockFunctionality.ahk

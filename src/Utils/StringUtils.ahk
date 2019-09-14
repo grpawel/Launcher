@@ -25,3 +25,7 @@ Join(stringArray, separator) {
     }
     return joined
 }
+
+StartsWith(haystack, needle) {
+    return InStr(haystack, needle) == 1
+}
