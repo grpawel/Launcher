@@ -63,7 +63,6 @@ class TextInput {
         controlName := this._controlName
         guiName := this._gui.GetName()
         GuiControl, %guiName%: Text, %controlName%, %value%
-        this._OnKeyPressed()
     }
 
     Disable() {
