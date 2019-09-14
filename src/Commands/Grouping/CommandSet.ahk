@@ -5,27 +5,51 @@ class CommandSet extends Command {
     doesNeedGui := true
 
     _guiControl :=
-    _keyPressedSubscription :=
+    _inputChangedSubscription :=
+    _returnPressedSubscription :=
 
     Run(mainController) {
         mainController.GetGui().DisableAll()
         this._guiControl := mainController.GetGui().AddTextInput({ header: this.GetDescription() })
-        this._keyPressedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, mainController))
+        this._inputChangedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, mainController))
+        this._returnPressedSubscription := this._guiControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, mainController))
     }
 
     _OnUserInput(mainController, input) {
         if (not this.commands.HasKey(input)) {
             return
         }
-        closeGuiAfter := true
+        this._RunCommand(this.commands[input], mainController)
+    }
 
-        matchedCommand := this.commands[input]
+    _OnReturnPressed(mainController, input) {
+        if (input == "") {
+            return
+        }
+        matchingCommands := []
+        for key, value in this.commands {
+            if (StartsWith(key, input)) {
+                matchingCommands.Push(key)
+                if (matchingCommands.Length() > 1) {
+                    ; found multiple matching command before - can stop here
+                    ; TODO: instead message to user
+                    return
+                }
+            }
+        }
+        if (matchingCommands.Length() == 1) {
+            this._RunCommand(this.commands[matchingCommands[1]], mainController)
+        }
+    }
+
+    _RunCommand(matchedCommand, mainController) {
         closeGuiAfter := !matchedCommand.doesNeedGui
         mainController.NotifyCommandAboutToRun(matchedCommand)
         %matchedCommand%(mainController, { caller: this })
 
         if (closeGuiAfter) {
-            this._keyPressedSubscription.Unsubscribe()
+            this._inputChangedSubscription.Unsubscribe()
+            this._returnPressedSubscription.Unsubscribe()
             mainController.GetGui().Destroy()
         }
     }
