@@ -33,7 +33,7 @@ CreateCommands() {
                 , inco: _.Sequence([ _.ChangeEnvironment({browser: browsers.FirefoxPrivate}, "untilGuiClosed")
                                     , incognito ])
                 , clip: _.Sequence([ _.ChangeEnvironment({ Open: new CopyToClipboardOpener() }, "untilGuiClosed")
-                                    , clip ]) }
+                                    , Helpy(clip) ]) }
 
     folders :=  { user: _.Folder("%USERPROFILE%")
                 , doc: _.Folder("%USERPROFILE%\Documents") }
