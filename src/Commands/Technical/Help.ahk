@@ -73,6 +73,7 @@ class Help extends Command {
 
         _Detach() {
             this.state := "detached"
+            this._UnsubscribeWhenToDetach()
             this._commandSet._helpAttachment := ""
         }
 
@@ -87,6 +88,10 @@ class Help extends Command {
             }
             this._guiControl.RemoveRows()
             this._guiControl.Populate(rows)
+        }
+
+        _OnRowDoubleClicked(key) {
+            this._commandSet.GetGuiControl().SetText(key)
         }
 
         _OnNextCommandRunned(context) {
@@ -106,10 +111,12 @@ class Help extends Command {
 
         _SubscribeInput() {
             this._inputChangedSubscription := this._commandSet.GetGuiControl().SubscribeInputChanged(this._OnInputChanged.Bind(this))
+            this._rowDoubleClickedSubscription := this._guiControl.SubscribeRowDoubleClicked(this._OnRowDoubleClicked.Bind(this))
         }
 
         _UnsubscribeInput() {
             this._inputChangedSubscription.Unsubscribe()
+            this._rowDoubleClickedSubscription.Unsubscribe()
         }
 
         _UnsubscribeWhenToDetach() {

@@ -1,5 +1,8 @@
+#Include %A_ScriptDir%\src\Events\EventBus.ahk
+
 class ListViewControl {
     _isSetup := false
+    _eventBus := new EventBus()
 
     __New(gui, name, options) {
         this._gui := gui
@@ -69,6 +72,11 @@ class ListViewControl {
     _OnRowDoubleClicked() {
         if (A_GuiEvent == "DoubleClick") {
             LV_GetText(rowText, A_EventInfo)
+            this._eventBus.Emit("rowDoubleClicked", rowText)
         }
+    }
+
+    SubscribeRowDoubleClicked(subscriber, duration = "everytime") {
+        this._eventBus.Subscribe("rowDoubleClicked", subscriber, duration)
     }
 }
