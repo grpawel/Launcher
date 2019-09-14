@@ -1,6 +1,6 @@
 #Include %A_ScriptDir%\src\Commands\ImportCommands.ahk
 ; Small shortcut for creating commands. Allows to not use `new` keyword everywhere.
-; Intended only to use within UserCommands.ahk file.
+; Works only with commands extending `Command` class.
 ; 
 ; Example using CommandFactory:
 ; _ := new CommandFactory()
@@ -13,6 +13,9 @@
 class CommandFactory {
     __Call(commandClassName, args*) {
         commandObj := new %commandClassName%(args*)
+        if (commandObj == "" || commandObj.base.base.__Class != "Command") {
+            throw, "Command """ commandClassName """ does not exist"
+        }
         return commandObj
     }
 }
