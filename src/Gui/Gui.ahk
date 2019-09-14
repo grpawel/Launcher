@@ -9,14 +9,17 @@ class Gui {
     _controls := []
     _eventBus := new EventBus()
     _isSetup := false
-    static _nextName := 2
+    static _nextName := 1
     _options := { style: "xm w220 " . (Colors.foreground) . " -E0x200"
                 , backgroundColor: Colors.background
                 , currentLineColor: Colors.currentLine}
 
+    static guiList := []
+
     __New() {
         this._name := Gui._nextName
         Gui._nextName += 1
+        Gui.guiList[this._name] := this
     }
 
     Show() { 

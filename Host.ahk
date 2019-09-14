@@ -1,4 +1,4 @@
-﻿; Created by Asger Juul Brunshøj
+; Created by Asger Juul Brunshøj
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn, All  ; Enable warnings to assist with detecting common errors.
@@ -25,5 +25,7 @@ main.SetRootCommand(CreateCommands())
 
 CapsLock & Space::
     main.Execute()
+    return
 
 #Include %A_ScriptDir%\src\Gui\CapsLockFunctionality.ahk
+#Include %A_ScriptDir%\src\Gui\GuiEscapes.ahk
