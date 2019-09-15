@@ -1,6 +1,7 @@
 #Include %A_ScriptDir%\src\Commands\Actions\File.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\Folder.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\Open.ahk
+#Include %A_ScriptDir%\src\Commands\Actions\RunOtherScript.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\Search.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\ShowMessage.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\TypeText.ahk
