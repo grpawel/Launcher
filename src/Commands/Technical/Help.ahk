@@ -111,7 +111,7 @@ class Help extends Command {
 
         _SubscribeInput() {
             this._inputChangedSubscription := this._commandSet.GetGuiControl().SubscribeInputChanged(this._OnInputChanged.Bind(this))
-            this._rowDoubleClickedSubscription := this._guiControl.SubscribeRowDoubleClicked(this._OnRowDoubleClicked.Bind(this))
+            this._rowDoubleClickedSubscription := this._guiControl.SubscribeRowSelected(this._OnRowDoubleClicked.Bind(this))
         }
 
         _UnsubscribeInput() {

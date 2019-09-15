@@ -34,8 +34,6 @@ class TextInput {
         }
         Gui, %guiName%: Add, Edit, %style% v%controlName% -WantReturn
         GuiControl, %guiName%: +g, %controlName%, %keyPressHandler%
-        Gui, %guiName%: Add, Button, x-10 y-10 w1 h1 v%controlName%Button +default -Tabstop
-        GuiControl, %guiName%: +g, %controlName%Button, %returnPressHandler%
         return
     }
 
@@ -45,6 +43,10 @@ class TextInput {
 
     SubscribeReturnPressed(subscriber, duration = "everytime") {
         return this._eventBus.Subscribe("returnPressed", subscriber, duration)
+    }
+
+    NotifyReturnPressed() {
+        this._OnReturnPressed()
     }
 
     _OnKeyPressed() {
@@ -70,10 +72,8 @@ class TextInput {
         local guiName := this._gui.GetName()
         local controlName := this._controlName
         GuiControl, %guiName%: Disable, %controlName%
-        GuiControl, %guiName%: Disable, %controlName%Button
         GuiControl, %guiName%: Disable, %controlName%Header
         GuiControl, %guiName%: -g, %controlName%
-        GuiControl, %guiName%: -g, %controlName%Button
     }
 
     Destroy() {

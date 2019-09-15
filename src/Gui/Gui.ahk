@@ -34,13 +34,28 @@ class Gui {
     }
 
     _Setup() {
-        name := this._name
+        local name := this._name
         Gui, %name%: Margin, 16, 16
-        colorBackground := this._options.backgroundColor
-        colorCurrentLine := this._options.currentLineColor
+        local colorBackground := this._options.backgroundColor
+        local colorCurrentLine := this._options.currentLineColor
         Gui, %name%: Color, %colorBackground%, %colorCurrentLine%
         Gui, %name%: +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
         Gui, %name%: Font, s10, Segoe UI
+        ; Button is common for all controls. This allows selecting rows by using Return key.
+        Gui, %name%: Add, Button, x-10 y-10 w1 h1 vDefaultButton +default -Tabstop
+        local returnPressHandler := this._OnReturnPressed.Bind(this)
+        GuiControl, %name%: +g, DefaultButton, %returnPressHandler%
+    }
+
+    _OnReturnPressed() {
+        focusedControl := this._FindFocusedControl()
+        focusedControl.NotifyReturnPressed()
+    }
+
+    _FindFocusedControl() {
+        name := this._name
+        GuiControlGet, focusedControlName, %name%:FocusV
+        return this._controls[focusedControlName]
     }
 
     Hide() {
@@ -83,20 +98,20 @@ class Gui {
     ; Options:
     ; header (string) - will be shown above input
     AddTextInput(options = "") {
-        mergedOptions := MergeArrays(this._options, options)
-        control := new TextInput(this, this._nextControlName, mergedOptions)
-        control.Show(this._nextControlName)
-        this._nextControlName += 1
-
-        this._controls.Push(control)
-        return control
+        return this._AddControl("TextInput", options)
     }
 
     AddListView() {
-        control := new ListViewControl(this, this._nextControlName, this._options)
-        control.Show(this._nextControlName)
-        this._controls.Push(control)
+        return this._AddControl("ListViewControl")
+    }
+
+    _AddControl(controlClassName, options = "") {
+        mergedOptions := MergeArrays(this._options, options)
+        controlName := this._nextControlName
         this._nextControlName += 1
+        control := new %controlClassName%(this, controlName, mergedOptions)
+        control.Show()
+        this._controls[controlName] := control
         return control
     }
 

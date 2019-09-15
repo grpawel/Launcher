@@ -35,7 +35,7 @@ class ListViewControl {
         ; because next input position is calculated
         ; using previous control initial position, ignoring further changes.
         ; TODO: remove margin around
-        Gui, %guiName%: Add, ListView, h0 -Hdr %style% v%controlName%, Command|Description
+        Gui, %guiName%: Add, ListView, h0 -Hdr -Multi %style% v%controlName%, Command|Description
         GuiControl, %guiName%: +g, %controlName%, %doubleClickHandler%
         LV_ModifyCol()
         GuiControl, %guiName%: Move, %controlName%, h150
@@ -78,11 +78,21 @@ class ListViewControl {
     _OnRowDoubleClicked() {
         if (A_GuiEvent == "DoubleClick") {
             LV_GetText(rowText, A_EventInfo)
-            this._eventBus.Emit("rowDoubleClicked", rowText)
+            this._eventBus.Emit("rowSelected", rowText)
         }
     }
 
-    SubscribeRowDoubleClicked(subscriber, duration = "everytime") {
-        this._eventBus.Subscribe("rowDoubleClicked", subscriber, duration)
+    _OnReturnPressed() {
+        selectedRowNumber := LV_GetNext()
+        LV_GetText(rowText, selectedRowNumber)
+        this._eventBus.Emit("rowSelected", rowText)
+    }
+
+    SubscribeRowSelected(subscriber, duration = "everytime") {
+        this._eventBus.Subscribe("rowSelected", subscriber, duration)
+    }
+
+    NotifyReturnPressed() {
+        this._OnReturnPressed()
     }
 }
