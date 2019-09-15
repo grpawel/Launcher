@@ -1,4 +1,5 @@
 ﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 class CommandSet extends Command {
     commands := {}
@@ -7,6 +8,11 @@ class CommandSet extends Command {
     _guiControl :=
     _inputChangedSubscription :=
     _returnPressedSubscription :=
+    static _DEFAULT_OPTIONS := {}
+
+    __New(options = "") {
+        this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
+    }
 
     Run(mainController) {
         mainController.GetGui().DisableAll()
