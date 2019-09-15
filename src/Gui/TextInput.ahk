@@ -34,7 +34,7 @@ class TextInput {
         }
         Gui, %guiName%: Add, Edit, %style% v%controlName% -WantReturn
         GuiControl, %guiName%: +g, %controlName%, %keyPressHandler%
-        Gui, %guiName%: Add, Button, x-10 y-10 w1 h1 v%controlName%Button +default
+        Gui, %guiName%: Add, Button, x-10 y-10 w1 h1 v%controlName%Button +default -Tabstop
         GuiControl, %guiName%: +g, %controlName%Button, %returnPressHandler%
         return
     }
