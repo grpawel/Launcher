@@ -8,8 +8,13 @@ class CommandSet extends Command {
     _guiControl :=
     _inputChangedSubscription :=
     _returnPressedSubscription :=
-    static _DEFAULT_OPTIONS := {}
+    static _DEFAULT_OPTIONS := { "":""
+        , "typingMatch": "exact" }
 
+    ; Options:
+    ; typingMatch - how to match commands when typing:
+    ;       "exact" - whole key must be typed
+    ;       "immediate" - run command as soon as only one key matches input
     __New(options = "") {
         this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
     }
@@ -22,29 +27,48 @@ class CommandSet extends Command {
     }
 
     _OnUserInput(mainController, input) {
-        if (not this.commands.HasKey(input)) {
+        matchingMode := this._options.typingMatch
+        if (matchingMode == "exact"
+                && this.commands.HasKey(input)) {
+            this._RunCommand(this.commands[input], mainController)
             return
         }
-        this._RunCommand(this.commands[input], mainController)
+        if (matchingMode == "immediate") {
+            commandKey := this._FindOnlyCommandKeyStartingWith(input)
+            if (commandKey != false) {
+                this._RunCommand(this.commands[commandKey], mainController)
+            }
+            return
+        }
     }
 
     _OnReturnPressed(mainController, input) {
         if (input == "") {
             return
         }
-        matchingCommands := []
+        matchingCommandKey := this._FindOnlyCommandKeyStartingWith(input)
+        if (matchingCommandKey != false) {
+            this._RunCommand(this.commands[matchingCommandKey], mainController)
+        }
+    }
+
+    ; Returns command key only if exactly one key starts with given beginning.
+    _FindOnlyCommandKeyStartingWith(beginning) {
+        matchingCommandKeys := []
         for key, value in this.commands {
-            if (StartsWith(key, input)) {
-                matchingCommands.Push(key)
-                if (matchingCommands.Length() > 1) {
+            if (StartsWith(key, beginning)) {
+                matchingCommandKeys.Push(key)
+                if (matchingCommandKeys.Length() > 1) {
                     ; found multiple matching command before - can stop here
                     ; TODO: instead message to user
-                    return
+                    return false
                 }
             }
         }
-        if (matchingCommands.Length() == 1) {
-            this._RunCommand(this.commands[matchingCommands[1]], mainController)
+        if (matchingCommandKeys.Length() == 1) {
+            return matchingCommandKeys[1]
+        } else {
+            return false
         }
     }
 
