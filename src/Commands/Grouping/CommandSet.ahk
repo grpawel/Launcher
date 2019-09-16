@@ -13,8 +13,9 @@ class CommandSet extends Command {
 
     ; Options:
     ; typingMatch - how to match commands when typing:
-    ;       "exact" - whole key must be typed
-    ;       "immediate" - run command as soon as only one key matches input
+    ;       "exact" - (default) whole key must be typed
+    ;       "immediate" - run command as soon as only one key starts with input
+    ;       ["atLeast", N] - try to match immediately if there are at least N characters
     __New(options = "") {
         this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
     }
@@ -37,6 +38,19 @@ class CommandSet extends Command {
             commandKey := this._FindOnlyCommandKeyStartingWith(input)
             if (commandKey != false) {
                 this._RunCommand(this.commands[commandKey], mainController)
+            }
+            return
+        }
+        if (IsArray(matchingMode) && matchingMode[1] == "atLeast") {
+            if (this.commands.HasKey(input)) {
+                this._RunCommand(this.commands[input], mainController)
+                return
+            } else if (StrLen(input) >= matchingMode[2]) {
+                commandKey := this._FindOnlyCommandKeyStartingWith(input)
+                if (commandKey != false) {
+                    this._RunCommand(this.commands[commandKey], mainController)
+                }
+                return
             }
             return
         }
