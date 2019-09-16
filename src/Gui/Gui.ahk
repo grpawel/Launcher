@@ -68,11 +68,11 @@ class Gui {
         this._state := "closed"
         this._isSetup := false
         name := this._name
-        this._eventBus.Emit("guiClosing") 
         Gui, %name%: Destroy
         this._nextControlName := 0
         this._DestroyControls(this._controls)
         this._controls := []
+        this._eventBus.Emit("guiClosing") 
         #WinActivateForce
         WinActivate
     }

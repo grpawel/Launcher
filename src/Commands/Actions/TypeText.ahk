@@ -10,7 +10,6 @@ class TypeText extends Command {
 
     Run(mainController) {
         env := mainController.GetEnvironment()
-        mainController.GetGui().Hide()
         env.Type(this._string)
     }
 }
