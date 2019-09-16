@@ -14,5 +14,6 @@
 #Include %A_ScriptDir%\src\Commands\Technical\Help.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\Reload.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\SleepMs.ahk
+#Include %A_ScriptDir%\src\Commands\Technical\WrapFunction.ahk
 
 #Include %A_ScriptDir%\src\Commands\Helpers\Helpy.ahk
