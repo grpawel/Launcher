@@ -6,8 +6,6 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance
 
-SetCapsLockState, AlwaysOff
-
 #Include %A_ScriptDir%\src\Commands\ImportCommands.ahk
 
 #Include %A_ScriptDir%\src\MainController.ahk
@@ -23,9 +21,8 @@ UserFunctions(main)
 #Include %A_ScriptDir%\UserCommands.ahk
 main.SetRootCommand(CreateCommands())
 
-CapsLock & Space::
+^/::
     main.Execute()
     return
 
-#Include %A_ScriptDir%\src\Gui\CapsLockFunctionality.ahk
 #Include %A_ScriptDir%\src\Gui\GuiEscapes.ahk
