@@ -1,4 +1,6 @@
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
+#Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
+#Include %A_ScriptDir%\src\Environment\Openers\SendTyper.ahk
 
 class MainController {
     _rootCommand := {}
@@ -7,6 +9,12 @@ class MainController {
     __New(environment, gui) {
         this._environment := environment
         this._gui := gui
+        this._SetDefaultEnvironment()
+    }
+
+    _SetDefaultEnvironment() {
+        this.UpdateEnvironment(new RunOpener().GetEnvironmentChanges())
+        this.UpdateEnvironment(new SendTyper().GetEnvironmentChanges())
     }
 
     Execute() {

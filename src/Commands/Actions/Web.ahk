@@ -10,6 +10,6 @@ class Web extends Command {
 
     Run(mainController) {
         env := mainController.GetEnvironment()
-        env.Open.Website(this._url, env)
+        env.OpenWebsite(this._url)
     }
 }

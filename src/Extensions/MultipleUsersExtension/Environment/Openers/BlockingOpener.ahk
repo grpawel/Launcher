@@ -6,20 +6,11 @@ class BlockingOpener extends Opener {
         this._reason := reason
     }
 
-    Default(args*) {
-        this._Open(args*)
-    }
-
-    Website(args*) {
-        this._Open(args*)
-    }
-
-    Folder(args*) {
-        this._Open(args*)
-    }
-
-    File(args*) {
-        this._Open(*args)
+    GetEnvironmentChanges() {
+        return  { "OpenOther": this._Open.Bind(this)
+                , "OpenWebsite": this._Open.Bind(this)
+                , "OpenFile": this._Open.Bind(this)
+                , "OpenFolder": this._Open.Bind(this) }
     }
 
     _Open(args*) {

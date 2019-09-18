@@ -1,14 +1,17 @@
-#Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
-#Include %A_ScriptDir%\src\Environment\SendTyper.ahk
-
 class Environment {
+    otherProgram := ""
     browser := "C:\Program Files\Mozilla Firefox\firefox.exe"
     fileProgram := ""
     folderProgram := "explorer"
-    defaultProgram := ""
 
-    Open := new RunOpener()
-    Type := Func("SendTyper")
+    ; Functions for opening, typing etc. various things.
+    ; Should be called like env.OpenOther(someArgument), 
+    ; because then env is supplied as first parameter to the function.
+    OpenOther := 
+    OpenWebsite := 
+    OpenFile := 
+    OpenFolder := 
+    TypeText := 
 
     ; Returns new `Environment` with values either from this object or `overrides`.
     ; Existing values are not copied, so changes to them are visible in both objects.

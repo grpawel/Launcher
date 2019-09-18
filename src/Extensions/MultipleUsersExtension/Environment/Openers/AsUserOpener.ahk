@@ -7,23 +7,15 @@ class AsUserOpener extends Opener {
         this._userName := userName
     }
 
-    Default(argument, environment = "") {
-        this._Open(argument, environment.defaultProgram, environment.user)
+    GetEnvironmentChanges() {
+        return  { "OpenOther": this._Open.Bind(this, "otherProgram")
+                , "OpenWebsite": this._Open.Bind(this, "browser")
+                , "OpenFile": this._Open.Bind(this, "fileProgram")
+                , "OpenFolder": this._Open.Bind(this, "folderProgram") }
     }
 
-    Website(website, environment = "") {
-        this._Open(website, environment.browser, environment.user)
-    }
-
-    Folder(folder, environment = "") {
-        this._Open(folder, environment.folderProgram, environment.user)
-    }
-
-    File(file, environment = "") {
-        this._Open(file, environment.fileProgram, environment.user)
-    }
-
-    _Open(argument, programName, userName) {
+    _Open(programNameKey, env, argument) {
+        programName := env[programNameKey]
         if (this._userName != "") {
             userName := this._userName
         }

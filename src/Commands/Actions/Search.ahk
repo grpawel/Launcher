@@ -20,7 +20,7 @@ class Search extends Command {
         this._keyPressedSubscription.Unsubscribe()
         url := StrReplace(this._urlTemplate, "REPLACEME", input)
         env := mainController.GetEnvironment()
-        env.Open.Website(url, env)
+        env.OpenWebsite(url)
         mainController.GetGui().Destroy()
     }
 }

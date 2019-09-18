@@ -10,6 +10,6 @@ class Open extends Command {
 
     Run(mainController) {
         env := mainController.GetEnvironment()
-        env.Open.Default(this._toRun, env)
+        env.OpenOther(this._toRun)
     }
 }

@@ -10,6 +10,6 @@ class File extends Command {
 
     Run(mainController) {
         env := mainController.GetEnvironment()
-        env.Open.File(this._path, env)
+        env.OpenFile(this._path)
     }
 }

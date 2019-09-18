@@ -14,11 +14,16 @@ class ChangeEnvironment extends Command {
     }
 
     Run(mainController) {
+        if (IsFunc(this._changes.GetEnvironmentChanges)) {
+            changes := this._changes.GetEnvironmentChanges()
+        } else {
+            changes := this._changes
+        }
         if (this._mode == "permanent") {
-            mainController.UpdateEnvironment(this._changes)
+            mainController.UpdateEnvironment(changes)
         }
         else if (this._mode == "untilGuiClosed") {
-            oldValues := mainController.UpdateEnvironment(this._changes)
+            oldValues := mainController.UpdateEnvironment(changes)
             mainController.GetGui().SubscribeGuiClosing(this._Revert.Bind(this, oldValues, mainController)
                                                       , "once")
         }

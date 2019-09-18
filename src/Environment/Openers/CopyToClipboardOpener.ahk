@@ -1,19 +1,14 @@
 #Include %A_ScriptDir%\src\Environment\Opener.ahk
 
 class CopyToClipboardOpener extends Opener {
-    Default(argument) {
+    GetEnvironmentChanges() {
+        return  { "OpenOther": this._Open.Bind(this)
+                , "OpenWebsite": this._Open.Bind(this)
+                , "OpenFile": this._Open.Bind(this)
+                , "OpenFolder": this._Open.Bind(this) }
+    }
+
+    _Open(env, argument) {
         Clipboard := argument
-    }
-
-    Website(website, environment) {
-        Clipboard := website
-    }
-
-    Folder(folder, environment) {
-        Clipboard := folder
-    }
-
-    File(file, environment) {
-        Clipboard := file
     }
 }
