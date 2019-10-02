@@ -7,7 +7,7 @@ class UserGuard extends Command {
         nextCommand := context.nextCommand
         allowedUsers := nextCommand.GetAllowedUsers()
         if (allowedUsers == "") {
-            ; Suppose all users are OK. Nothing to block.
+            ; No allowed user specified. Nothing to block.
             return
         }
         currentUser := mainController.GetEnvironment()["user"]
@@ -18,7 +18,7 @@ class UserGuard extends Command {
         reason := "Command """ nextCommand.GetDescription() """"
         reason .= "`ncan only be run for users [" . Join(allowedUsers, ",") . "]" 
         reason .= "`nbut current user is """ currentUser """."
-        blocker := new ChangeEnvironment({ Open: new BlockingOpener(reason) }, "untilGuiClosed")
+        blocker := new ChangeEnvironment({ Open: BlockingOpener(reason) }, "untilGuiClosed")
         mainController.NotifyCommandAboutToRun(blocker)
         %blocker%(mainController, { caller: this })
     }

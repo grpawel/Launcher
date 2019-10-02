@@ -1,21 +1,17 @@
-#Include %A_ScriptDir%\src\Environment\Opener.ahk
+RunOpener() {
+    function := Func("_RunOpener")
+    return  { "OpenOther": function.Bind("otherProgram")
+            , "OpenWebsite": function.Bind("browser")
+            , "OpenFile": function.Bind("fileProgram")
+            , "OpenFolder": function.Bind("folderProgram") }
+}
 
-class RunOpener extends Opener {
-    GetEnvironmentChanges() {
-        return  { "OpenOther": this._Open.Bind(this, "otherProgram")
-                , "OpenWebsite": this._Open.Bind(this, "browser")
-                , "OpenFile": this._Open.Bind(this, "fileProgram")
-                , "OpenFolder": this._Open.Bind(this, "folderProgram") }
+_RunOpener(programNameKey, env, argument) {
+    programName := env[programNameKey]
+    if (programName != "") {
+        target := programName " """ argument """"
+    } else {
+        target := argument
     }
-
-    ; env is supplied by calling functions env.OpenOther(someArgument)
-    _Open(programNameKey, env, argument) {
-        programName := env[programNameKey]
-        if (programName != "") {
-            target := programName " """ argument """"
-        } else {
-            target := argument
-        }
-        Run, %target%
-    }
+    Run, %target%
 }

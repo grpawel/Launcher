@@ -4,7 +4,7 @@
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\BlockingOpener.ahk
 
 MultipleUsersExtension(mainController) {
-    mainController.UpdateEnvironment({ user: "", Open: new AsUserOpener() })
+    mainController.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
     Command.GetAllowedUsers := Func("_Command_GetAllowedUsers")
     Command.SetAllowedUsers := Func("_Command_SetAllowedUsers")
 }

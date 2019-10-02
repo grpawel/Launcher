@@ -1,5 +1,4 @@
 ﻿#Include %A_ScriptDir%\src\Commands\Filters.ahk
-#Include %A_ScriptDir%\src\Environment\ImportOpeners.ahk
 
 CreateCommands() {
     browsers := { firefox: """firefox"""
@@ -32,7 +31,7 @@ CreateCommands() {
                 , help: _.Help()
                 , inco: _.Sequence([ _.ChangeEnvironment({browser: browsers.FirefoxPrivate}, "untilGuiClosed")
                                     , incognito ])
-                , clip: _.Sequence([ _.ChangeEnvironment({ Open: new CopyToClipboardOpener() }, "untilGuiClosed")
+                , clip: _.Sequence([ _.ChangeEnvironment(CopyToClipboardOpener(), "untilGuiClosed")
                                     , Helpy(clip) ]) }
 
     folders :=  { user: _.Folder("%USERPROFILE%")

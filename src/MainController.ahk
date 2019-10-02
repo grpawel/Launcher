@@ -13,8 +13,8 @@ class MainController {
     }
 
     _SetDefaultEnvironment() {
-        this.UpdateEnvironment(new RunOpener().GetEnvironmentChanges())
-        this.UpdateEnvironment(new SendTyper().GetEnvironmentChanges())
+        this.UpdateEnvironment(RunOpener())
+        this.UpdateEnvironment(SendTyper())
     }
 
     Execute() {

@@ -1,11 +1,8 @@
-#Include %A_ScriptDir%\src\Environment\Opener.ahk
+SendTyper() {
+    function := Func("_SendTyper")
+    return  { "TypeText": function }
+}
 
-class SendTyper extends Opener {
-    GetEnvironmentChanges() {
-        return  { "TypeText": this._Send.Bind(this) }
-    }
-
-    _Send(env, string) {
-        Send, %string%
-    }
+_SendTyper(env, string) {
+    Send, %string%
 }

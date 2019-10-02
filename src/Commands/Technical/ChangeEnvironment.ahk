@@ -14,11 +14,7 @@ class ChangeEnvironment extends Command {
     }
 
     Run(mainController) {
-        if (IsFunc(this._changes.GetEnvironmentChanges)) {
-            changes := this._changes.GetEnvironmentChanges()
-        } else {
-            changes := this._changes
-        }
+        changes := this._changes
         if (this._mode == "permanent") {
             mainController.UpdateEnvironment(changes)
         }
