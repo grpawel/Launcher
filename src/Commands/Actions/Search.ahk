@@ -19,6 +19,7 @@ class Search extends Command {
     _OnUserInput(mainController, input) {
         this._keyPressedSubscription.Unsubscribe()
         url := StrReplace(this._urlTemplate, "REPLACEME", input)
+        url := StrReplace(url, " ", "+")
         env := mainController.GetEnvironment()
         env.OpenWebsite(url)
         mainController.GetGui().Destroy()
