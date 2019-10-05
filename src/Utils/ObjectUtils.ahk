@@ -13,6 +13,18 @@ AddAll(target, arrays*) {
     return target
 }
 
+; Flip object keys and values.
+; Example:
+; obj := { "a": "AA", "b": "BB" }
+; Flip(obj) == { "AA": "a", "BB": "b" }
+Flip(object) {
+    flipped := {}
+    for key, value in object {
+        flipped[value] := key
+    }
+    return flipped
+}
+
 ; from https://www.autohotkey.com/boards/viewtopic.php?p=255613#p255613
 Obj2String(Obj,FullPath:=1,BottomBlank:=0){
 	static String,Blank

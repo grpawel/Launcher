@@ -59,11 +59,31 @@ class MainController {
 
     RunCommand(com, context = "") {
         this._eventBus.Emit("commandAboutToRun", { nextCommand: com })
-        %com%(this, context)
+        if (this._commandBlocked) {
+            this._ShowBlockMessage()
+            this._commandBlocked := false
+            this._blockingReason := ""
+        } else {
+            %com%(this, context)
+        }
+    }
+
+    _ShowBlockMessage() {
+        message := "Command blocked."
+        if (this._blockingReason != "") {
+            message .= " Reason:`n"
+            message .= this._blockingReason
+        }
+        MsgBox, %message%
     }
 
     SubscribeCommandAboutToRun(subscriber, duration = "everytime") {
         return this._eventBus.Subscribe("commandAboutToRun", subscriber, duration)
+    }
+
+    BlockNextCommand(reason := "") {
+        this._commandBlocked := true
+        this._blockingReason := reason
     }
 
 }

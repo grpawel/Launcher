@@ -1,24 +1,32 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\StringUtils.ahk
+#Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\ChangeDesktop.ahk
 
 ; Checks if command and current user match.
 class UserGuard extends Command {
+    __New(desktopToUserMap) {
+        this._desktopToUserMap := desktopToUserMap
+    }
+
     Run(mainController, context) {
         nextCommand := context.nextCommand
-        allowedUsers := nextCommand.GetAllowedUsers()
-        if (allowedUsers == "") {
-            ; No allowed user specified. Nothing to block.
+        currentUser := mainController.GetEnvironment()["user"]
+        isAllowed := nextCommand.CanRunWithUser(currentUser)
+        if (isAllowed == true) {
+            ; nothing to block
             return
         }
-        currentUser := mainController.GetEnvironment()["user"]
-        if (ArrayContains(allowedUsers, currentUser)) {
-            ; Current user is on an allowance list. Nothing to block.
+        if (isAllowed == false) {
+            reason := "Command """ nextCommand.GetDescription() """"
+            reason .= "`ncannot be run for user """ currentUser """."
+            mainController.BlockNextCommand(reason)
             return
-        } 
-        reason := "Command """ nextCommand.GetDescription() """"
-        reason .= "`ncan only be run for users [" . Join(allowedUsers, ",") . "]" 
-        reason .= "`nbut current user is """ currentUser """."
-        blocker := new ChangeEnvironment({ Open: BlockingOpener(reason) }, "untilGuiClosed")
-        mainController.RunCommand(blocker, { caller: this })
+        }
+        if (isAllowed.switchTo != "") {
+            desktop := Flip(this._desktopToUserMap)[isAllowed.switchTo]
+            switcher := new ChangeDesktop(desktop)
+            mainController.RunCommand(switcher, { caller: this })
+            return
+        }
     }
 }
