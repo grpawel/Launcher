@@ -57,8 +57,9 @@ class MainController {
         return oldChangedValues
     }
 
-    NotifyCommandAboutToRun(com) {
+    RunCommand(com, context = "") {
         this._eventBus.Emit("commandAboutToRun", { nextCommand: com })
+        %com%(this, context)
     }
 
     SubscribeCommandAboutToRun(subscriber, duration = "everytime") {

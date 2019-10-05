@@ -88,8 +88,7 @@ class CommandSet extends Command {
 
     _RunCommand(matchedCommand, mainController) {
         closeGuiAfter := !matchedCommand.doesNeedGui
-        mainController.NotifyCommandAboutToRun(matchedCommand)
-        %matchedCommand%(mainController, { caller: this })
+        mainController.RunCommand(matchedCommand, {caller: this })
 
         if (closeGuiAfter) {
             this._inputChangedSubscription.Unsubscribe()

@@ -19,7 +19,6 @@ class UserGuard extends Command {
         reason .= "`ncan only be run for users [" . Join(allowedUsers, ",") . "]" 
         reason .= "`nbut current user is """ currentUser """."
         blocker := new ChangeEnvironment({ Open: BlockingOpener(reason) }, "untilGuiClosed")
-        mainController.NotifyCommandAboutToRun(blocker)
-        %blocker%(mainController, { caller: this })
+        mainController.RunCommand(blocker, { caller: this })
     }
 }

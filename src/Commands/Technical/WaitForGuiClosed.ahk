@@ -11,8 +11,6 @@ class WaitForGuiClosed extends Command {
     }
 
     _OnGuiClosing(mainController, context) {
-        command := this._command
-        mainController.NotifyCommandAboutToRun(command)
-        %command%(mainController, context)
+        mainController.RunCommand(this._command, context)
     }
 }
