@@ -1,10 +1,11 @@
-#Include %A_ScriptDir%\src\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Grouping\Sequence.ahk
+#Include %A_ScriptDir%\src\Commands\Technical\RunDecorator.ahk
+
 
 ; Change environment and run command
 ; Small helper function.
-; Uses description and tags from given CommandSet.
+; See also `Helpy` and `RunDecorator` docs.
 WithEnvironment(environmentChange, wrapped) {
-    return new Sequence([new ChangeEnvironment(environmentChange, "untilGuiClosed"), wrapped])
-        .SetDescription(wrapped.GetDescription())
-        .AddTags(wrapped.tags)
+    seq := new Sequence([new ChangeEnvironment(environmentChange, "untilGuiClosed"), wrapped])
+    return new RunDecorator(wrapped, seq)
 }

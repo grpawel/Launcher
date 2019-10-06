@@ -1,14 +1,16 @@
-#Include %A_ScriptDir%\src\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Grouping\Sequence.ahk
+#Include %A_ScriptDir%\src\Commands\Technical\RunDecorator.ahk
 
 ; Show help with CommandSet by default.
-; Small helper function.
-; Uses description and tags from given CommandSet.
-; 
+; Transparently wraps given CommandSet with help.
+; Calls to returned object (like .AddTags()) are passed to CommandSet given in argument,
+; so Helpy can be called anywhere.
+; See also `RunDecorator` docs.
 ; Example: 
-; films := _.CommandSet().SetDescription( ...
+; films := Helpy(_.CommandSet()).SetDescription( ...)
 ; something["film"] := Helpy(films)
-Helpy(wrapped) {
-    return new Sequence([wrapped, new Help(wrapped)])
-        .SetDescription(wrapped.GetDescription())
-        .AddTags(wrapped.GetTags())
+
+Helpy(comSet) {
+    seq := new Sequence([comSet, new Help(comSet)])
+    return new RunDecorator(comSet, seq)
 }
