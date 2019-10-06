@@ -7,8 +7,12 @@
 ; so Helpy can be called anywhere.
 ; See also `RunDecorator` docs.
 ; Example: 
-; films := Helpy(_.CommandSet()).SetDescription( ...)
+; films := Helpy(_.CommandSet().SetDescription(...))
 ; something["film"] := Helpy(films)
+; 
+; Be careful where to put closing parenthesis:
+; `Helpy(_.CommandSet() ) .SetDescription(...)` would not work correctly, because `SetDescription` returns inner `CommandSet`.
+; Either `Helpy()` must embrace whole expression, or .SetDescription(...) has to be called later, in separate line.
 
 Helpy(comSet) {
     seq := new Sequence([comSet, new Help(comSet)])
