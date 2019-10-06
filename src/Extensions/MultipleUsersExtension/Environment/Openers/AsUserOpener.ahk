@@ -1,5 +1,5 @@
 ; Runs command as different user using `runas` (Windows utility).
-; User name is taken from constructor, if none then from environment.
+; User name is taken from parameter, if none then from environment.
 AsUserOpener(userName = "") {
     function := Func("_AsUserOpener")
     return  { "OpenOther": function.Bind(userName, "otherProgram")
@@ -10,6 +10,7 @@ AsUserOpener(userName = "") {
 
 _AsUserOpener(userName, programNameKey, env, argument) {
     programName := env[programNameKey]
+    userName := userName != "" ? userName : env.user
     ; Fix for Firefox not working properly with RunAs, regardless of -no-remote or -new-instance options.
     ; Instead use Firefox profiles.
     if (InStr(programName, "firefox")) {

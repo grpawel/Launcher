@@ -2,6 +2,7 @@
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\SetUserFromDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\AsUserOpener.ahk
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\BlockingOpener.ahk
+#Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 MultipleUsersExtension(mainController) {
     mainController.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
@@ -10,7 +11,7 @@ MultipleUsersExtension(mainController) {
 }
 
 ; `config` object specifies how command interacts with current user.
-; Possible values:
+; 
 ; 1) Block every user
 ; command.UserConfig({ blacklist: "all" }) 
 ; 2) Block only user 'user1' and 'user2', others are allowed
@@ -21,7 +22,9 @@ MultipleUsersExtension(mainController) {
 ; command.UserConfig({ switchFrom: ["user1"], switchTo: "user2" })
 ; 5) Allow all users and switch to 'user2' before running
 ; command.UserConfig({ switchTo: "user2" })
-; 5) Combination of above. Same user in multiple options can cause unexpected results.
+; 6) Run as different user, regardless of current user
+; command.UserConfig({ runAs: "user1" })
+; 6) A combination of above. Same user in multiple options can cause unexpected results.
 _Command_UserConfig(this, config) {
     if (this._userConfig == "") {
         this._userConfig := {}
@@ -33,26 +36,26 @@ _Command_UserConfig(this, config) {
 ; returns true, false or {switchTo: username}
 _Command_CanRunWithUser(this, user) {
     config := this._userConfig
-    if (config == "") {
-        ; no config => allowed
-        return true
-    }
+    result := { block: false }
     if (config.blacklist == "all"
         || ArrayContains(config.blacklist, user)) {
         ; user is blocked
-        return false
+        result.block := true
     }
     if (ArrayContains(config.whitelist, user)) {
         ; user is specifically allowed
-        return true
+        result.block := false
     }
-    if (config.switchTo != "") {
+    if (config.HasKey("switchTo")) {
         ; user has to be switched
         if (config.switchFrom == ""
             || config.switchFrom == "all"
             || ArrayContains(config.switchFrom, user)) {
-            return { "switchTo": config.switchTo }
+            result.switchTo := config.switchTo
         }
     }
-    return true
+    if (config.HasKey("runAs")) {
+        result.runAs := config.runAs
+    }
+    return result
 }
