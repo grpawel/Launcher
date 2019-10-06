@@ -23,7 +23,10 @@ MultipleUsersExtension(mainController) {
 ; command.UserConfig({ switchTo: "user2" })
 ; 5) Combination of above. Same user in multiple options can cause unexpected results.
 _Command_UserConfig(this, config) {
-    this._userConfig := config
+    if (this._userConfig == "") {
+        this._userConfig := {}
+    }
+    AddAll(this._userConfig, config)
     return this
 }
 
