@@ -10,6 +10,7 @@ class Gui {
     _controls := []
     _eventBus := new EventBus()
     _isSetup := false
+    _canBeDestroyed := true
     static _nextName := 1
     static DEFAULT_OPTIONS := { width: "220"
                 , textColor: Colors.LIGHT_GRAY
@@ -99,7 +100,18 @@ class Gui {
         Gui, %name%: Hide
     }
 
+    DisableDestroying() {
+        this._canBeDestroyed := false
+    }
+
+    EnableDestroying() {
+        this._canBeDestroyed := true
+    }
+
     Destroy() {
+        if (!this._canBeDestroyed) {
+            return
+        }
         this._state := "closed"
         this._isSetup := false
         name := this._name

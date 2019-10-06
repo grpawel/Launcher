@@ -69,7 +69,7 @@ class MainController {
             message .= " Reason:`n"
             message .= this._blockingReason
         }
-        MsgBox, %message%
+        this.ShowErrorMessage(message)
     }
 
     SubscribeCommandAboutToRun(subscriber, duration = "everytime") {
@@ -81,4 +81,18 @@ class MainController {
         this._blockingReason := reason
     }
 
+    ShowErrorMessage(message) {
+        this._gui.AddText({text: message, textColor: Colors.RED})
+        this._gui.DisableDestroying()
+        this._gui.DisableAll()
+        ; command (eg. CommandSet) could close Gui after "successful" running of command.
+        ; Temporarily disable closing Gui so the user can see the message.
+        destroyer := this._EnableGuiDestroying.Bind(this)
+        SetTimer, %destroyer%, -0
+
+    }
+
+    _EnableGuiDestroying() {
+        this._gui.EnableDestroying()
+    }
 }
