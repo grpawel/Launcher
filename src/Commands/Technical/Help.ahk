@@ -57,7 +57,7 @@ class Help extends Command {
 
         AttachAndShow() {
             this._SubscribeWhenToDetach()
-            this._guiControl := this._mainController.GetGui().AddListView()
+            this._guiControl := this._mainController.GetGui().AddListView({position: "right", width: 300})
             this._SubscribeInput()
             this.state := "shown"
         }
