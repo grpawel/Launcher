@@ -38,6 +38,22 @@ _HasTagFilter(tags, object) {
         && Intersect(tags, objectTags)
 }
 
+; Join filters using OR function.
+; Returns true if any of the filters matches.
+OrFunc(filters*) {
+    return Func("_Or_Filter").Bind(filters)
+}
+
+_Or_Filter(filters, object) {
+    for _, filter in filters {
+        result := %filter%(object)
+        if (result) {
+            return result
+        }
+    }
+    return false
+}
+
 _GenericFilterDecorator(arrayArgument, functionName) {
     if (!IsArray(arrayArgument)) {
         arrayArgument := [arrayArgument]
