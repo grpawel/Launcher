@@ -18,9 +18,13 @@ class MainController {
     }
 
     Execute() {
-        this._gui.ToggleWindow()
-        if (this._gui.IsVisible()) {
+        if (!this._gui.IsVisible()) {
+            if (this._rootCommand.DoesNeedGui()) {
+                this._gui.Show()
+            }
             this._rootCommand.Run(this)
+        } else {
+            this._gui.Destroy()
         }
     }
 

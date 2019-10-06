@@ -131,14 +131,6 @@ class Gui {
         }
     }
 
-    ToggleWindow() {
-        if (this._state == "closed" || this._state == "hidden") {
-            this.Show()
-        } else {
-            this.Destroy()
-        }
-    }
-
     IsVisible() {
         return this._state == "opened"
     }
