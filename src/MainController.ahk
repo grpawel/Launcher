@@ -82,7 +82,7 @@ class MainController {
     }
 
     ShowErrorMessage(message) {
-        this._gui.AddText({text: message, textColor: Colors.RED})
+        this._gui.AddText({ text: message, textColor: Colors.RED, textColorDisabled: Colors.RED })
         this._gui.DisableDestroying()
         this._gui.DisableAll()
         ; command (eg. CommandSet) could close Gui after "successful" running of command.
