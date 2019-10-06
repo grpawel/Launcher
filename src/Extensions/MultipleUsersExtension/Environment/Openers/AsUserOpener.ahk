@@ -1,20 +1,20 @@
 ; Runs command as different user using `runas` (Windows utility).
-; User name is taken from parameter, if none then from environment.
-AsUserOpener(userName = "") {
+; User name is taken from environment ("user" key).
+AsUserOpener() {
     function := Func("_AsUserOpener")
-    return  { "OpenOther": function.Bind(userName, "otherProgram")
-            , "OpenWebsite": function.Bind(userName, "browser")
-            , "OpenFile": function.Bind(userName, "fileProgram")
-            , "OpenFolder": function.Bind(userName, "folderProgram") }
+    return  { "OpenOther": function.Bind("otherProgram")
+            , "OpenWebsite": function.Bind("browser")
+            , "OpenFile": function.Bind("fileProgram")
+            , "OpenFolder": function.Bind("folderProgram") }
 }
 
-_AsUserOpener(userName, programNameKey, env, argument) {
+_AsUserOpener(programNameKey, env, argument) {
     programName := env[programNameKey]
-    userName := userName != "" ? userName : env.user
+    userName := env.user
     ; Fix for Firefox not working properly with RunAs, regardless of -no-remote or -new-instance options.
     ; Instead use Firefox profiles.
     if (InStr(programName, "firefox") || InStr(argument, "firefox")) {
-        return _UseFirefoxProfileFix(argument, programName, userName)
+        return _UseFirefoxProfileFix(programName, argument, userName)
     }
     ; Fix for Windows Explorer
     if (programName == "explorer") {
@@ -35,7 +35,7 @@ _AsUserOpener(userName, programNameKey, env, argument) {
     Run, %target%
 }
 
-_UseFirefoxProfileFix(argument, firefoxPath, userName) {
+_UseFirefoxProfileFix(firefoxPath, argument, userName) {
     if (userName == "") {
         target := firefoxPath " " argument " -P default-release"
     } else {
