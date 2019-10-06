@@ -75,9 +75,11 @@ class Help extends Command {
         }
 
         _Detach() {
+            if (this.state != "detached") {
             this.state := "detached"
             this._UnsubscribeWhenToDetach()
             this._commandSet._helpAttachment := ""
+        }
         }
 
         _OnInputChanged(input) {
