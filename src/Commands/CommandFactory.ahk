@@ -13,8 +13,11 @@
 class CommandFactory {
     __Call(commandClassName, args*) {
         commandObj := new %commandClassName%(args*)
-        if (commandObj == "" || commandObj.base.base.__Class != "Command") {
-            throw, "Command """ commandClassName """ does not exist"
+        if (commandObj == "") {
+            MsgBox % "Class ``" commandClassName "`` does not exist."
+        }
+        else if (commandObj.base.base.__Class != "Command") {
+            MsgBox % "Class ``" commandClassName "`` does not extend ``Command`` class, but ``" commandObj.base.base.__Class "``."
         }
         return commandObj
     }
