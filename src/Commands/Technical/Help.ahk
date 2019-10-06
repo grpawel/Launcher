@@ -85,8 +85,8 @@ class Help extends Command {
             commands := this._commandSet.GetCommands()
             rows := []
             for key, value in commands {
-                description := value.GetDescription()
                 if (input == "" || StartsWith(key, input)) {
+                description := value.GetDescription()
                     rows.Push([key, description])
                 }
             }
