@@ -10,8 +10,12 @@ class Search extends Command {
     }
 
     Run(mainController) {
-        mainController.GetGui().DisableAll()
-        guiControl := mainController.GetGui().AddTextInput({ header: this.GetDescription() })
+        gui := mainController.GetGui()
+        gui.DisableAll()
+        if (this.GetDescription() != "") {
+            gui.AddText({ text: this.GetDescription() })
+        }
+        guiControl := gui.AddTextInput()
         this._keyPressedSubscription := guiControl.SubscribeReturnPressed(this._OnUserInput.Bind(this, mainController))
     }
 

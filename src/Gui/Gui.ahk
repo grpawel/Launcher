@@ -1,7 +1,8 @@
-#Include %A_ScriptDir%\src\Gui\TextInput.ahk
-#Include %A_ScriptDir%\src\Gui\ListViewControl.ahk
-#Include %A_ScriptDir%\src\Gui\Colors.ahk
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
+#Include %A_ScriptDir%\src\Gui\Colors.ahk
+#Include %A_ScriptDir%\src\Gui\ListViewControl.ahk
+#Include %A_ScriptDir%\src\Gui\TextInput.ahk
+#Include %A_ScriptDir%\src\Gui\TextView.ahk
 
 class Gui {
     _state := "closed"
@@ -103,6 +104,12 @@ class Gui {
 
     AddListView() {
         return this._AddControl("ListViewControl")
+    }
+
+    ; Options:
+    ; text (string) - text to show
+    AddText(options := "") {
+        return this._AddControl("TextView", options)
     }
 
     _AddControl(controlClassName, options = "") {

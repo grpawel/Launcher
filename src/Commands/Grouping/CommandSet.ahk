@@ -20,8 +20,13 @@ class CommandSet extends Command {
     }
 
     Run(mainController) {
-        mainController.GetGui().DisableAll()
-        this._guiControl := mainController.GetGui().AddTextInput({ header: this.GetDescription() })
+        gui := mainController.GetGui()
+        gui.DisableAll()
+        if (this.GetDescription() != "") {
+            gui.AddText({ text: this.GetDescription() })
+        }
+
+        this._guiControl := gui.AddTextInput()
         this._inputChangedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, mainController))
         this._returnPressedSubscription := this._guiControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, mainController))
     }
