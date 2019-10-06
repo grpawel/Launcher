@@ -20,17 +20,12 @@ class MainController {
     Execute() {
         this._gui.ToggleWindow()
         if (this._gui.IsVisible()) {
-            this.RunRootCommand()
+            this._rootCommand.Run(this)
         }
     }
 
     SetRootCommand(rootCommand) {
         this._rootCommand := rootCommand
-    }
-    
-    RunRootCommand() {
-        rootCommand := this._rootCommand
-        %rootCommand%(this)
     }
 
     GetEnvironment() {
@@ -64,7 +59,7 @@ class MainController {
             this._commandBlocked := false
             this._blockingReason := ""
         } else {
-            %com%(this, context)
+            com.Run(this, context)
         }
     }
 

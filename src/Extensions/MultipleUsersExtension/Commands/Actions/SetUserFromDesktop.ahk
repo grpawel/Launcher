@@ -19,7 +19,7 @@ class SetUserFromDesktop extends Command {
         desktop := this._findCurrentDesktop()
         user := this._desktopToUserMap[desktop]
         envChanger := new ChangeEnvironment({ user: user})
-        %envChanger%(mainController, { caller: this })
+        envChanger.Run(mainController, { caller: this })
     }
 
     _findCurrentDesktop() {

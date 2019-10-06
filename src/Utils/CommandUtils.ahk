@@ -13,5 +13,5 @@ BindControllerToCommand(command, mainController) {
 }
 
 _BindControllerToCommand_Internal(command, controller, args*) {
-    return %command%(controller, args*)
+    return command.Run(controller, args*)
 }

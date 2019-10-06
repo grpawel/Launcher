@@ -2,12 +2,6 @@ class Command {
     _description := ""
     _tags := []
 
-    __Call(method, mainController, context="") {
-        if (method == "Run" || method == "") {
-            this.Run(mainController, context)
-        }
-    }
-
     Run(mainController, context="") {
         throw "Not implemented"
     }
