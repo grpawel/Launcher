@@ -4,12 +4,11 @@
 ; Shows help for  CommandSet given in constructor, or if not
 ; then one calling this help.
 class Help extends Command {
-    description := "Show/hide help"
-    tags := ["technical"]
-    doesNeedGui := true
+    _description := "Show/hide help"
 
     __New(commandSet = "") {
         this._commandSet := commandSet
+        this.AddTags(["technical"])
     }
 
     Run(mainController, context) {
@@ -30,6 +29,10 @@ class Help extends Command {
             }
         }
         helped.GetGuiControl().SetText("")
+    }
+
+    DoesNeedGui() {
+        return true
     }
 
     ; There are three possible states:
@@ -79,9 +82,9 @@ class Help extends Command {
 
         _OnInputChanged(input) {
             this._guiControl.RemoveRows()
-            commands := this._commandSet.commands
+            commands := this._commandSet.GetCommands()
             rows := []
-            for key, value in this._commandSet.commands {
+            for key, value in commands {
                 description := value.GetDescription()
                 if (input == "" || StartsWith(key, input)) {
                     rows.Push([key, description])

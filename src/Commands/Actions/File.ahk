@@ -1,11 +1,10 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class File extends Command {
-    tags := ["file", "hasPath"]
-
     __New(path) {
         this._path := path
-        this.description := "Open file " path
+        this._description := "Open file " path
+        this.AddTags(["file", "hasPath"])
     }
 
     Run(mainController) {

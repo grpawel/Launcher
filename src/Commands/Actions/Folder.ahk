@@ -1,11 +1,10 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class Folder extends Command {
-    tags := ["folder", "hasPath"]
-
     __New(path) {
         this._path := path
-        this.description := "Open folder" path
+        this._description := "Open folder" path
+        this.AddTags(["folder", "hasPath"])
     }
 
     Run(mainController) {

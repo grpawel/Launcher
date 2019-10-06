@@ -1,11 +1,10 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class Web extends Command {
-    tags := ["web", "hasPath"]
-
     __New(url) {
         this._url := url
-        this.description := "Open " url
+        this._description := "Open " url
+        this.AddTags(["web", "hasPath"])
     }
 
     Run(mainController) {

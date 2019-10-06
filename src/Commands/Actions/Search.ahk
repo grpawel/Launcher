@@ -1,13 +1,12 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class Search extends Command {
-    tags := ["web", "hasPath"]
-    doesNeedGui := true
 
     _keyPressedSubscription :=
 
     __New(urlTemplate) {
         this._urlTemplate := urlTemplate
+        this.AddTags(["web", "hasPath"])
     }
 
     Run(mainController) {
@@ -23,5 +22,9 @@ class Search extends Command {
         env := mainController.GetEnvironment()
         env.OpenWebsite(url)
         mainController.GetGui().Destroy()
+    }
+
+    DoesNeedGui() {
+        return true
     }
 }

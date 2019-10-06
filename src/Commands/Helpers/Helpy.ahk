@@ -10,5 +10,5 @@
 Helpy(wrapped) {
     return new Sequence([wrapped, new Help(wrapped)])
         .SetDescription(wrapped.GetDescription())
-        .AddTags(wrapped.tags)
+        .AddTags(wrapped.GetTags())
 }

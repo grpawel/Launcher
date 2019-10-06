@@ -6,7 +6,7 @@ class RunOtherScript extends Command {
         this._command := command
         this._name := name
         this._path := path
-        this.description := command " " name " script"
+        this._description := command " " name " script"
     }
 
     Run(mainController) {

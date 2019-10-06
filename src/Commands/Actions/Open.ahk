@@ -1,11 +1,10 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class Open extends Command {
-    tags := ["hasPath"]
-
     __New(toRun) {
         this._toRun := toRun
-        this.description := "Open " this._toRun
+        this._description := "Open " this._toRun
+        this.AddTags(["hasPath"])
     }
 
     Run(mainController) {

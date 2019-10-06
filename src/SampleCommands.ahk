@@ -44,13 +44,13 @@ CreateCommands() {
         drives[letter "\"] := _.Folder(letter ":\")
     }
     
-    topLevel.commands := MergeArrays(searches, websites, programs, misc, drives, folders, files)
+    topLevel.AddCommmands(MergeArrays(searches, websites, programs, misc, drives, folders, files))
 
     incognito.SetDescription("Incognito mode")
-    incognito.commands := topLevel.FilterCommands(HasTag(["web", "technical"])).commands
+    incognito.AddCommands(topLevel.FilterCommands(HasTag(["web", "technical"])).GetCommands())
 
     clip.SetDescription("Copy to clipboard")
-    clip.commands := topLevel.FilterCommands(HasTag(["hasPath", "technical"])).commands
+    clip.AddCommands(topLevel.FilterCommands(HasTag(["hasPath", "technical"])).GetCommands())
 
     return topLevel
 }

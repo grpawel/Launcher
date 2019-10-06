@@ -2,9 +2,7 @@
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 class CommandSet extends Command {
-    commands := {}
-    doesNeedGui := true
-
+    _commands := {}
     _guiControl :=
     _inputChangedSubscription :=
     _returnPressedSubscription :=
@@ -27,28 +25,56 @@ class CommandSet extends Command {
         this._returnPressedSubscription := this._guiControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, mainController))
     }
 
+    AddCommand(key, com) {
+        this._commands[key] := com
+        return this
+    }
+
+    AddCommands(arr) {
+        if (IsFunc(arr.GetCommands)) {
+            ; arr is CommandSet or similar
+            AddAll(this._commands, arr.GetCommands())
+        } else {
+            ; arr is an array
+            AddAll(this._commands, arr)
+        }
+        return this
+    }
+
+    GetCommands() {
+        return this._commands
+    }
+
+    GetCommand(key) {
+        return this._commands[key]
+    }
+
+    DoesNeedGui() {
+        return true
+    }
+
     _OnUserInput(mainController, input) {
         matchingMode := this._options.typingMatch
         if (matchingMode == "exact"
-                && this.commands.HasKey(input)) {
-            this._RunCommand(this.commands[input], mainController)
+                && this._commands.HasKey(input)) {
+            this._RunCommand(this._commands[input], mainController)
             return
         }
         if (matchingMode == "immediate") {
             commandKey := this._FindOnlyCommandKeyStartingWith(input)
             if (commandKey != false) {
-                this._RunCommand(this.commands[commandKey], mainController)
+                this._RunCommand(this._commands[commandKey], mainController)
             }
             return
         }
         if (IsArray(matchingMode) && matchingMode[1] == "atLeast") {
-            if (this.commands.HasKey(input)) {
-                this._RunCommand(this.commands[input], mainController)
+            if (this._commands.HasKey(input)) {
+                this._RunCommand(this._commands[input], mainController)
                 return
             } else if (StrLen(input) >= matchingMode[2]) {
                 commandKey := this._FindOnlyCommandKeyStartingWith(input)
                 if (commandKey != false) {
-                    this._RunCommand(this.commands[commandKey], mainController)
+                    this._RunCommand(this._commands[commandKey], mainController)
                 }
                 return
             }
@@ -62,14 +88,14 @@ class CommandSet extends Command {
         }
         matchingCommandKey := this._FindOnlyCommandKeyStartingWith(input)
         if (matchingCommandKey != false) {
-            this._RunCommand(this.commands[matchingCommandKey], mainController)
+            this._RunCommand(this._commands[matchingCommandKey], mainController)
         }
     }
 
     ; Returns command key only if exactly one key starts with given beginning.
     _FindOnlyCommandKeyStartingWith(beginning) {
         matchingCommandKeys := []
-        for key, value in this.commands {
+        for key, value in this._commands {
             if (StartsWith(key, beginning)) {
                 matchingCommandKeys.Push(key)
                 if (matchingCommandKeys.Length() > 1) {
@@ -87,7 +113,7 @@ class CommandSet extends Command {
     }
 
     _RunCommand(matchedCommand, mainController) {
-        closeGuiAfter := !matchedCommand.doesNeedGui
+        closeGuiAfter := !matchedCommand.DoesNeedGui()
         mainController.RunCommand(matchedCommand, {caller: this })
 
         if (closeGuiAfter) {
@@ -103,13 +129,13 @@ class CommandSet extends Command {
     ; New `CommandSet` instead of commands only is returned mostly for chaining filters.
     FilterCommands(filter) {
         filtered := {}
-        for name, com in this.commands {
+        for name, com in this._commands {
             if (%filter%(com)) {
                 filtered[name] := com
             }
         }
         filteredCommandSet := new CommandSet()
-        filteredCommandSet.commands := filtered
+        filteredCommandSet._commands := filtered
         return filteredCommandSet
     }
 

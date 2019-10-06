@@ -24,7 +24,7 @@ _IsClassFilter(classes, object) {
 }
 
 ; Filter by tags
-; Returns true if its argument has `tags` key with array value containing any of specified tags.
+; Returns true if its argument has `GetTags` method returning array value containing any of specified tags.
 HasTag(tags) {
     if (!IsArray(tags)) {
         tags := [tags]
@@ -33,9 +33,9 @@ HasTag(tags) {
 }
 
 _HasTagFilter(tags, object) {
-    return object.HasKey("tags")
-        && IsArray(object["tags"])
-        && Intersect(tags, object["tags"])
+    objectTags := object.GetTags()
+    return IsArray(objectTags)
+        && Intersect(tags, objectTags)
 }
 
 _GenericFilterDecorator(arrayArgument, functionName) {

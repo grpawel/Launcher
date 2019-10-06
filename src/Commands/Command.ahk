@@ -1,11 +1,6 @@
 class Command {
-    description := ""
-    tags := []
-    doesNeedGui {
-        get {
-            return false
-        }
-    }
+    _description := ""
+    _tags := []
 
     __Call(method, mainController, context="") {
         if (method == "Run" || method == "") {
@@ -18,19 +13,27 @@ class Command {
     }
 
     SetDescription(description) {
-        this.description := description
+        this._description := description
         return this
     }
 
     GetDescription() {
-        return this.description
+        return this._description
     }
 
     AddTags(tags) {
         EnsureArray(tags)
         for i, tag in tags {
-            this.tags.Push(tag)
+            this._tags.Push(tag)
         }
         return this
+    }
+
+    GetTags() {
+        return this._tags
+    }
+
+    DoesNeedGui() {
+        return false
     }
 }

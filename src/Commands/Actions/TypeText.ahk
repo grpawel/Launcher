@@ -1,11 +1,10 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class TypeText extends Command {
-    tags := ["web", "hasPath"]
-
     __New(string) {
         this._string := string
-        this.description := "Type " . string
+        this._description := "Type " . string
+        this.AddTags(["web", "hasPath"])
     }
 
     Run(mainController) {

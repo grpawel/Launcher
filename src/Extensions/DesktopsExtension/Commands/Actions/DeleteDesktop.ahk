@@ -3,7 +3,7 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class DeleteDesktop extends Command {
-    description := "Delete current desktop"
+    _description := "Delete current desktop"
 
     Run(mainController) {
         deleteVirtualDesktop()
