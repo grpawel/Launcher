@@ -16,6 +16,7 @@ class CommandSet extends Command {
     ;       ["atLeast", N] - try to match immediately if there are at least N characters
     __New(options = "") {
         this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
+        this.AddTags(["compound"])
     }
 
     Run(mainController) {
