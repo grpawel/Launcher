@@ -44,6 +44,7 @@ class Gui {
 
     ; Options:
     ; text (string) - text to show
+    ; textColorDisabled (string) - text color when disabled. If not specified, text is grayed out by AHK.
     AddText(options := "") {
         return this._AddControl("TextView", options)
     }

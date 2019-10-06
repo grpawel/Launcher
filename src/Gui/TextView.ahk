@@ -47,6 +47,12 @@ class TextView {
         global
         local guiName := this._gui.GetName()
         local controlName := this._controlName
-        GuiControl, %guiName%: Disable, %controlName%
+        if (this._options.HasKey("textColorDisabled")) {
+            textColor := this._options.textColorDisabled
+            Gui, %guiName%: Font, c%textColor%
+            GuiControl, %guiName%: Font, %controlName%
+        } else {
+            GuiControl, %guiName%: Disable, %controlName%
+        }
     }
 }
