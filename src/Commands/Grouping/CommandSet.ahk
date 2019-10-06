@@ -61,30 +61,43 @@ class CommandSet extends Command {
 
     _OnUserInput(mainController, input) {
         matchingMode := this._options.typingMatch
-        if (matchingMode == "exact"
-                && this._commands.HasKey(input)) {
-            this._RunCommand(this._commands[input], mainController)
+        if (matchingMode == "exact") {
+            this._MatchExact(mainController, input)
             return
         }
         if (matchingMode == "immediate") {
-            commandKey := this._FindOnlyCommandKeyStartingWith(input)
-            if (commandKey != false) {
-                this._RunCommand(this._commands[commandKey], mainController)
-            }
+            this._MatchImmediate(mainController, input)
             return
         }
         if (IsArray(matchingMode) && matchingMode[1] == "atLeast") {
-            if (this._commands.HasKey(input)) {
-                this._RunCommand(this._commands[input], mainController)
-                return
-            } else if (StrLen(input) >= matchingMode[2]) {
-                commandKey := this._FindOnlyCommandKeyStartingWith(input)
-                if (commandKey != false) {
-                    this._RunCommand(this._commands[commandKey], mainController)
-                }
-                return
-            }
+            this._MatchAtLeastN(mainController, input, matchingMode)
             return
+        }
+    }
+
+    _MatchExact(mainController, input) {
+        if (this._commands.HasKey(input)) {
+            this._RunCommand(this._commands[input], mainController)
+            return true
+        }
+        return false
+    }
+
+    _MatchImmediate(mainController, input) {
+        commandKey := this._FindOnlyCommandKeyStartingWith(input)
+        if (commandKey != false) {
+            this._RunCommand(this._commands[commandKey], mainController)
+            return true
+        }
+        return false
+    }
+
+    _MatchAtLeastN(mainController, input, matchingMode) {
+        if (!this._MatchExact(mainController, input)) {
+            isAtLeastN := StrLen(input) >= matchingMode[2]
+            if (isAtLeastN) {
+                this._MatchImmediate(mainController, input)
+            }
         }
     }
 
