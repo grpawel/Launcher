@@ -16,6 +16,10 @@ _AsUserOpener(userName, programNameKey, env, argument) {
     if (InStr(programName, "firefox") || InStr(argument, "firefox")) {
         return _UseFirefoxProfileFix(argument, programName, userName)
     }
+    ; Fix for Windows Explorer
+    if (programName == "explorer") {
+        userName := ""
+    }
 
     if (programName != "") {
         target := programName " """ argument """"
