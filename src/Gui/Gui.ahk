@@ -35,6 +35,8 @@ class Gui {
         return this._AddControl("TextInput", options)
     }
 
+    ; Options:
+    ; position ("right"|"normal") - where to put control
     AddListView(options = "") {
         return this._AddControl("ListViewControl", options)
     }

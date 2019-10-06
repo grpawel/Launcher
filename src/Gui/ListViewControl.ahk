@@ -40,8 +40,12 @@ class ListViewControl {
     }
     
     _GetStyle(options) {
+        position := "xm"
+        if (options.position == "right") {
+            position := "x+m ym"
+        }
         return Join([ " -E0x200" ; no borders
-                    , "xm"
+                    , position
                     , "w" . options.width
                     , "c" . options.textColor ]
                 , " ")
