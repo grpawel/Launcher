@@ -11,14 +11,15 @@ MultipleUsersExtension(mainController) {
 }
 
 ; `config` object specifies how command interacts with current user.
-; 
+; If user is not specified, by default is allowed.
+; Some examples:
 ; 1) Block every user
 ; command.UserConfig({ blacklist: "all" }) 
 ; 2) Block only user 'user1' and 'user2', others are allowed
 ; command.UserConfig({ blacklist: ["user1", "user2"] }) 
 ; 3) Allow only 'user1', others are blocked
-; command.UserConfig({ whitelist: ["user1"] }) 
-; 4) Allow 'user1', but switch to 'user2' before running
+; command.UserConfig({ blacklist: "all", whitelist: ["user1"] }) 
+; 4) Allow 'user1', but switch to desktop for 'user2' before running
 ; command.UserConfig({ switchFrom: ["user1"], switchTo: "user2" })
 ; 5) Allow all users and switch to 'user2' before running
 ; command.UserConfig({ switchTo: "user2" })
