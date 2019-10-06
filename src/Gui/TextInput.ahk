@@ -1,4 +1,5 @@
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
+#Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
 class TextInput {
     _isSetup := false
@@ -25,12 +26,20 @@ class TextInput {
     _Setup() {
         local guiName := this._gui.GetName()
         local controlName := this._controlName
-        local style := this._options.style
+        local style := this._GetStyle(this._options)
         local keyPressHandler := this._OnKeyPressed.Bind(this)
         local returnPressHandler := this._OnReturnPressed.Bind(this)
         Gui, %guiName%: Add, Edit, %style% v%controlName% -WantReturn
         GuiControl, %guiName%: +g, %controlName%, %keyPressHandler%
         return
+    }
+
+    _GetStyle(options) {
+        return Join([ " -E0x200" ; no borders
+                    , "xm"
+                    , "w" . options.width
+                    , "c" . options.textColor ]
+                , " ")
     }
 
     SubscribeInputChanged(subscriber, duration = "everytime") {

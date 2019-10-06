@@ -1,4 +1,5 @@
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
+#Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
 class TextView {
     _isSetup := false
@@ -24,9 +25,16 @@ class TextView {
         textColor := this._options.textColor
         ;Gui, %guiName%: Font, c%textColor%
         text := this._options.text
-        local style := this._options.style
+        local style := this._GetStyle(this._options)
         Gui, %guiName%: Add, Text, xm %style% v%controlName%, %text%
         return
+    }
+
+    _GetStyle(options) {
+        return Join([ "xm"
+                    , "w" . options.width
+                    , "c" . options.textColor ]
+                , " ")
     }
 
     SetText(value) {

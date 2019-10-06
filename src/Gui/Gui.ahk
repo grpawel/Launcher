@@ -11,16 +11,48 @@ class Gui {
     _eventBus := new EventBus()
     _isSetup := false
     static _nextName := 1
-    _options := { style: "xm w220 " . (Colors.foreground) . " -E0x200"
-                , backgroundColor: Colors.background
-                , currentLineColor: Colors.currentLine}
+    static DEFAULT_OPTIONS := { width: "220"
+                , textColor: Colors.LIGHT_GRAY
+                , windowColor: Colors.ALMOST_BLACK
+                , controlColor: Colors.DARK_GRAY }
 
     static guiList := []
 
-    __New() {
+
+    ; Options common for all controls:
+    ; width (int) - width of control in px
+    ; textColor (string)
+    ; windowColor (string) - background color of GUI window
+    ; controlColor (string) - background color of controls
+    __New(options = "") {
         this._name := Gui._nextName
         Gui._nextName += 1
         Gui.guiList[this._name] := this
+        this._options := MergeArrays(this.DEFAULT_OPTIONS, options)
+    }
+
+    AddTextInput(options = "") {
+        return this._AddControl("TextInput", options)
+    }
+
+    AddListView(options = "") {
+        return this._AddControl("ListViewControl", options)
+    }
+
+    ; Options:
+    ; text (string) - text to show
+    AddText(options := "") {
+        return this._AddControl("TextView", options)
+    }
+
+    _AddControl(controlClassName, options = "") {
+        mergedOptions := MergeArrays(this._options, options)
+        controlName := this._nextControlName
+        this._nextControlName += 1
+        control := new %controlClassName%(this, controlName, mergedOptions)
+        control.Show()
+        this._controls[controlName] := control
+        return control
     }
 
     Show() { 
@@ -37,9 +69,9 @@ class Gui {
     _Setup() {
         local name := this._name
         Gui, %name%: Margin, 16, 16
-        local colorBackground := this._options.backgroundColor
-        local colorCurrentLine := this._options.currentLineColor
-        Gui, %name%: Color, %colorBackground%, %colorCurrentLine%
+        local windowColor := "c" . this._options.windowColor
+        local controlColor := "c" . this._options.controlColor
+        Gui, %name%: Color, %windowColor%, %controlColor%
         Gui, %name%: +AlwaysOnTop -SysMenu +ToolWindow -caption +Border
         Gui, %name%: Font, s10, Segoe UI
         ; Button is common for all controls. This allows selecting rows by using Return key.
@@ -94,32 +126,6 @@ class Gui {
 
     IsVisible() {
         return this._state == "opened"
-    }
-
-    ; Options:
-    ; header (string) - will be shown above input
-    AddTextInput(options = "") {
-        return this._AddControl("TextInput", options)
-    }
-
-    AddListView() {
-        return this._AddControl("ListViewControl")
-    }
-
-    ; Options:
-    ; text (string) - text to show
-    AddText(options := "") {
-        return this._AddControl("TextView", options)
-    }
-
-    _AddControl(controlClassName, options = "") {
-        mergedOptions := MergeArrays(this._options, options)
-        controlName := this._nextControlName
-        this._nextControlName += 1
-        control := new %controlClassName%(this, controlName, mergedOptions)
-        control.Show()
-        this._controls[controlName] := control
-        return control
     }
 
     DisableAll() {

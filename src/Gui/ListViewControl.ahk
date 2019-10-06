@@ -1,4 +1,5 @@
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
+#Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
 class ListViewControl {
     _isSetup := false
@@ -24,13 +25,10 @@ class ListViewControl {
     _Setup() {
         local guiName := this._gui.GetName()
         local controlName := this._controlName
-        local style := this._options.style
+        local style := this._GetStyle(this._options)
         local doubleClickHandler := this._OnRowDoubleClicked.Bind(this)
         
         Gui, %guiName%: Default
-        local colorBackground := this._options.backgroundColor
-        local colorCurrentLine := this._options.currentLineColor
-        Gui, %guiName%: Color, %colorBackground%, %colorCurrentLine%
         ; Initial height must be 0, 
         ; because next input position is calculated
         ; using previous control initial position, ignoring further changes.
@@ -39,6 +37,14 @@ class ListViewControl {
         GuiControl, %guiName%: +g, %controlName%, %doubleClickHandler%
         LV_ModifyCol()
         GuiControl, %guiName%: Move, %controlName%, h150
+    }
+    
+    _GetStyle(options) {
+        return Join([ " -E0x200" ; no borders
+                    , "xm"
+                    , "w" . options.width
+                    , "c" . options.textColor ]
+                , " ")
     }
 
     Populate(rows) {

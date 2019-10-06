@@ -1,13 +1,14 @@
 ; Tomorrow Night Color Definitions:
-global Colors    := { background: "c" . "1d1f21"
-                    , currentLine: "c" . "282a2e"
-                    , selection: "c" . "373b41"
-                    , foreground: "c" . "c5c8c6"
-                    , comment: "c" . "969896"
-                    , red: "c" . "cc6666"
-                    , orange: "c" . "de935f"
-                    , yellow: "c" . "f0c674"
-                    , green: "c" . "b5bd68"
-                    , aqua: "c" . "8abeb7"
-                    , blue: "c" . "81a2be"
-                    , purple: "c" . "b294bb" }
+class Colors   {
+    static ALMOST_BLACK := "1d1f21"
+    static DARK_GRAY := "282a2e"
+    static LIGHT_GRAY :=  "c5c8c6"
+    static PALE_GREEN :=  "969896"
+    static RED :=  "cc6666"
+    static ORANGE :=  "de935f"
+    static YELLOW :=  "f0c674"
+    static GREEN :=  "b5bd68"
+    static AQUA :=  "8abeb7"
+    static BLUE :=  "81a2be"
+    static PURPLE :=  "b294bb"
+}
