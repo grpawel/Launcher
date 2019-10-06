@@ -13,7 +13,7 @@ _AsUserOpener(userName, programNameKey, env, argument) {
     userName := userName != "" ? userName : env.user
     ; Fix for Firefox not working properly with RunAs, regardless of -no-remote or -new-instance options.
     ; Instead use Firefox profiles.
-    if (InStr(programName, "firefox")) {
+    if (InStr(programName, "firefox") || InStr(argument, "firefox")) {
         return _UseFirefoxProfileFix(argument, programName, userName)
     }
 
@@ -37,5 +37,8 @@ _UseFirefoxProfileFix(argument, firefoxPath, userName) {
     } else {
         target := firefoxPath " " argument " -P " userName
     }
+    ; Fix for running Firefox directly. In this case firefoxPath is empty and "firefox" is in argument,
+    ; so there's space as first char that breaks ahk.
+    target := Trim(target)
     Run, %target%
 }
