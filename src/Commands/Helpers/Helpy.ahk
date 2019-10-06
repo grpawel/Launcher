@@ -10,9 +10,9 @@
 ; films := Helpy(_.CommandSet().SetDescription(...))
 ; something["film"] := Helpy(films)
 ; 
-; Be careful where to put closing parenthesis:
-; `Helpy(_.CommandSet() ) .SetDescription(...)` would not work correctly, because `SetDescription` returns inner `CommandSet`.
-; Either `Helpy()` must embrace whole expression, or .SetDescription(...) has to be called later, in separate line.
+; Closing parenthesis can be anywhere:
+; Helpy(_.CommandSet().SetDescription(...)) and 
+; Helpy(_.CommandSet()).SetDescription(...) are equivalent.
 
 Helpy(comSet) {
     seq := new Sequence([comSet, new Help(comSet)])

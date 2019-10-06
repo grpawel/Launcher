@@ -6,8 +6,8 @@
 ;
 ; Why?
 ; This allows to take `CommandSet` object and transparently add some functionality like help,
-; without losing any additional functionality - tags, description etc.
-; Following snippets can be equivalent:
+; without losing access to other CommandSet values - tags, description etc.
+; Following snippets are equivalent:
 ; (1)
 ; nested := new CommandSet()
 ; nested.AddTags(...)
@@ -29,6 +29,13 @@ class RunDecorator {
         else {
             com := this._decorated
         }
-        return com[methodName](params*)
+        result := com[methodName](params*)
+        if (result == this._decorated) {
+            ; Method returned `this`, which is decorated object.
+            ; We have to instead return this decorator, in order for method chains to work correctly.
+            ; Otherwise Helpy(new CommandSet()).SetDescription() would not work since SetDescription returns decorated object.
+            result := this
+        }
+        return result
     }
 }
