@@ -60,7 +60,6 @@ class Gui {
     }
 
     Show() { 
-        this._eventBus.Emit("guiShowing")
         this._state := "opened"
         if (!this._isSetup) {
             this._Setup()
@@ -144,10 +143,6 @@ class Gui {
     GetName() {
         name := this._name
         return this._name
-    }
-
-    SubscribeGuiShowing(subscriber, duration = "everytime") {
-        return this._eventBus.Subscribe("guiShowing", subscriber, duration)
     }
 
     SubscribeGuiClosing(subscriber, duration = "everytime") {

@@ -3,5 +3,5 @@
 UserFunctions(mainController) {
     desktops := { 2: "dev" }
     userSetter := new SetUserFromDesktop()
-    mainController.GetGui().SubscribeGuiShowing(BindControllerToCommand(userSetter, mainController))
+    mainController.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, mainController))
 }

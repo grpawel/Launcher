@@ -22,7 +22,8 @@ class MainController {
             if (this._rootCommand.DoesNeedGui()) {
                 this._gui.Show()
             }
-            this._rootCommand.Run(this)
+            this._eventBus.Emit("rootCommandAboutToRun", { rootCommand: this._rootCommand })
+            this.RunCommand(this._rootCommand)
         } else {
             this._gui.Destroy()
         }
@@ -78,6 +79,10 @@ class MainController {
 
     SubscribeCommandAboutToRun(subscriber, duration = "everytime") {
         return this._eventBus.Subscribe("commandAboutToRun", subscriber, duration)
+    }
+
+    SubscribeRootCommandAboutToRun(subscriber, duration = "everytime") {
+        return this._eventBus.Subscribe("rootCommandAboutToRun", subscriber, duration)
     }
 
     BlockNextCommand(reason := "") {
