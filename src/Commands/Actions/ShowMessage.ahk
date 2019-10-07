@@ -3,7 +3,7 @@
 class ShowMessage extends Command {
     __New(message) {
         this._message := message
-        this._description := "Show message """ path """"
+        this._description := "Show message """ message """"
     }
 
     Run(mainController) {
