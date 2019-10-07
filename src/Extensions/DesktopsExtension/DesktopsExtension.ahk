@@ -4,8 +4,12 @@
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\CreateDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\DeleteDesktop.ahk
 
-DesktopsExtension(mainController) {
-    mainController.base.GetDesktop := Func("mainController_GetDesktop")
+class DesktopsExtension {
+    name := "desktops"
+
+    Register() {
+        MainController.GetDesktop := Func("mainController_GetDesktop")
+    }
 }
 
 mainController_GetDesktop(self) {

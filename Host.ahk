@@ -11,15 +11,17 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include %A_ScriptDir%\src\MainController.ahk
 #Include %A_ScriptDir%\src\Environment\Environment.ahk
 #Include %A_ScriptDir%\src\Gui\Gui.ahk
-main := new MainController(new Environment(), new Gui())
 
 #Include %A_ScriptDir%\src\Extensions\RegisterExtensions.ahk
-RegisterExtensions(main)
+extensionManager := new ExtensionManager()
+extensionManager.RegisterExtensions()
 
 #Include %A_ScriptDir%\UserFunctions.ahk
-UserFunctions(main)
 #Include %A_ScriptDir%\UserCommands.ahk
-main.SetRootCommand(CreateCommands())
+rootCommand := CreateCommands()
+main := new MainController(new Environment(), new Gui())
+main.SetRootCommand(rootCommand)
+extensionManager.Attach(main, {multipleUsers: {desktops: desktopUserMap}})
 
 ^/::
     main.Execute()

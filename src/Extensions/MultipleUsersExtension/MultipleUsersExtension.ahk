@@ -3,11 +3,27 @@
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\AsUserOpener.ahk
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\BlockingOpener.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
+#Include %A_ScriptDir%\src\Utils\CommandUtils.ahk
 
-MultipleUsersExtension(mainController) {
-    mainController.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
-    Command.UserConfig := Func("_Command_UserConfig")
-    Command.CanRunWithUser := Func("_Command_CanRunWithUser")
+class MultipleUsersExtension {
+    name := "multipleUsers"
+
+    Register() {
+        Command.UserConfig := Func("_Command_UserConfig")
+        Command.CanRunWithUser := Func("_Command_CanRunWithUser")
+    }
+
+    Attach(controller, settings = "") {
+        desktops := settings.desktops
+        if (desktops != "") {
+            userSetter := new SetUserFromDesktop(desktops)
+            controller.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, controller))
+        }
+        guard := new UserGuard(desktops)
+        controller.SubscribeCommandAboutToRun(BindControllerToCommand(guard, controller))
+
+        controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
+    }
 }
 
 ; `config` object specifies how command interacts with current user.
@@ -25,7 +41,7 @@ MultipleUsersExtension(mainController) {
 ; command.UserConfig({ switchTo: "user2" })
 ; 6) Run as different user, regardless of current user
 ; command.UserConfig({ runAs: "user1" })
-; 6) A combination of above. Same user in multiple options can cause unexpected results.
+; 7) A combination of above. Same user in multiple options can cause unexpected results.
 _Command_UserConfig(this, config) {
     if (this._userConfig == "") {
         this._userConfig := {}
