@@ -7,9 +7,9 @@ class Sequence extends Command {
         this.AddTags(["compound"])
     }
 
-    Run(mainController) {
+    Run(controller) {
         for i, com in this._commands {
-            mainController.RunCommand(com, { caller: this })
+            controller.RunCommand(com, { caller: this })
         }
         return result
     }

@@ -2,7 +2,7 @@
 #Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
 #Include %A_ScriptDir%\src\Environment\Openers\SendTyper.ahk
 
-class MainController {
+class Controller {
     _rootCommand := {}
     _eventBus := new EventBus()
 

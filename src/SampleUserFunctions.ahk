@@ -1,7 +1,7 @@
 #Include %A_ScriptDir%\src\Utils\CommandUtils.ahk
 
-UserFunctions(mainController) {
+UserFunctions(controller) {
     desktops := { 2: "dev" }
     userSetter := new SetUserFromDesktop()
-    mainController.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, mainController))
+    controller.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, controller))
 }

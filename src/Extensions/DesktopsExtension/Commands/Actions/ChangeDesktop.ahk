@@ -7,7 +7,7 @@ class ChangeDesktop extends Command {
         this._number := num
     }
 
-    Run(mainController) {
+    Run(controller) {
         SwitchDesktopByNumber(this._number)
     }
 }

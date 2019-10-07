@@ -6,10 +6,10 @@
 ; SubscribeSomeEvent(command) ; wrong - SomeEvent does not send the controller that the command needs
 ; Solution:
 ; command := new SomeCommand(...)
-; mainController ; supposing we have it
-; SubscribeSomeEvent(BindControllerToCommand(command, mainController)) ; ok - the command will receive the controller
-BindControllerToCommand(command, mainController) {
-    return Func("_BindControllerToCommand_Internal").Bind(command, mainController)
+; controller ; supposing we have it
+; SubscribeSomeEvent(BindControllerToCommand(command, controller)) ; ok - the command will receive the controller
+BindControllerToCommand(command, controller) {
+    return Func("_BindControllerToCommand_Internal").Bind(command, controller)
 }
 
 _BindControllerToCommand_Internal(command, controller, args*) {

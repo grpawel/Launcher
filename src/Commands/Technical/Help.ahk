@@ -11,7 +11,7 @@ class Help extends Command {
         this.AddTags(["technical"])
     }
 
-    Run(mainController, context) {
+    Run(controller, context) {
         helped := this._commandSet != "" ? this._commandSet : context.caller
         if (helped._helpAttachment == "") {
             ; Because instance of this command can be added to multiple CommandSets
@@ -19,7 +19,7 @@ class Help extends Command {
             ; we cannot store any data within this object
             ; so we attach it to calling CommandSet object
             ; then any of Help objects can use the same data and eg. toggle visibility
-            helped._helpAttachment := new this._HelpAttachment(mainController, helped)
+            helped._helpAttachment := new this._HelpAttachment(controller, helped)
             helped._helpAttachment.AttachAndShow()
         } else {
             if (helped._helpAttachment.state != "shown") {
@@ -50,14 +50,14 @@ class Help extends Command {
     class _HelpAttachment {
         state := "detached"
 
-        __New(mainController, commandSet) {
-            this._mainController := mainController
+        __New(controller, commandSet) {
+            this._controller := controller
             this._commandSet := commandSet
         }
 
         AttachAndShow() {
             this._SubscribeWhenToDetach()
-            this._guiControl := this._mainController.GetGui().AddListView({position: "right", width: 300})
+            this._guiControl := this._controller.GetGui().AddListView({position: "right", width: 300})
             this._SubscribeInput()
             this.state := "shown"
         }
@@ -110,8 +110,8 @@ class Help extends Command {
         }
 
         _SubscribeWhenToDetach() {
-            this._nextCommandRunningSubscription := this._mainController.SubscribeCommandAboutToRun(this._OnNextCommandRunned.Bind(this))
-            this._guiClosingSubscription := this._mainController.GetGui().SubscribeGuiClosing(this._Detach.Bind(this))
+            this._nextCommandRunningSubscription := this._controller.SubscribeCommandAboutToRun(this._OnNextCommandRunned.Bind(this))
+            this._guiClosingSubscription := this._controller.GetGui().SubscribeGuiClosing(this._Detach.Bind(this))
         }
 
         _SubscribeInput() {

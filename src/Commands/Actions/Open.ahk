@@ -7,8 +7,8 @@ class Open extends Command {
         this.AddTags(["hasPath"])
     }
 
-    Run(mainController) {
-        env := mainController.GetEnvironment()
+    Run(controller) {
+        env := controller.GetEnvironment()
         env.OpenOther(this._toRun)
     }
 }

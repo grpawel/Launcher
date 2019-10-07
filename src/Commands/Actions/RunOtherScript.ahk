@@ -9,7 +9,7 @@ class RunOtherScript extends Command {
         this._description := command " " name " script"
     }
 
-    Run(mainController) {
+    Run(controller) {
         if (this._command == "open") {
             this._Open()
         } else if (this._command == "close") {

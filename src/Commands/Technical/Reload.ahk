@@ -7,7 +7,7 @@ class Reload extends Command {
         this.AddTags(["technical"])
     }
 
-    Run(mainController) {
+    Run(controller) {
         Reload
     }
 }

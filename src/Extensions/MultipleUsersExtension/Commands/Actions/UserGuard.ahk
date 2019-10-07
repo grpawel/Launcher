@@ -8,24 +8,24 @@ class UserGuard extends Command {
         this._desktopToUserMap := desktopToUserMap
     }
 
-    Run(mainController, context) {
+    Run(controller, context) {
         nextCommand := context.nextCommand
-        currentUser := mainController.GetEnvironment()["user"]
+        currentUser := controller.GetEnvironment()["user"]
         userOptions := nextCommand.CanRunWithUser(currentUser)
         if (userOptions.block) {
             reason := "Command """ nextCommand.GetDescription() """"
             reason .= "`ncannot be run for user """ currentUser """."
-            mainController.BlockNextCommand(reason)
+            controller.BlockNextCommand(reason)
             return
         }
         if (userOptions.HasKey("switchTo")) {
             desktop := Flip(this._desktopToUserMap)[userOptions.switchTo]
             desktopChange := new ChangeDesktop(desktop)
-            mainController.RunCommand(desktopChange, { caller: this })
+            controller.RunCommand(desktopChange, { caller: this })
         }
         if (userOptions.HasKey("runAs")) {
             userChange := new ChangeEnvironment({ user: userOptions.runAs })
-            mainController.RunCommand(userChange, { caller: this })
+            controller.RunCommand(userChange, { caller: this })
         }
     }
 }

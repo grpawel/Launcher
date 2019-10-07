@@ -6,9 +6,9 @@ class ShowMessage extends Command {
         this._description := "Show message """ message """"
     }
 
-    Run(mainController) {
-        mainController.GetGui().DisableAll()
-        mainController.GetGui().AddText({ text: this._message })
+    Run(controller) {
+        controller.GetGui().DisableAll()
+        controller.GetGui().AddText({ text: this._message })
 
     }
 

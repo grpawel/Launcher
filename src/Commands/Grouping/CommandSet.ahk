@@ -19,16 +19,16 @@ class CommandSet extends Command {
         this.AddTags(["compound"])
     }
 
-    Run(mainController) {
-        gui := mainController.GetGui()
+    Run(controller) {
+        gui := controller.GetGui()
         gui.DisableAll()
         if (this.GetDescription() != "") {
             gui.AddText({ text: this.GetDescription() })
         }
 
         this._guiControl := gui.AddTextInput()
-        this._inputChangedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, mainController))
-        this._returnPressedSubscription := this._guiControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, mainController))
+        this._inputChangedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, controller))
+        this._returnPressedSubscription := this._guiControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, controller))
     }
 
     AddCommand(key, com) {
@@ -59,55 +59,55 @@ class CommandSet extends Command {
         return true
     }
 
-    _OnUserInput(mainController, input) {
+    _OnUserInput(controller, input) {
         matchingMode := this._options.typingMatch
         if (matchingMode == "exact") {
-            this._MatchExact(mainController, input)
+            this._MatchExact(controller, input)
             return
         }
         if (matchingMode == "immediate") {
-            this._MatchImmediate(mainController, input)
+            this._MatchImmediate(controller, input)
             return
         }
         if (IsArray(matchingMode) && matchingMode[1] == "atLeast") {
-            this._MatchAtLeastN(mainController, input, matchingMode)
+            this._MatchAtLeastN(controller, input, matchingMode)
             return
         }
     }
 
-    _MatchExact(mainController, input) {
+    _MatchExact(controller, input) {
         if (this._commands.HasKey(input)) {
-            this._RunCommand(this._commands[input], mainController)
+            this._RunCommand(this._commands[input], controller)
             return true
         }
         return false
     }
 
-    _MatchImmediate(mainController, input) {
+    _MatchImmediate(controller, input) {
         commandKey := this._FindOnlyCommandKeyStartingWith(input)
         if (commandKey != "") {
-            this._RunCommand(this._commands[commandKey], mainController)
+            this._RunCommand(this._commands[commandKey], controller)
             return true
         }
         return false
     }
 
-    _MatchAtLeastN(mainController, input, matchingMode) {
-        if (!this._MatchExact(mainController, input)) {
+    _MatchAtLeastN(controller, input, matchingMode) {
+        if (!this._MatchExact(controller, input)) {
             isAtLeastN := StrLen(input) >= matchingMode[2]
             if (isAtLeastN) {
-                this._MatchImmediate(mainController, input)
+                this._MatchImmediate(controller, input)
             }
         }
     }
 
-    _OnReturnPressed(mainController, input) {
+    _OnReturnPressed(controller, input) {
         if (input == "") {
             return
         }
         matchingCommandKey := this._FindOnlyCommandKeyStartingWith(input)
         if (matchingCommandKey != "") {
-            this._RunCommand(this._commands[matchingCommandKey], mainController)
+            this._RunCommand(this._commands[matchingCommandKey], controller)
         }
     }
 
@@ -131,14 +131,14 @@ class CommandSet extends Command {
         }
     }
 
-    _RunCommand(matchedCommand, mainController) {
+    _RunCommand(matchedCommand, controller) {
         closeGuiAfter := !matchedCommand.DoesNeedGui()
-        mainController.RunCommand(matchedCommand, {caller: this })
+        controller.RunCommand(matchedCommand, {caller: this })
 
         if (closeGuiAfter) {
             this._inputChangedSubscription.Unsubscribe()
             this._returnPressedSubscription.Unsubscribe()
-            mainController.GetGui().Destroy()
+            controller.GetGui().Destroy()
         }
     }
 

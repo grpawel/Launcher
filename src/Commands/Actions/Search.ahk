@@ -9,23 +9,23 @@ class Search extends Command {
         this.AddTags(["web", "hasPath"])
     }
 
-    Run(mainController) {
-        gui := mainController.GetGui()
+    Run(controller) {
+        gui := controller.GetGui()
         gui.DisableAll()
         if (this.GetDescription() != "") {
             gui.AddText({ text: this.GetDescription() })
         }
         guiControl := gui.AddTextInput()
-        this._keyPressedSubscription := guiControl.SubscribeReturnPressed(this._OnUserInput.Bind(this, mainController))
+        this._keyPressedSubscription := guiControl.SubscribeReturnPressed(this._OnUserInput.Bind(this, controller))
     }
 
-    _OnUserInput(mainController, input) {
+    _OnUserInput(controller, input) {
         this._keyPressedSubscription.Unsubscribe()
         url := StrReplace(this._urlTemplate, "REPLACEME", input)
         url := StrReplace(url, " ", "+")
-        env := mainController.GetEnvironment()
+        env := controller.GetEnvironment()
         env.OpenWebsite(url)
-        mainController.GetGui().Destroy()
+        controller.GetGui().Destroy()
     }
 
     DoesNeedGui() {

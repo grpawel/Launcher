@@ -5,7 +5,7 @@
 class DeleteDesktop extends Command {
     _description := "Delete current desktop"
 
-    Run(mainController) {
+    Run(controller) {
         deleteVirtualDesktop()
     }
 }

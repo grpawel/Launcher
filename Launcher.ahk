@@ -2,7 +2,7 @@
 
 #Include %A_ScriptDir%\UserCommands.ahk
 rootCommand := CreateCommands()
-main := new MainController(new Environment(), new Gui())
+main := new Controller(new Environment(), new Gui())
 main.SetRootCommand(rootCommand)
 extensionManager.Attach(main, {multipleUsers: {desktops: desktopUserMap}})
 

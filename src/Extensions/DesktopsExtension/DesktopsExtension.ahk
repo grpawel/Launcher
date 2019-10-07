@@ -8,11 +8,11 @@ class DesktopsExtension {
     name := "desktops"
 
     Register() {
-        MainController.GetDesktop := Func("mainController_GetDesktop")
+        Controller.GetDesktop := Func("_Controller_GetDesktop")
     }
 }
 
-mainController_GetDesktop(self) {
+_Controller_GetDesktop(self) {
     mapDesktopsFromRegistry()
     global CurrentDesktop
     return CurrentDesktop

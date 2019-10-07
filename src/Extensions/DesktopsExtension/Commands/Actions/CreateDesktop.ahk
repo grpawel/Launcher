@@ -5,7 +5,7 @@
 class CreateDesktop extends Command {
     _description := "Create new desktop"
 
-    Run(mainController) {
+    Run(controller) {
         createVirtualDesktop()
     }
 }

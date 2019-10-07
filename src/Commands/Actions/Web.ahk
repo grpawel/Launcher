@@ -7,9 +7,9 @@ class Web extends Command {
         this.AddTags(["web", "hasPath"])
     }
 
-    Run(mainController) {
+    Run(controller) {
         url := StrReplace(this._url, " ", "+")
-        env := mainController.GetEnvironment()
+        env := controller.GetEnvironment()
         env.OpenWebsite(url)
     }
 }

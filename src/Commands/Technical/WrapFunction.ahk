@@ -7,12 +7,12 @@ class WrapFunction extends Command {
         this._function := function
     }
 
-    Run(mainController, context) {
+    Run(controller, context) {
         parametersNumber := IsFunc(this._function) - 1
         additionalParameters := []
         for i in range(0, parametersNumber - 2) {
             additionalParameters.Push("")
         }
-        this._function.Call(mainController, context, additionalParameters*)
+        this._function.Call(controller, context, additionalParameters*)
     }
 }

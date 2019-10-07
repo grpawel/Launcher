@@ -2,7 +2,7 @@ class Command {
     _description := ""
     _tags := []
 
-    Run(mainController, context="") {
+    Run(controller, context="") {
         throw "Not implemented"
     }
 

@@ -7,7 +7,7 @@ class SleepMs extends Command {
         this.AddTags(["technical"])
     }
 
-    Run(mainController) {
+    Run(controller) {
         Sleep % this._durationMs
     }
 }
