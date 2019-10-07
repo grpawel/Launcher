@@ -7,6 +7,12 @@ class ShowMessage extends Command {
     }
 
     Run(mainController) {
-        MsgBox % this._message
+        mainController.GetGui().DisableAll()
+        mainController.GetGui().AddText({ text: this._message })
+
+    }
+
+    DoesNeedGui() {
+        return true
     }
 }
