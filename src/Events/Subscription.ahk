@@ -12,5 +12,7 @@ class Subscription {
         }
         this._eventBus._Unsubscribe(this._params)
         this._isUnsubscribed := true
+        this._eventBus := ""
+        this._params := ""
     }
 }
