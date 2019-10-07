@@ -85,7 +85,7 @@ class CommandSet extends Command {
 
     _MatchImmediate(mainController, input) {
         commandKey := this._FindOnlyCommandKeyStartingWith(input)
-        if (commandKey != false) {
+        if (commandKey != "") {
             this._RunCommand(this._commands[commandKey], mainController)
             return true
         }
@@ -106,7 +106,7 @@ class CommandSet extends Command {
             return
         }
         matchingCommandKey := this._FindOnlyCommandKeyStartingWith(input)
-        if (matchingCommandKey != false) {
+        if (matchingCommandKey != "") {
             this._RunCommand(this._commands[matchingCommandKey], mainController)
         }
     }
@@ -120,14 +120,14 @@ class CommandSet extends Command {
                 if (matchingCommandKeys.Length() > 1) {
                     ; found multiple matching command before - can stop here
                     ; TODO: instead message to user
-                    return false
+                    return ""
                 }
             }
         }
         if (matchingCommandKeys.Length() == 1) {
             return matchingCommandKeys[1]
         } else {
-            return false
+            return ""
         }
     }
 
