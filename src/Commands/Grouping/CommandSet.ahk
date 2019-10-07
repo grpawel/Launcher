@@ -25,10 +25,10 @@ class CommandSet extends Command {
         if (this.GetDescription() != "") {
             gui.AddText({ text: this.GetDescription() })
         }
-
         this._guiControl := gui.AddTextInput()
         this._inputChangedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, controller))
         this._returnPressedSubscription := this._guiControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, controller))
+        gui.Show()
     }
 
     AddCommand(key, com) {

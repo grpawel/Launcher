@@ -59,12 +59,14 @@ class Help extends Command {
             this._SubscribeWhenToDetach()
             this._guiControl := this._controller.GetGui().AddListView({position: "right", width: 300})
             this._SubscribeInput()
+            this._controller.GetGui().Show()
             this.state := "shown"
         }
 
         Show() {
             this._SubscribeInput()
             this._guiControl.Show()
+            this._controller.GetGui().Show()
             this.state := "shown"
         }
 
@@ -72,6 +74,7 @@ class Help extends Command {
             this.state := "hidden"
             this._UnsubscribeInput()
             this._guiControl.Hide()
+            this._controller.GetGui().Show()
         }
 
         _Detach() {

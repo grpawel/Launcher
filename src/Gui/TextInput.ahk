@@ -20,7 +20,6 @@ class TextInput {
         controlName := this._controlName
         GuiControl, %guiName%: Enable, %controlName%
         GuiControl, %guiName%: Focus, %controlName%
-        Gui, %guiName%: Show, AutoSize
     }
 
     _Setup() {

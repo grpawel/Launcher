@@ -19,9 +19,6 @@ class Controller {
 
     Execute() {
         if (!this._gui.IsVisible()) {
-            if (this._rootCommand.DoesNeedGui()) {
-                this._gui.Show()
-            }
             this._eventBus.Emit("rootCommandAboutToRun", { rootCommand: this._rootCommand })
             this.RunCommand(this._rootCommand)
         } else {
@@ -94,6 +91,7 @@ class Controller {
         this._gui.AddText({ text: message, textColor: Colors.RED, textColorDisabled: Colors.RED })
         this._gui.DisableDestroying()
         this._gui.DisableAll()
+        this._gui.Show()
         ; command (eg. CommandSet) could close Gui after "successful" running of command.
         ; Temporarily disable closing Gui so the user can see the message.
         destroyer := this._EnableGuiDestroying.Bind(this)

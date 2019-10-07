@@ -19,7 +19,6 @@ class ListViewControl {
         guiName := this._gui.GetName()
         controlName := this._controlName
         GuiControl, %guiName%: Show, %controlName%
-        Gui, %guiName%: Show, AutoSize
     }
 
     _Setup() {
@@ -72,7 +71,6 @@ class ListViewControl {
         guiName := this._gui.GetName()
         controlName := this._controlName
         GuiControl, %guiName%: Hide, %controlName%
-        Gui, %guiName%: Show, AutoSize
     }
 
     Destroy() {

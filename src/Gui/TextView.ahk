@@ -16,7 +16,6 @@ class TextView {
             this._isSetup := true
         }
         guiName := this._gui.GetName()
-        Gui, %guiName%: Show, AutoSize
     }
 
     _Setup() {

@@ -17,6 +17,7 @@ class Search extends Command {
         }
         guiControl := gui.AddTextInput()
         this._keyPressedSubscription := guiControl.SubscribeReturnPressed(this._OnUserInput.Bind(this, controller))
+        gui.Show()
     }
 
     _OnUserInput(controller, input) {

@@ -9,7 +9,7 @@ class ShowMessage extends Command {
     Run(controller) {
         controller.GetGui().DisableAll()
         controller.GetGui().AddText({ text: this._message })
-
+        controller.GetGui().Show()
     }
 
     DoesNeedGui() {

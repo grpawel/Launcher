@@ -50,6 +50,10 @@ class Gui {
     }
 
     _AddControl(controlClassName, options = "") {
+        if (!this._isSetup) {
+            this._Setup()
+            this._isSetup := true
+        }
         mergedOptions := MergeArrays(this._options, options)
         controlName := this._nextControlName
         this._nextControlName += 1
@@ -66,7 +70,7 @@ class Gui {
             this._isSetup := true
         }
         name := this._name
-        Gui, %name%: Show,, %name%
+        Gui, %name%: Show, AutoSize, %name%
     }
 
     _Setup() {
