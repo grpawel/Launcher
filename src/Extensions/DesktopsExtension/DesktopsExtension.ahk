@@ -4,15 +4,17 @@
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\CreateDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\DeleteDesktop.ahk
 
+extensionManager.RegisterExtension(new DesktopsExtension())
+
 class DesktopsExtension {
     name := "desktops"
 
-    Register() {
+    __New() {
         Controller.GetDesktop := Func("_Controller_GetDesktop")
     }
 }
 
-_Controller_GetDesktop(self) {
+_Controller_GetDesktop() {
     mapDesktopsFromRegistry()
     global CurrentDesktop
     return CurrentDesktop

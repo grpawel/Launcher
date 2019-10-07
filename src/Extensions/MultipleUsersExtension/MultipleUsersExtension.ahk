@@ -5,24 +5,33 @@
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 #Include %A_ScriptDir%\src\Utils\CommandUtils.ahk
 
+extensionManager.RegisterExtension(new MultipleUsersExtension())
+
 class MultipleUsersExtension {
     name := "multipleUsers"
 
-    Register() {
+    __New() {
         Command.UserConfig := Func("_Command_UserConfig")
         Command.CanRunWithUser := Func("_Command_CanRunWithUser")
     }
 
-    Attach(controller, settings = "") {
+    Attach(controller, availableExtensions, settings = "") {
         desktopToUserMap := settings.desktopToUserMap
-        if (desktopToUserMap != "") {
-            userSetter := new SetUserFromDesktop(desktopToUserMap)
-            controller.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, controller))
+        if (availableExtensions.HasKey("desktops")) {
+            this._DesktopsCompat(controller, desktopToUserMap)
         }
         guard := new UserGuard(desktopToUserMap)
         controller.SubscribeCommandAboutToRun(BindControllerToCommand(guard, controller))
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
+    }
+
+    _DesktopsCompat(controller, desktopToUserMap) {
+        if (desktopToUserMap != "") {
+            userSetter := new SetUserFromDesktop(desktopToUserMap)
+            controller.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, controller))
+        }
+        
     }
 }
 
