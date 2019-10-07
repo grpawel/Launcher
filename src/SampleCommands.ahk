@@ -1,6 +1,4 @@
-﻿#Include %A_ScriptDir%\src\Commands\Filters.ahk
-
-CreateCommands() {
+﻿CreateCommands() {
     browsers := { firefox: """firefox"""
                 , chrome: """chrome"""
                 , firefoxPrivate: """firefox"" ""-private-window""" }

@@ -7,6 +7,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance
 
 #Include %A_ScriptDir%\src\Commands\ImportCommands.ahk
+#Include %A_ScriptDir%\src\Environment\ImportOpeners.ahk
+#Include %A_ScriptDir%\src\Commands\Filters.ahk
+#Include %A_ScriptDir%\src\Commands\CommandFactory.ahk
 
 #Include %A_ScriptDir%\src\Controller.ahk
 #Include %A_ScriptDir%\src\Environment\Environment.ahk
@@ -15,5 +18,3 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include %A_ScriptDir%\src\Extensions\RegisterExtensions.ahk
 extensionManager := new ExtensionManager()
 extensionManager.RegisterExtensions()
-
-#Include %A_ScriptDir%\UserFunctions.ahk

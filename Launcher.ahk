@@ -1,5 +1,5 @@
 #Include %A_ScriptDir%\IncludeAll.ahk
-
+#Include %A_ScriptDir%\UserFunctions.ahk
 #Include %A_ScriptDir%\UserCommands.ahk
 rootCommand := CreateCommands()
 main := new Controller(new Environment(), new Gui())
