@@ -14,12 +14,12 @@ class MultipleUsersExtension {
     }
 
     Attach(controller, settings = "") {
-        desktops := settings.desktops
-        if (desktops != "") {
-            userSetter := new SetUserFromDesktop(desktops)
+        desktopToUserMap := settings.desktopToUserMap
+        if (desktopToUserMap != "") {
+            userSetter := new SetUserFromDesktop(desktopToUserMap)
             controller.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, controller))
         }
-        guard := new UserGuard(desktops)
+        guard := new UserGuard(desktopToUserMap)
         controller.SubscribeCommandAboutToRun(BindControllerToCommand(guard, controller))
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
