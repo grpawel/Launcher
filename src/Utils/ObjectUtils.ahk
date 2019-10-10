@@ -25,30 +25,76 @@ Flip(object) {
     return flipped
 }
 
-; from https://www.autohotkey.com/boards/viewtopic.php?p=255613#p255613
-Obj2String(Obj,FullPath:=1,BottomBlank:=0){
-	static String,Blank
-	if(FullPath=1)
-		String:=FullPath:=Blank:=""
-	if(IsObject(Obj)){
-		for a,b in Obj{
-			if(IsObject(b))
-				Obj2String(b,FullPath "." a,BottomBlank)
-			else{
-				if(BottomBlank=0)
-					String.=FullPath "." a " = " b "`n"
-				else if(b!="")
-					String.=FullPath "." a " = " b "`n"
-				else
-					Blank.=FullPath "." a " =`n"
-			}
-	}}
-	return String Blank
+ToString(obj) {
+    string := ""
+    _ToString_Recursive(obj, "", string)
+    return string
+}
+
+_ToString_Recursive(obj, prefix, ByRef string) {
+    if (IsObject(obj)) {
+        for key, value in obj {
+            _ToString_Recursive(value, prefix "." key, string)
+        }
+    } else {
+        if (prefix != "") {
+            string .= prefix " = " obj "`n"
+        } else {
+            string .= obj "`n"
+        }
+    }
 }
 
 Debug(obj, title = "") {
-    string := Obj2String(obj)
+    string := ToString(obj)
     MsgBox, %title% `n %string%
+}
+
+ToCompactString(obj) {
+    if (IsObject(obj)) {
+        if (IsArrayWithoutGapsAndStringKeys(obj)) {
+            string := "["
+            valueStrings := []
+            for key, value in obj {
+                valueStrings.Push(ToCompactString(obj[key]))
+            }
+            string .= Join(valueStrings, ", ")
+            string .= "]"
+        } else {
+            string := "{"
+            valueStrings := []
+            for key, value in obj {
+                valueStrings.Push(key ": " ToCompactString(obj[key]))
+            }
+            string .= Join(valueStrings, ", ")
+            string .= "}"
+        }
+        return string
+    } else {
+        return obj
+    }
+}
+
+ToMultilineString(obj, indent=2, spaces="") {
+    moreSpaces .= spaces . RepeatString(" ", indent)
+    if (IsObject(obj)) {
+        if (IsArrayWithoutGapsAndStringKeys(obj)) {
+            string := "[`n"
+            for key, value in obj {
+                string .= moreSpaces ToMultilineString(obj[key], indent, moreSpaces) "`n"
+            }
+            string .= spaces "]"
+        } else {
+            string := "{`n"
+            for key, value in obj {
+                string .= moreSpaces key ": " ToMultilineString(obj[key], indent, moreSpaces) "`n"
+            }
+            string .= spaces "}"
+        }
+        return string
+    } else {
+        return obj
+    }
 }
 
 ArrayContains(array, searched) {
