@@ -19,5 +19,6 @@
 #Include %A_ScriptDir%\src\Commands\Technical\WaitForGuiClosed.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\WrapFunction.ahk
 
+#Include %A_ScriptDir%\src\Commands\Helpers\FolderCommands.ahk
 #Include %A_ScriptDir%\src\Commands\Helpers\Helpy.ahk
 #Include %A_ScriptDir%\src\Commands\Helpers\WithEnvironment.ahk
