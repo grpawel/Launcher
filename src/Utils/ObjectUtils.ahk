@@ -138,3 +138,16 @@ EnsureArray(ByRef var) {
         var := [var]
     }
 }
+
+AnyKey(object) {
+    for key, value in object {
+        return key
+    }
+}
+
+HasAnyKey(object) {
+    for key, value in object {
+        return true
+    }
+    return false
+}
