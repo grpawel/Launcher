@@ -45,9 +45,12 @@ _ToString_Recursive(obj, prefix, ByRef string) {
     }
 }
 
-Debug(obj, title = "") {
-    string := ToString(obj)
-    MsgBox, %title% `n %string%
+Debug(objs*) {
+    string := ""
+    for i, obj in objs {
+        string .= ToMultilineString(obj) "`n"
+    }
+    MsgBox, %string%
 }
 
 ToCompactString(obj) {
@@ -107,6 +110,17 @@ ArrayContains(array, searched) {
 
 IsArray(obj) {
     return !!obj.MaxIndex()
+}
+
+IsArrayWithoutGapsAndStringKeys(obj) {
+    i := 1
+    for key, v in obj {
+        if (key != i) {
+            return false
+        }
+        i += 1
+    }
+    return true
 }
 
 ; Returns true if arrays have at least one matching value.

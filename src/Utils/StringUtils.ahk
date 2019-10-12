@@ -29,3 +29,11 @@ Join(stringArray, separator) {
 StartsWith(haystack, needle) {
     return InStr(haystack, needle) == 1
 }
+
+RepeatString(string, times) {
+    repeated := ""
+    for i in range(times) {
+        repeated .= string
+    }
+    return string
+}
