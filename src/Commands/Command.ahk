@@ -30,4 +30,16 @@ class Command {
     DoesNeedGui() {
         return false
     }
+
+    ; Methods used in internals, e.g. in Help.
+    SetPayload(key, payload) {
+        if (!this.HasKey("_payload")) {
+            this._payload := {}
+        }
+        this._payload[key] := payload
+    }
+
+    GetPayload(key) {
+        return this._payload[key]
+    }
 }

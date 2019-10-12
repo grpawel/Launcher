@@ -13,19 +13,21 @@ class Help extends Command {
 
     Run(controller, context) {
         helped := this._commandSet != "" ? this._commandSet : context.caller
-        if (helped._helpAttachment == "") {
+        attachment := helped.GetPayload("helpAttachment")
+        if (attachment == "") {
             ; Because instance of this command can be added to multiple CommandSets
             ; and one CommandSet can have multiple Help commands available
             ; we cannot store any data within this object
             ; so we attach it to calling CommandSet object
             ; then any of Help objects can use the same data and eg. toggle visibility
-            helped._helpAttachment := new this._HelpAttachment(controller, helped)
-            helped._helpAttachment.AttachAndShow()
+            attachment := new this._HelpAttachment(controller, helped)
+            attachment.AttachAndShow()
+            helped.SetPayload("helpAttachment", attachment)
         } else {
-            if (helped._helpAttachment.state != "shown") {
-                helped._helpAttachment.Show()
+            if (attachment.state != "shown") {
+                attachment.Show()
             } else {
-                helped._helpAttachment.Hide()
+                attachment.Hide()
             }
         }
         helped.GetGuiControl().SetText("")
@@ -79,10 +81,10 @@ class Help extends Command {
 
         _Detach() {
             if (this.state != "detached") {
-            this.state := "detached"
-            this._UnsubscribeWhenToDetach()
-            this._commandSet._helpAttachment := ""
-        }
+                this.state := "detached"
+                this._UnsubscribeWhenToDetach()
+                this._commandSet.SetPayload("helpAttachment", "")
+            }
         }
 
         _OnInputChanged(input) {
