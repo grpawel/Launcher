@@ -30,7 +30,7 @@
                 , inco: _.Sequence([ _.ChangeEnvironment({browser: browsers.FirefoxPrivate}, "untilGuiClosed")
                                     , incognito ])
                 , clip: _.Sequence([ _.ChangeEnvironment(CopyToClipboardOpener(), "untilGuiClosed")
-                                    , Helpy(clip) ]) }
+                                    , WithHelpOpened(clip) ]) }
 
     folders :=  { user: _.Folder("%USERPROFILE%")
                 , doc: _.Folder("%USERPROFILE%\Documents") }

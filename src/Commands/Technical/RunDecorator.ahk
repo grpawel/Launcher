@@ -6,16 +6,16 @@
 ;
 ; Why?
 ; This allows to take `CommandSet` object and transparently add some functionality like help,
-; without losing access to other CommandSet values - tags, description etc.
+; without losing access to other CommandSet methods - tags, description etc.
 ; Following snippets are equivalent:
 ; (1)
 ; nested := new CommandSet()
 ; nested.AddTags(...)
-; outer.AddCommand(Helpy(nested))
+; commands.AddCommand(WithHelpOpened(nested))
 ; (2)
-; nested := Helpy(new CommandSet())
+; nested := WithHelpOpened(new CommandSet())
 ; nested.AddTags(...)
-; outer.AddCommand(Helpy(nested))
+; commands.AddCommand(nested)
 class RunDecorator {
     __New(decorated, runDecorator) {
         this._decorated := decorated
@@ -33,7 +33,7 @@ class RunDecorator {
         if (result == this._decorated) {
             ; Method returned `this`, which is decorated object.
             ; We have to instead return this decorator, in order for method chains to work correctly.
-            ; Otherwise Helpy(new CommandSet()).SetDescription() would not work since SetDescription returns decorated object.
+            ; Otherwise `WithHelpOpened(new CommandSet()).SetDescription()` would return `CommandSet` object and not `RunDecorator`.
             result := this
         }
         return result
