@@ -5,17 +5,25 @@ class EventBus {
     _subscribers := {}
 
     ; Subscribe to emissions of event named `eventName`.
-    ; Can subscribe to all events until unsubscribe or only next one. (duration: everytime|once)
+    ; Can subscribe to all events or only single event.
+    ; Subscribers are called from lowest priority; if priority is same then in no particular order.
     ; Returned value can be used to unsubscribe by calling Unsubscribe method on it.
     ;
+    ; Options:
+    ; duration: "everytime" - (default) subscriber is called for events until unsubscribes
+    ;           "once" - subscriber is called only once, then automatically unsubscribed
+    ; priority: 1-32 (default: 16) - priority of subscriber. Lower priority subscribers are called earlier.
+    ; 
     ; Remark:
     ; When subscriber is added or removed in response to emitted event,
     ; the subscriber may or may not receive the event.
     ; Do not rely on apparent behavior.
     Subscribe(eventName, subscriber, options = "") {
         static V := new ValidatorFactory()
-        static VAL := V.Object( { "duration": V.OneOf(["everytime", "once"]) })
-        static DEFAULT_OPTIONS = { "duration": "everytime" }
+        static VAL := V.Object( { "duration": V.OneOf(["everytime", "once"])
+                                , "priority": V.Between(1, 32) })
+        static DEFAULT_OPTIONS = { "duration": "everytime"
+                                 , "priority": 16 }
         options := MergeArrays(DEFAULT_OPTIONS, options)
         VAL.ValidateAndShow(options)
 
@@ -23,14 +31,11 @@ class EventBus {
             this._subscribers[eventName] := new this._SubscriberList()
         }
         key := RandomString(8) ; for 1000 subscribers collision probability is ~ 1e-8 - acceptable risk
-        this._subscribers[eventName][duration][key] := subscriber
-        return new Subscription(this, { eventName: eventName, key: key, duration: duration })
-    }
-
-    ; Shortcut method.
-    ; Argument `subscriber` can be long - last argument "Once" could be missed.
-    SubscribeOnce(eventName, subscriber) {
-        return this.Subscribe(eventName, subscriber)
+        ; for priority we use simple trick. AHK iterates keys alphabetically, so we can add single letter
+        ; from range 48 ('0') to 79 ('O'). Object keys are case insensitive, so priority range cannot be much bigger.
+        key := Chr(Asc("0") + options.priority) . key
+        this._subscribers[eventName][options.duration][key] := subscriber
+        return new Subscription(this, { eventName: eventName, key: key, duration: options.duration })
     }
 
     ; To be called by `Subscription` object.
