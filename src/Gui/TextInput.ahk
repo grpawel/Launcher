@@ -41,12 +41,12 @@ class TextInput {
                 , " ")
     }
 
-    SubscribeInputChanged(subscriber, duration = "everytime") {
-        return this._eventBus.Subscribe("inputChanged", subscriber, duration)
+    SubscribeInputChanged(subscriber, options = "") {
+        return this._eventBus.Subscribe("inputChanged", subscriber, options)
     }
 
-    SubscribeReturnPressed(subscriber, duration = "everytime") {
-        return this._eventBus.Subscribe("returnPressed", subscriber, duration)
+    SubscribeReturnPressed(subscriber, options = "") {
+        return this._eventBus.Subscribe("returnPressed", subscriber, options)
     }
 
     NotifyReturnPressed() {

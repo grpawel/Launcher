@@ -12,10 +12,13 @@ class EventBus {
     ; When subscriber is added or removed in response to emitted event,
     ; the subscriber may or may not receive the event.
     ; Do not rely on apparent behavior.
-    Subscribe(eventName, subscriber, duration = "everytime") {
-        if (!ArrayContains(["everytime", "once"], duration)) {
-            Throw % "Invalid argument: '" duration "'."
-        }
+    Subscribe(eventName, subscriber, options = "") {
+        static V := new ValidatorFactory()
+        static VAL := V.Object( { "duration": V.OneOf(["everytime", "once"]) })
+        static DEFAULT_OPTIONS = { "duration": "everytime" }
+        options := MergeArrays(DEFAULT_OPTIONS, options)
+        VAL.ValidateAndShow(options)
+
         if (!this._subscribers.HasKey(eventName)) {
             this._subscribers[eventName] := new this._SubscriberList()
         }

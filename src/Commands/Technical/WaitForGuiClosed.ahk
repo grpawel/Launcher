@@ -7,7 +7,8 @@ class WaitForGuiClosed extends Command {
     }
 
     Run(controller, context) {
-        controller.GetGui().SubscribeGuiClosing(this._OnGuiClosing.Bind(this, controller, context), "once")
+        controller.GetGui().SubscribeGuiClosing(this._OnGuiClosing.Bind(this, controller, context)
+                                               , { duration: "once" })
     }
 
     _OnGuiClosing(controller, context) {

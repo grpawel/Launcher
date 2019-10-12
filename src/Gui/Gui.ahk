@@ -12,10 +12,6 @@ class Gui {
     _isSetup := false
     _canBeDestroyed := true
     static _nextName := 1
-    static DEFAULT_OPTIONS := { width: "220"
-                , textColor: Colors.LIGHT_GRAY
-                , windowColor: Colors.ALMOST_BLACK
-                , controlColor: Colors.DARK_GRAY }
 
     static guiList := []
 
@@ -29,7 +25,23 @@ class Gui {
         this._name := Gui._nextName
         Gui._nextName += 1
         Gui.guiList[this._name] := this
-        this._options := MergeArrays(this.DEFAULT_OPTIONS, options)
+        this._options := this._GetGlobalOptions(options)
+    }
+
+    _GetGlobalOptions(options) {
+        static DEFAULT_OPTIONS := { width: "220"
+                , textColor: Colors.LIGHT_GRAY
+                , windowColor: Colors.ALMOST_BLACK
+                , controlColor: Colors.DARK_GRAY }
+        static V := new ValidatorFactory()
+        static VAL := V.Object(   { "width": V.PositiveInt()
+                                , "textColor": V.String()
+                                , "windowColor": V.String()
+                                , "controlColor": V.String()}
+                            , {ignoreMissing: false})
+        options := MergeArrays(DEFAULT_OPTIONS, options)
+        VAL.ValidateAndShow(options)
+        return options
     }
 
     AddTextInput(options = "") {
@@ -149,7 +161,7 @@ class Gui {
         return this._name
     }
 
-    SubscribeGuiClosing(subscriber, duration = "everytime") {
-        return this._eventBus.Subscribe("guiClosing", subscriber, duration)
+    SubscribeGuiClosing(subscriber, options = "") {
+        return this._eventBus.Subscribe("guiClosing", subscriber, options)
     }
 }

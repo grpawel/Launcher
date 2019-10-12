@@ -6,6 +6,7 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #SingleInstance
 
+#Include %A_ScriptDir%\src\Validator.ahk
 #Include %A_ScriptDir%\src\Commands\ImportCommands.ahk
 #Include %A_ScriptDir%\src\Environment\ImportOpeners.ahk
 #Include %A_ScriptDir%\src\Commands\Filters.ahk

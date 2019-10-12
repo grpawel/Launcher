@@ -74,12 +74,12 @@ class Controller {
         this.ShowErrorMessage(message)
     }
 
-    SubscribeCommandAboutToRun(subscriber, duration = "everytime") {
-        return this._eventBus.Subscribe("commandAboutToRun", subscriber, duration)
+    SubscribeCommandAboutToRun(subscriber, options = "") {
+        return this._eventBus.Subscribe("commandAboutToRun", subscriber, options)
     }
 
-    SubscribeRootCommandAboutToRun(subscriber, duration = "everytime") {
-        return this._eventBus.Subscribe("rootCommandAboutToRun", subscriber, duration)
+    SubscribeRootCommandAboutToRun(subscriber, options = "") {
+        return this._eventBus.Subscribe("rootCommandAboutToRun", subscriber, iptions)
     }
 
     BlockNextCommand(reason := "") {

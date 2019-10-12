@@ -6,8 +6,7 @@ class CommandSet extends Command {
     _guiControl :=
     _inputChangedSubscription :=
     _returnPressedSubscription :=
-    static _DEFAULT_OPTIONS := { "":""
-        , "typingMatch": "exact" }
+    static _DEFAULT_OPTIONS := { "typingMatch": "exact" }
 
     ; Options:
     ; typingMatch - how to match commands when typing:
@@ -16,6 +15,11 @@ class CommandSet extends Command {
     ;       ["atLeast", N] - try to match immediately if there are at least N characters
     __New(options = "") {
         this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
+        static V := new ValidatorFactory()
+        static VAL := V.Object({"typingMatch": V.Or([ V.Equal("exact")
+                                                    , V.Equal("immediate")
+                                                    , V.Object({1: V.Equal("atLeast"), 2: V.PositiveInt()}) ]) })
+        VAL.ValidateAndShow(this._options)
         this.AddTags(["compound"])
     }
 

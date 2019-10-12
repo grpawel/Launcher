@@ -96,8 +96,8 @@ class ListViewControl {
         this._eventBus.Emit("rowSelected", rowText)
     }
 
-    SubscribeRowSelected(subscriber, duration = "everytime") {
-        this._eventBus.Subscribe("rowSelected", subscriber, duration)
+    SubscribeRowSelected(subscriber, options = "") {
+        this._eventBus.Subscribe("rowSelected", subscriber, options)
     }
 
     NotifyReturnPressed() {
