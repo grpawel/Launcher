@@ -12,6 +12,7 @@ class MultipleUsersExtension {
 
     __New() {
         Command.UserConfig := Func("_Command_UserConfig")
+        Command.RunAs := Func("_Command_RunAs")
         Command.CanRunWithUser := Func("_Command_CanRunWithUser")
     }
 
@@ -65,6 +66,11 @@ _Command_UserConfig(this, config) {
     AddAll(this._userConfig, config)
     VAL.ValidateAndShow(this._userConfig)
     return this
+}
+
+; Shortcut method for user config
+_Command_RunAs(this, userName) {
+    return this.UserConfig({"runAs": userName})
 }
 
 ; returns true, false or {switchTo: username}
