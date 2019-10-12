@@ -11,6 +11,7 @@
 #Include %A_ScriptDir%\src\Commands\Grouping\Sequence.ahk
 
 #Include %A_ScriptDir%\src\Commands\Technical\ChangeEnvironment.ahk
+#Include %A_ScriptDir%\src\Commands\Technical\DestroyGui.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\Help.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\Reload.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\RunDecorator.ahk
