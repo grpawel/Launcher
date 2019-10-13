@@ -17,8 +17,13 @@ class SetUserFromDesktop extends Command {
 
     Run(controller, context="") {
         desktop := controller.GetDesktop()
-        user := this._desktopToUserMap[desktop]
-        envChanger := new ChangeEnvironment({ user: user})
-        envChanger.Run(controller, { caller: this })
+        newUser := this._desktopToUserMap[desktop]
+        oldUser := controller.GetEnvironment()["user"]
+        if (newUser != oldUser) {
+            envChanger := new ChangeEnvironment({ user: newUser})
+            ; We cannot use controller.RunCommand() here, 
+            ; because we could be stuck in a loop.
+            envChanger.Run(controller, { caller: this })
+        }
     }
 }
