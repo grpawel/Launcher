@@ -1,7 +1,7 @@
-#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\UserGuard.ahk
+#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\ChangeDesktopFromUserConfig.ahk
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\SetUserFromDesktop.ahk
+#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Blockers\IsUserAllowed.ahk
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\AsUserOpener.ahk
-#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\BlockingOpener.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 #Include %A_ScriptDir%\src\Utils\CommandUtils.ahk
 
@@ -12,8 +12,7 @@ class MultipleUsersExtension {
 
     __New() {
         Command.UserConfig := Func("_Command_UserConfig")
-        Command.RunAs := Func("_Command_RunAs")
-        Command.CanRunWithUser := Func("_Command_CanRunWithUser")
+        Command.GetUserConfig := Func("_Command_GetUserConfig")
     }
 
     Attach(controller, availableExtensions, settings = "") {
@@ -21,8 +20,6 @@ class MultipleUsersExtension {
         if (availableExtensions.HasKey("desktops")) {
             this._DesktopsCompat(controller, desktopToUserMap)
         }
-        guard := new UserGuard(desktopToUserMap)
-        controller.SubscribeCommandAboutToRun(BindControllerToCommand(guard, controller))
         controller.GetBlocker().AddBlocker(Func("MultipleUsers_IsUserAllowed"))
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
@@ -30,8 +27,12 @@ class MultipleUsersExtension {
 
     _DesktopsCompat(controller, desktopToUserMap) {
         if (desktopToUserMap != "") {
+            desktopChanger := new ChangeDesktopFromUserConfig(desktopToUserMap)
+            controller.SubscribeCommandAboutToRun(BindControllerToCommand(desktopChanger, controller), {priority: 10})
+            ; priority for `userSetter` must be higher (means running later) than for `desktopChanger`
+            ; first change desktop, then change user based on that desktop
             userSetter := new SetUserFromDesktop(desktopToUserMap)
-            controller.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, controller))
+            controller.SubscribeCommandAboutToRun(BindControllerToCommand(userSetter, controller), {priority: 20})
         }
         
     }
@@ -50,14 +51,11 @@ class MultipleUsersExtension {
 ; command.UserConfig({ switchFrom: ["user1"], switchTo: "user2" })
 ; 5) Allow all users and switch to 'user2' before running
 ; command.UserConfig({ switchTo: "user2" })
-; 6) Run as different user, regardless of current user
-; command.UserConfig({ runAs: "user1" })
-; 7) A combination of above. Same user in multiple options can cause unexpected results.
+; 6) A combination of above. Same user in multiple options can cause unexpected results.
 _Command_UserConfig(this, config) {
     static V := new ValidatorFactory()
     static VAL := V.Object( { "blacklist": V.Or([V.Equal("all"), V.ObjectEachValue(V.String())])
                             , "whitelist": V.Or([V.Equal("all"), V.ObjectEachValue(V.String())])
-                            , "runAs": V.String()
                             , "switchFrom": V.ObjectEachValue(V.String())
                             , "switchTo": V.String() }
                         , {ignoreMissing: true, noOtherKeys: false} )
@@ -69,34 +67,6 @@ _Command_UserConfig(this, config) {
     return this
 }
 
-; Shortcut method for user config
-_Command_RunAs(this, userName) {
-    return this.UserConfig({"runAs": userName})
-}
-
-; returns true, false or {switchTo: username}
-_Command_CanRunWithUser(this, user) {
-    config := this._userConfig
-    result := { block: false }
-    if (config.blacklist == "all"
-        || ArrayContains(config.blacklist, user)) {
-        ; user is blocked
-        result.block := true
-    }
-    if (ArrayContains(config.whitelist, user)) {
-        ; user is specifically allowed
-        result.block := false
-    }
-    if (config.HasKey("switchTo")) {
-        ; user has to be switched
-        if (config.switchFrom == ""
-            || config.switchFrom == "all"
-            || ArrayContains(config.switchFrom, user)) {
-            result.switchTo := config.switchTo
-        }
-    }
-    if (config.HasKey("runAs")) {
-        result.runAs := config.runAs
-    }
-    return result
+_Command_GetUserConfig(this) {
+    return this._userConfig
 }
