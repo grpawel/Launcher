@@ -60,9 +60,10 @@ class Controller {
         this._eventBus.Emit("commandAboutToRun", { nextCommand: com })
         blockingReason := this._blocker.IsCommandBlocked(com, this)
         if (blockingReason != false) {
-            this.ShowErrorMessage(blockingReason)
-        }
-        else {
+            if (blockingReason != true) {
+                this.ShowErrorMessage(blockingReason)
+            }
+        } else {
             com.Run(this, context)
         }
     }
