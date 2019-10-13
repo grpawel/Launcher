@@ -21,6 +21,7 @@
 #Include %A_ScriptDir%\src\Commands\Technical\WrapFunction.ahk
 
 #Include %A_ScriptDir%\src\Commands\Helpers\FolderCommands.ahk
+#Include %A_ScriptDir%\src\Commands\Helpers\WithBlockerDisabled.ahk
 #Include %A_ScriptDir%\src\Commands\Helpers\WithCommandsBlocked.ahk
 #Include %A_ScriptDir%\src\Commands\Helpers\WithHelpOpened.ahk
 #Include %A_ScriptDir%\src\Commands\Helpers\WithEnvironment.ahk
