@@ -11,5 +11,5 @@ class DestroyGui extends Command {
 
 WithGuiDestroyed(com) {
     seq := new Sequence([new DestroyGui(), com])
-    return new RunDecorator(com, seq)
+    return new MethodDecorator(com, seq, ["Run"])
 }

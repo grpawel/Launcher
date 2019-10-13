@@ -1,8 +1,8 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
-; Takes two commands, `decorated` and `runDecorator`.
-; Passes all function calls to `decorated`,
-; except `Run()`, which is passed to `runDecorator`.
+; Takes two objects, `obj` and `decorator`.
+; Passes all function calls to `obj`,
+; except methods given in `decoratedMethodNames` which are passed to `decorator`.
 ;
 ; Why?
 ; This allows to take `CommandSet` object and transparently add some functionality like help,
@@ -16,24 +16,26 @@
 ; nested := WithHelpOpened(new CommandSet())
 ; nested.AddTags(...)
 ; commands.AddCommand(nested)
-class RunDecorator {
-    __New(decorated, runDecorator) {
-        this._decorated := decorated
-        this._runDecorator := runDecorator
+class MethodDecorator {
+    __New(obj, decorator, decoratedMethodNames) {
+        this._obj := obj
+        this._decorator := decorator
+        this._decoratedMethodNames := decoratedMethodNames
     }
 
     __Call(methodName, params*) {
-        if (methodName == "Run") {
-            com := this._runDecorator
+        if (ArrayContains(this._decoratedMethodNames, methodName)) {
+            obj := this._decorator
         }
         else {
-            com := this._decorated
+            obj := this._obj
         }
-        result := com[methodName](params*)
-        if (result == this._decorated) {
+        result := obj[methodName](params*)
+        if (result == this._obj) {
             ; Method returned `this`, which is decorated object.
             ; We have to instead return this decorator, in order for method chains to work correctly.
-            ; Otherwise `WithHelpOpened(new CommandSet()).SetDescription()` would return `CommandSet` object and not `RunDecorator`.
+            ; Otherwise `WithHelpOpened(new CommandSet()).SetDescription()`
+            ; would return `CommandSet` object and not `MethodDecorator`.
             result := this
         }
         return result

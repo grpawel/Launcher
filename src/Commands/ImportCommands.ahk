@@ -14,7 +14,6 @@
 #Include %A_ScriptDir%\src\Commands\Technical\DestroyGui.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\Help.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\Reload.ahk
-#Include %A_ScriptDir%\src\Commands\Technical\RunDecorator.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\SleepMs.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\WaitForGuiClosed.ahk
 #Include %A_ScriptDir%\src\Commands\Technical\WrapFunction.ahk
