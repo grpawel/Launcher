@@ -5,7 +5,7 @@
 #Include %A_ScriptDir%\src\Gui\TextView.ahk
 
 class Gui {
-    _state := "closed"
+    _state := "destroyed"
     _nextControlName := 0
     _controls := []
     _eventBus := new EventBus()
@@ -128,14 +128,14 @@ class Gui {
         if (!this._canBeDestroyed) {
             return
         }
-        this._state := "closed"
+        this._state := "destroyed"
         this._isSetup := false
         name := this._name
         Gui, %name%: Destroy
         this._nextControlName := 0
         this._DestroyControls(this._controls)
         this._controls := []
-        this._eventBus.Emit("guiClosing") 
+        this._eventBus.Emit("guiDestroyed") 
         #WinActivateForce
         WinActivate
     }
@@ -161,7 +161,7 @@ class Gui {
         return this._name
     }
 
-    SubscribeGuiClosing(subscriber, options = "") {
-        return this._eventBus.Subscribe("guiClosing", subscriber, options)
+    SubscribeGuiDestroyed(subscriber, options = "") {
+        return this._eventBus.Subscribe("guiDestroyed", subscriber, options)
     }
 }

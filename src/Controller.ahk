@@ -84,10 +84,11 @@ class Controller {
         this._gui.DisableDestroying()
         this._gui.DisableAll()
         this._gui.Show()
-        ; command (eg. CommandSet) could close Gui after "successful" running of command.
-        ; Temporarily disable closing Gui so the user can see the message.
-        destroyer := this._EnableGuiDestroying.Bind(this)
-        SetTimer, %destroyer%, -0
+        ; command (eg. CommandSet) could destroy Gui after "successful" running of command.
+        ; Temporarily disable destroying Gui so command won't do that 
+        ; and the user can see the message.
+        destroyEnabler := this._EnableGuiDestroying.Bind(this)
+        SetTimer, %destroyEnabler%, -0
 
     }
 

@@ -15,7 +15,7 @@
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\Help.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\Reload.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\SleepMs.ahk
-#Include %A_ScriptDir%\src\Commands\ScriptInteraction\WaitForGuiClosed.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\WaitForGuiDestroyed.ahk
 
 #Include %A_ScriptDir%\src\Commands\Technical\WrapFunction.ahk
 

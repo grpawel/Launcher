@@ -6,6 +6,6 @@
 ; Small helper function.
 ; See also `WithHelpOpened` and `MethodDecorator` docs.
 WithEnvironment(environmentChange, wrapped) {
-    seq := new Sequence([new ChangeEnvironment(environmentChange, "untilGuiClosed"), wrapped])
+    seq := new Sequence([new ChangeEnvironment(environmentChange, "untilGuiDestroyed"), wrapped])
     return new MethodDecorator(wrapped, seq, ["Run"])
 }

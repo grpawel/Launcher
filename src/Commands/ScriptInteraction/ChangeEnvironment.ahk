@@ -5,7 +5,7 @@ class ChangeEnvironment extends Command {
     ; Nothing is changed anywhere until this command is run.
     ; Possible modes:
     ; permanent - changes are permanent until the script is reloaded
-    ; untilGuiClosed - changes are reverted when GUI is closed
+    ; untilGuiDestroyed - changes are reverted when GUI is destroyed
     ; Reversal of changes can have unexpected results when the environment is changed somewhere else in meantime.
     ; If this commands adds new keys to environment, this cannot be currently reversed.
     __New(changes, mode = "permanent") {
@@ -18,9 +18,9 @@ class ChangeEnvironment extends Command {
         if (this._mode == "permanent") {
             controller.UpdateEnvironment(changes)
         }
-        else if (this._mode == "untilGuiClosed") {
+        else if (this._mode == "untilGuiDestroyed") {
             oldValues := controller.UpdateEnvironment(changes)
-            controller.GetGui().SubscribeGuiClosing(this._Revert.Bind(this, oldValues, controller)
+            controller.GetGui().SubscribeGuiDestroyed(this._Revert.Bind(this, oldValues, controller)
                                                       , { duration: "once" })
         }
     }

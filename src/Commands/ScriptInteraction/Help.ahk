@@ -37,7 +37,7 @@ class Help extends Command {
     }
 
     ; There are three possible states:
-    ; (D) Detached: user has not opened help yet, closed GUI or opened another CommandSet
+    ; (D) Detached: user has not opened help yet, user opened another CommandSet or GUI is destroyed.
     ; (S) Shown: subscribed to user input and command selection; attached to CommandSet
     ; (H) Hidden: attached to CommandSet
     ;
@@ -47,7 +47,7 @@ class Help extends Command {
     ; (S), Help.Run() called -> (H)
     ; (H), Help.Run() called -> (S)
     ; (S/H), command selected -> (D)
-    ; (S/H), GUI closed -> (D)
+    ; (S/H), GUI destroyed -> (D)
     class _HelpAttachment {
         state := "detached"
 
@@ -115,7 +115,7 @@ class Help extends Command {
 
         _SubscribeWhenToDetach() {
             this._nextCommandRunningSubscription := this._controller.SubscribeCommandAboutToRun(this._OnNextCommandRunned.Bind(this))
-            this._guiClosingSubscription := this._controller.GetGui().SubscribeGuiClosing(this._Detach.Bind(this))
+            this._guiDestroyedSubscription := this._controller.GetGui().SubscribeGuiDestroyed(this._Detach.Bind(this))
         }
 
         _SubscribeInput() {
@@ -130,7 +130,7 @@ class Help extends Command {
 
         _UnsubscribeWhenToDetach() {
             this._nextCommandRunningSubscription.Unsubscribe()
-            this._guiClosingSubscription.Unsubscribe()
+            this._guiDestroyedSubscription.Unsubscribe()
         }
     }
 }

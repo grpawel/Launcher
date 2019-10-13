@@ -27,9 +27,9 @@
     misc :=     { rel: _.Reload()
                 , "?": _.Help()
                 , help: _.Help()
-                , inco: _.Sequence([ _.ChangeEnvironment({browser: browsers.FirefoxPrivate}, "untilGuiClosed")
+                , inco: _.Sequence([ _.ChangeEnvironment({browser: browsers.FirefoxPrivate}, "untilGuiDestroyed")
                                     , incognito ])
-                , clip: _.Sequence([ _.ChangeEnvironment(CopyToClipboardOpener(), "untilGuiClosed")
+                , clip: _.Sequence([ _.ChangeEnvironment(CopyToClipboardOpener(), "untilGuiDestroyed")
                                     , WithHelpOpened(clip) ]) }
 
     folders :=  { user: _.Folder("%USERPROFILE%")
