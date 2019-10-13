@@ -45,10 +45,10 @@
     topLevel.AddCommmands(MergeArrays(searches, websites, programs, misc, drives, folders, files))
 
     incognito.SetDescription("Incognito mode")
-    incognito.AddCommands(topLevel.FilterCommands(HasTag(["web", "technical"])).GetCommands())
+    incognito.AddCommands(topLevel.FilterCommands(HasTag(["web"])).GetCommands())
 
     clip.SetDescription("Copy to clipboard")
-    clip.AddCommands(topLevel.FilterCommands(HasTag(["hasPath", "technical"])).GetCommands())
+    clip.AddCommands(topLevel.FilterCommands(HasTag(["hasPath"])).GetCommands())
 
     return topLevel
 }

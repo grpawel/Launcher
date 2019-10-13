@@ -10,12 +10,13 @@
 #Include %A_ScriptDir%\src\Commands\Grouping\CommandSet.ahk
 #Include %A_ScriptDir%\src\Commands\Grouping\Sequence.ahk
 
-#Include %A_ScriptDir%\src\Commands\Technical\ChangeEnvironment.ahk
-#Include %A_ScriptDir%\src\Commands\Technical\DestroyGui.ahk
-#Include %A_ScriptDir%\src\Commands\Technical\Help.ahk
-#Include %A_ScriptDir%\src\Commands\Technical\Reload.ahk
-#Include %A_ScriptDir%\src\Commands\Technical\SleepMs.ahk
-#Include %A_ScriptDir%\src\Commands\Technical\WaitForGuiClosed.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\ChangeEnvironment.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\DestroyGui.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\Help.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\Reload.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\SleepMs.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\WaitForGuiClosed.ahk
+
 #Include %A_ScriptDir%\src\Commands\Technical\WrapFunction.ahk
 
 #Include %A_ScriptDir%\src\Commands\Helpers\FolderCommands.ahk

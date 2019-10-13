@@ -8,7 +8,6 @@ class Help extends Command {
 
     __New(commandSet = "") {
         this._commandSet := commandSet
-        this.AddTags(["technical"])
     }
 
     Run(controller, context) {
