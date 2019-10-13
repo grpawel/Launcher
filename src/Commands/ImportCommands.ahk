@@ -10,6 +10,7 @@
 #Include %A_ScriptDir%\src\Commands\Grouping\CommandSet.ahk
 #Include %A_ScriptDir%\src\Commands\Grouping\Sequence.ahk
 
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\BlockCommands.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\ChangeEnvironment.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\DestroyGui.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\Help.ahk

@@ -6,7 +6,7 @@ class CommandBlocker {
     ;   and returns string with reason if command should be blocked, false otherwise.
     ;   If `predicate` returns true instead of string, reason is taken from `fallbackReason`.
 
-    AddBlocker(predicate, fallbackReason := "") {
+    AddBlocking(predicate, fallbackReason := "") {
         blocker := new this._Blocker(predicate, fallbackReason)
         this._blockers.Push(blocker)
         return blocker
@@ -15,7 +15,7 @@ class CommandBlocker {
     ; Remove blocker. 
     ; `blockerToRemove` should be object returned from `Add[Predicate]Blocker` method.
     ; Returns true if removed, false if not found.
-    RemoveBlocker(blockerToRemove) {
+    Unblock(blockerToRemove) {
         for i, blocker in this._blockers {
             if (blockerToRemove == blocker) {
                 this._blockers.Remove(i)

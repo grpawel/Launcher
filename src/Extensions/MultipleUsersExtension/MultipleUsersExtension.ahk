@@ -20,7 +20,7 @@ class MultipleUsersExtension {
         if (availableExtensions.HasKey("desktops")) {
             this._DesktopsCompat(controller, desktopToUserMap)
         }
-        controller.GetBlocker().AddBlocker(Func("MultipleUsers_IsUserAllowed"))
+        controller.GetBlocker().AddBlocking(Func("MultipleUsers_IsUserAllowed"))
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
     }
