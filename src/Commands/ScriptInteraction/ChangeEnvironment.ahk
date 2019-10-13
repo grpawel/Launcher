@@ -11,6 +11,9 @@ class ChangeEnvironment extends Command {
     __New(changes, mode = "permanent") {
         this._changes := changes
         this._mode := mode
+        static V := new ValidatorFactory()
+        static VAL := V.OneOf(["permanent", "untilGuiDestroyed"])
+        VAL.ValidateAndShow(this._mode)
     }
 
     Run(controller) {
