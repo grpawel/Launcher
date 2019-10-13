@@ -41,12 +41,12 @@ class CommandBlocker {
     ;   string message to show to user if command is blocked.
     IsCommandBlocked(com, contr) {
         for i, blocker in this._blockers {
-            returnedMessage := blocker.IsCommandBlocked(com, contr)
-            if (returnedMessage != false) {
-                return returnedMessage
+            res := blocker.IsCommandBlocked(com, contr)
+            if (res.doBlock) {
+                return res
             }
         }
-        return false
+        return { doBlock: false }
     }
 
     class _Blocker {
@@ -59,21 +59,13 @@ class CommandBlocker {
             predicate := this._predicate
             returned := %predicate%(com, contr)
             if (returned == false) {
-                return false
-            } else {
-                return this._DetermineMessage(returned)
+                return { doBlock: false }
             }
-        }
-
-        _DetermineMessage(reason) {
-            if (this._options.quiet) {
-                return true
+            result := { doBlock: true}
+            if (!this._options.quiet) {
+                result.message := returned != true ? returned : this._options.fallbackReason
             }
-            if (reason == true) {
-                return this._options.fallbackReason
-            } else {
-                return reason
-            }
+            return result
         }
     }
 }
