@@ -1,6 +1,7 @@
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
 #Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
 #Include %A_ScriptDir%\src\Environment\Openers\SendTyper.ahk
+#Include %A_ScriptDir%\src\CommandBlocker.ahk
 
 class Controller {
     _rootCommand := {}
@@ -10,6 +11,7 @@ class Controller {
         this._environment := environment
         this._gui := gui
         this._SetDefaultEnvironment()
+        this._blocker := new CommandBlocker()
     }
 
     _SetDefaultEnvironment() {
@@ -56,22 +58,13 @@ class Controller {
 
     RunCommand(com, context = "") {
         this._eventBus.Emit("commandAboutToRun", { nextCommand: com })
-        if (this._commandBlocked) {
-            this._ShowBlockMessage()
-            this._commandBlocked := false
-            this._blockingReason := ""
-        } else {
+        blockingReason := this._blocker.IsCommandBlocked(com, this)
+        if (blockingReason != false) {
+            this.ShowErrorMessage(blockingReason)
+        }
+        else {
             com.Run(this, context)
         }
-    }
-
-    _ShowBlockMessage() {
-        message := "Command blocked."
-        if (this._blockingReason != "") {
-            message .= " Reason:`n"
-            message .= this._blockingReason
-        }
-        this.ShowErrorMessage(message)
     }
 
     SubscribeCommandAboutToRun(subscriber, options = "") {
@@ -82,9 +75,8 @@ class Controller {
         return this._eventBus.Subscribe("rootCommandAboutToRun", subscriber, iptions)
     }
 
-    BlockNextCommand(reason := "") {
-        this._commandBlocked := true
-        this._blockingReason := reason
+    GetBlocker() {
+        return this._blocker
     }
 
     ShowErrorMessage(message) {

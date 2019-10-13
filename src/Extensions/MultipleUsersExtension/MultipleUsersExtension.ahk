@@ -23,6 +23,7 @@ class MultipleUsersExtension {
         }
         guard := new UserGuard(desktopToUserMap)
         controller.SubscribeCommandAboutToRun(BindControllerToCommand(guard, controller))
+        controller.GetBlocker().AddBlocker(Func("MultipleUsers_IsUserAllowed"))
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
     }
