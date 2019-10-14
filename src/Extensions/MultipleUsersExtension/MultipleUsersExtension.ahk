@@ -1,5 +1,6 @@
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\ChangeDesktopFromUserConfig.ahk
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\SetUserFromDesktop.ahk
+#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\SetUserFromUserConfig.ahk
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Blockers\IsUserAllowed.ahk
 #Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\AsUserOpener.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
@@ -23,6 +24,8 @@ class MultipleUsersExtension {
         controller.GetBlocker().AddBlocking(Func("MultipleUsers_IsUserAllowed"), { name: "isUserAllowed" })
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
+        runAsSetter := new SetUserFromUserConfig()
+        controller.SubscribeCommandAboutToRun(BindControllerToCommand(runAsSetter, controller), {priority: 26})
     }
 
     _DesktopsCompat(controller, desktopToUserMap) {
@@ -34,7 +37,6 @@ class MultipleUsersExtension {
             userSetter := new SetUserFromDesktop(desktopToUserMap)
             controller.SubscribeCommandAboutToRun(BindControllerToCommand(userSetter, controller), {priority: 20})
         }
-        
     }
 }
 
@@ -51,13 +53,16 @@ class MultipleUsersExtension {
 ; command.UserConfig({ switchFrom: ["user1"], switchTo: "user2" })
 ; 5) Allow all users and switch to 'user2' before running
 ; command.UserConfig({ switchTo: "user2" })
-; 6) A combination of above. Same user in multiple options can cause unexpected results.
+; 6) Run as different user (equivalent to `WithEnvironment({user: "user1"}, command))
+; command.UserConfig({ runAs: "user1" })
+; 7) A combination of above. Same user in multiple options can cause unexpected results.
 _Command_UserConfig(this, config) {
     static V := new ValidatorFactory()
     static VAL := V.Object( { "blacklist": V.Or([V.Equal("all"), V.ObjectEachValue(V.String())])
                             , "whitelist": V.Or([V.Equal("all"), V.ObjectEachValue(V.String())])
                             , "switchFrom": V.ObjectEachValue(V.String())
-                            , "switchTo": V.String() }
+                            , "switchTo": V.String()
+                            , "runAs": V.String() }
                         , {ignoreMissing: true, noOtherKeys: false} )
     if (this._userConfig == "") {
         this._userConfig := {}
