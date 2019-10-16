@@ -28,43 +28,40 @@ class EventBus {
         VAL.ValidateAndShow(options)
 
         if (!this._subscribers.HasKey(eventName)) {
-            this._subscribers[eventName] := new this._SubscriberList()
+            this._subscribers[eventName] := {}
         }
         key := RandomString(8) ; for 1000 subscribers collision probability is ~ 1e-8 - acceptable risk
         ; for priority we use simple trick. AHK iterates keys alphabetically, so we can add single letter
         ; from range 48 ('0') to 79 ('O'). Object keys are case insensitive, so priority range cannot be much bigger.
         key := Chr(Asc("0") + options.priority) . key
-        this._subscribers[eventName][options.duration][key] := subscriber
-        return new Subscription(this, { eventName: eventName, key: key, duration: options.duration })
+        sub := new Subscription(this, { eventName: eventName, key: key, duration: options.duration, callback: subscriber })
+        this._subscribers[eventName][key] := sub
+        return sub
     }
 
     ; To be called by `Subscription` object.
     ; To unsubscribe, call `Unsubscribe` on object returned from `EventBus.Subscribe()`.
     _Unsubscribe(params) {
         eventName := params.eventName
-        duration := params.duration
         key := params.key
-        this._subscribers[eventName][duration].Delete(key)
+        this._subscribers[eventName].Delete(key)
     }
 
     Emit(eventName, payload*) {
-        if (!this._subscribers.hasKey(eventName)) {
+        if (!this._subscribers.HasKey(eventName)) {
             return
         }
-        subscriberList := this._subscribers[eventName]
 
-        for key, subscriber in subscriberList.everytime.Clone() {
-            %subscriber%(payload*)
+        for key, subscriber in this._subscribers[eventName].Clone() {
+            callback := subscriber._params.callback
+            %callback%(payload*)
+            if (subscriber._params.duration == "once") {
+                subscriber.Unsubscribe()
+            }
         }
-        oneTimeSubscribers := subscriberList.once.Clone()
-        for key, subscriber in oneTimeSubscribers {
-            %subscriber%(payload*)
-            subscriberList.once.Delete(key)
+        ; No subscribers left - remove no more necessary list
+        if (!HasAnyKey(this._subscribers[eventName])) {
+            this._subscribers.Delete(eventName)
         }
-    }
-
-    class _SubscriberList {
-        everytime := {}
-        once := {}
     }
 }
