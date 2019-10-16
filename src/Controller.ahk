@@ -73,7 +73,7 @@ class Controller {
     }
 
     SubscribeRootCommandAboutToRun(subscriber, options = "") {
-        return this._eventBus.Subscribe("rootCommandAboutToRun", subscriber, iptions)
+        return this._eventBus.Subscribe("rootCommandAboutToRun", subscriber, options)
     }
 
     GetBlocker() {
