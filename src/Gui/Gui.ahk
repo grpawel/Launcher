@@ -125,6 +125,17 @@ class Gui {
     }
 
     Destroy() {
+        this._Destroy()
+        this._eventBus.Emit("guiDestroyed") 
+        #WinActivateForce
+        WinActivate
+    }
+
+    Reset() {
+        this._Destroy()
+    }
+
+    _Destroy() {
         if (!this._canBeDestroyed) {
             return
         }
@@ -135,9 +146,6 @@ class Gui {
         this._nextControlName := 0
         this._DestroyControls(this._controls)
         this._controls := []
-        this._eventBus.Emit("guiDestroyed") 
-        #WinActivateForce
-        WinActivate
     }
 
     _DestroyControls(controls) {

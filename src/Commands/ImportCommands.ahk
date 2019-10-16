@@ -12,9 +12,9 @@
 
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\BlockCommands.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\ChangeEnvironment.ahk
-#Include %A_ScriptDir%\src\Commands\ScriptInteraction\DestroyGui.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\Help.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\Reload.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\ResetGui.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\SleepMs.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\WaitForGuiDestroyed.ahk
 
