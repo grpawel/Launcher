@@ -10,7 +10,6 @@ class Gui {
     _controls := []
     _eventBus := new EventBus()
     _isSetup := false
-    _canBeDestroyed := true
     static _nextName := 1
 
     static guiList := []
@@ -116,14 +115,6 @@ class Gui {
         Gui, %name%: Hide
     }
 
-    DisableDestroying() {
-        this._canBeDestroyed := false
-    }
-
-    EnableDestroying() {
-        this._canBeDestroyed := true
-    }
-
     Destroy() {
         this._Destroy()
         this._eventBus.Emit("guiDestroyed") 
@@ -136,9 +127,6 @@ class Gui {
     }
 
     _Destroy() {
-        if (!this._canBeDestroyed) {
-            return
-        }
         this._state := "destroyed"
         this._isSetup := false
         name := this._name

@@ -63,7 +63,9 @@ class Controller {
             com.Run(this, context)
         } else {
             if (blockingResult.message != "") {
-                this.ShowErrorMessage(blockingResult.message)
+                message := new WaitForGuiDestroyed(new ShowMessage(blockingResult.message
+                                                                    , { textColor: Colors.RED }))
+                message.Run(this, context)
             }
         }
     }
@@ -78,22 +80,5 @@ class Controller {
 
     GetBlocker() {
         return this._blocker
-    }
-
-    ShowErrorMessage(message) {
-        this._gui.AddText({ text: message, textColor: Colors.RED, textColorDisabled: Colors.RED })
-        this._gui.DisableDestroying()
-        this._gui.DisableAll()
-        this._gui.Show()
-        ; command (eg. CommandSet) could destroy Gui after "successful" running of command.
-        ; Temporarily disable destroying Gui so command won't do that 
-        ; and the user can see the message.
-        destroyEnabler := this._EnableGuiDestroying.Bind(this)
-        SetTimer, %destroyEnabler%, -0
-
-    }
-
-    _EnableGuiDestroying() {
-        this._gui.EnableDestroying()
     }
 }
