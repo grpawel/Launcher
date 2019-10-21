@@ -58,6 +58,12 @@ class Controller {
 
     RunCommand(com, context = "") {
         this._eventBus.Emit("commandAboutToRun", { nextCommand: com })
+        this.RunCommandWithoutEvents(com, context)
+    }
+
+    ; Run command without firing events.
+    ; Stops loops when command subscribes `commandAboutToRun` - it would run again and again infinitely.
+    RunCommandWithoutEvents(com, context) {
         blockingResult := this._blocker.IsCommandBlocked(com, this)
         if (!blockingResult.doBlock) {
             com.Run(this, context)

@@ -29,17 +29,17 @@ class MultipleUsersExtension {
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
         runAsSetter := new SetUserFromUserConfig()
-        controller.SubscribeCommandAboutToRun(BindControllerToCommand(runAsSetter, controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
+        controller.SubscribeCommandAboutToRun(CommandAsSubscriber(runAsSetter, controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
     }
 
     _DesktopsCompat(controller, desktopToUserMap) {
         if (desktopToUserMap != "") {
             desktopChanger := new ChangeDesktopFromUserConfig(desktopToUserMap)
-            controller.SubscribeCommandAboutToRun(BindControllerToCommand(desktopChanger, controller), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
+            controller.SubscribeCommandAboutToRun(CommandAsSubscriber(desktopChanger, controller), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
             ; priority for `userSetter` must be higher (means running later) than for `desktopChanger`
             ; first change desktop, then change user based on that desktop
             userSetter := new SetUserFromDesktop(desktopToUserMap)
-            controller.SubscribeCommandAboutToRun(BindControllerToCommand(userSetter, controller), {priority: this.PRIORITIES["userFromDesktop"]})
+            controller.SubscribeCommandAboutToRun(CommandAsSubscriber(userSetter, controller), {priority: this.PRIORITIES["userFromDesktop"]})
         }
     }
 }

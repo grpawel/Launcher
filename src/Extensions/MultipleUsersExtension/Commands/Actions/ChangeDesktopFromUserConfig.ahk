@@ -9,7 +9,7 @@ class ChangeDesktopFromUserConfig extends Command {
     }
 
     Run(contr, context) {
-        com := context.nextCommand
+        com := context.event.payload.nextCommand
         config := com.GetUserConfig()
         if (!config.HasKey("switchTo")) {
             return

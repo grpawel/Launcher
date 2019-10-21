@@ -103,8 +103,8 @@ class Help extends Command {
             this._commandSet.GetGuiControl().SetText(key)
         }
 
-        _OnNextCommandRunned(context) {
-            if (context.nextCommand.base.__Class == "Help") {
+        _OnNextCommandRunned(payload) {
+            if (payload.nextCommand.base.__Class == "Help") {
                 ; nextCommand could be user trying to close help.
                 ; If we call Detach() here,
                 ; Help.Run() would not see the attachment and would create help again.

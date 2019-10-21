@@ -3,5 +3,5 @@
 UserFunctions(controller) {
     desktops := { 2: "dev" }
     userSetter := new SetUserFromDesktop()
-    controller.SubscribeRootCommandAboutToRun(BindControllerToCommand(userSetter, controller))
+    controller.SubscribeRootCommandAboutToRun(CommandAsSubscriber(userSetter, controller))
 }
