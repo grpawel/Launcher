@@ -42,4 +42,9 @@ class Command {
     GetPayload(key) {
         return this._payload[key]
     }
+
+    ; Workaround for `com.__Class` not working with `MethodDecorator`
+    GetCommandName() {
+        return this.__Class
+    }
 }

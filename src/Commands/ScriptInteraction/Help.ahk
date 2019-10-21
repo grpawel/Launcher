@@ -104,7 +104,7 @@ class Help extends Command {
         }
 
         _OnNextCommandRunned(payload) {
-            if (payload.nextCommand.base.__Class == "Help") {
+            if (payload.nextCommand.base.GetCommandName() == "Help") {
                 ; nextCommand could be user trying to close help.
                 ; If we call Detach() here,
                 ; Help.Run() would not see the attachment and would create help again.

@@ -23,6 +23,18 @@ _IsClassFilter(classes, object) {
     return ArrayContains(classes, object.__Class)
 }
 
+IsCommand(commandNames) {
+    if (!IsArray(commandNames)) {
+        commandNames := [commandNames]
+    }
+    return Func("_IsCommandFilter").Bind(commandNames)
+}
+
+_IsCommandFilter(commandNames, com) {
+    commandName := com.GetCommandName()
+    return ArrayContains(commandNames, commandName)
+}
+
 ; Filter by tags
 ; Returns true if its argument has `GetTags` method returning array value containing any of specified tags.
 HasTag(tags) {
