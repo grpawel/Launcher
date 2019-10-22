@@ -162,6 +162,14 @@ class CommandSet extends Command {
         return filteredCommandSet
     }
 
+    ; Commands are shared between original and duplicate - changes to them are visible in both.
+    ; List of commands itself is not shared - adding commands adds them only to single commandSet.
+    Duplicate() {
+        duplicate := base.Duplicate()
+        duplicate._commands := ObjClone(this._commands)
+        return duplicate
+    }
+
     GetGuiControl() {
         return this._guiControl
     }

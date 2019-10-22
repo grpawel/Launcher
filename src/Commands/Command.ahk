@@ -43,6 +43,20 @@ class Command {
         return this._payload[key]
     }
 
+    ; Returns shallow copy of command.
+    ; Extending classes that add object data must override this method and clone the data themselves.
+    Duplicate() {
+        duplicate.base := this.base
+        duplicate := ObjClone(this)
+        duplicate._tags := ObjClone(this._tags)
+        if (this.HasKey("_payload")) {
+            for key, value in this._payload {
+                duplicate._payload[key] := ObjClone(value)
+            }
+        }
+        return duplicate
+    }
+
     ; Workaround for `com.__Class` not working with `MethodDecorator`
     GetCommandName() {
         return this.__Class
