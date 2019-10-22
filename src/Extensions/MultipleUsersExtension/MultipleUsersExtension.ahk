@@ -76,6 +76,13 @@ _Command_UserConfig(this, config) {
     return this
 }
 
+; Shortcut for RunAs
+; Replaces `.UserConfig({runAs: "user1"})` with `.RunAs("user1")`
+_Command_RunAs(this, userName) {
+    this.UserConfig({ runAs: userName })
+    return this
+}
+
 _Command_GetUserConfig(this) {
     return this._userConfig
 }
