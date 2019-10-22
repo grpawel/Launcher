@@ -20,6 +20,9 @@ class Gui {
     ; textColor (string)
     ; windowColor (string) - background color of GUI window
     ; controlColor (string) - background color of controls
+    ; Options for window:
+    ; position.x (int) - x position of window in px, default is middle of the screen
+    ; position.y (int) - y position of window in px, default is middle of the screen
     __New(options = "") {
         this._name := Gui._nextName
         Gui._nextName += 1
@@ -36,8 +39,11 @@ class Gui {
         static VAL := V.Object(   { "width": V.PositiveInt()
                                 , "textColor": V.String()
                                 , "windowColor": V.String()
-                                , "controlColor": V.String()}
-                            , {ignoreMissing: false})
+                                , "controlColor": V.String()
+                                , "position": V.Object({ "x": V.Integer()
+                                                       , "y": V.Integer()}
+                                                    , { ignoreMissing: true })}
+                            , { ignoreMissing: true })
         options := MergeArrays(DEFAULT_OPTIONS, options)
         VAL.ValidateAndShow(options)
         return options
@@ -81,7 +87,19 @@ class Gui {
             this._isSetup := true
         }
         name := this._name
-        Gui, %name%: Show, AutoSize, %name%
+        style := this._GetShowOptionsString(this._options)
+        Gui, %name%: Show, AutoSize %style%, %name%
+    }
+
+    _GetShowOptionsString(options) {
+        style := ""
+        if (options.position.x != "") {
+            style .= " x" options.position.x
+        }
+        if (options.position.y != "") {
+            style .= " y" options.position.y
+        }
+        return style
     }
 
     _Setup() {
