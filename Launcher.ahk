@@ -3,7 +3,7 @@
 rootCommand := CreateCommands()
 main := new Controller(new Environment(), new Gui())
 main.SetRootCommand(rootCommand)
-extensionManager.Attach(main, "all", {multipleUsers: {desktopToUserMap: desktopToUserMap}})
+extensionManager.Attach(main, "all", {users: {desktopToUserMap: desktopToUserMap}})
 
 ^/::
     main.Execute()

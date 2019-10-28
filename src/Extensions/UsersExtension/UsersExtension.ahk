@@ -1,15 +1,15 @@
-#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\ChangeDesktopFromUserConfig.ahk
-#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\SetUserFromDesktop.ahk
-#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Actions\SetUserFromUserConfig.ahk
-#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Commands\Blockers\IsUserAllowed.ahk
-#Include %A_ScriptDir%\src\Extensions\MultipleUsersExtension\Environment\Openers\AsUserOpener.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\ChangeDesktopFromUserConfig.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\SetUserFromDesktop.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\SetUserFromUserConfig.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Blockers\IsUserAllowed.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Environment\Openers\AsUserOpener.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 #Include %A_ScriptDir%\src\Utils\CommandUtils.ahk
 
-extensionManager.RegisterExtension(new MultipleUsersExtension())
+extensionManager.RegisterExtension(new UsersExtension())
 
-class MultipleUsersExtension {
-    name := "multipleUsers"
+class UsersExtension {
+    name := "users"
 
     static PRIORITIES := { "desktopFromCommandConfig": 8
                          , "userFromDesktop": 16
@@ -25,7 +25,7 @@ class MultipleUsersExtension {
         if (availableExtensions.HasKey("desktops")) {
             this._DesktopsCompat(controller, desktopToUserMap)
         }
-        controller.GetBlocker().AddBlocking(Func("MultipleUsers_IsUserAllowed"), { name: "isUserAllowed" })
+        controller.GetBlocker().AddBlocking(Func("IsUserAllowedBlocker"), { name: "isUserAllowed" })
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
         runAsSetter := new SetUserFromUserConfig()
