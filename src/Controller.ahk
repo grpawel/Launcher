@@ -69,8 +69,9 @@ class Controller {
             com.Run(this, context)
         } else {
             if (blockingResult.message != "") {
-                message := new WaitForGuiDestroyed(new ShowMessage(blockingResult.message
-                                                                    , { textColor: Colors.RED }))
+                message := new ShowMessage(blockingResult.message
+                                          , { textColor: Colors.RED
+                                            , disablePrevious: true })
                 message.Run(this, context)
             }
         }
