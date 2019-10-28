@@ -49,6 +49,14 @@ class TextInput {
         return this._eventBus.Subscribe("returnPressed", subscriber, options)
     }
 
+    SubscribeDestroyed(subscriber, options = "") {
+        return this._eventBus.Subscribe("destroyed", subscriber, options)
+    }
+
+    SubscribeDisabled(subscriber, options = "") {
+        return this._eventBus.Subscribe("disabled", subscriber, options)
+    }
+
     NotifyReturnPressed() {
         this._OnReturnPressed()
     }
@@ -77,10 +85,12 @@ class TextInput {
         local controlName := this._controlName
         GuiControl, %guiName%: Disable, %controlName%
         GuiControl, %guiName%: -g, %controlName%
+        this._eventBus.Emit("disabled")
     }
 
     Destroy() {
         ; Break circular references (https://www.autohotkey.com/docs/Objects.htm#Circular_References).
+        this._eventBus.Emit("destroyed")
         this._gui := ""
         this._eventBus := ""
     }

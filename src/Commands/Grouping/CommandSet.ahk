@@ -1,11 +1,14 @@
-﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 class CommandSet extends Command {
     _commands := {}
     _guiControl :=
+    _eventBus := new EventBus()
     _inputChangedSubscription :=
     _returnPressedSubscription :=
+    _inputDestroyedSubscription := 
+    _inputDisabledSubscription := 
     static _DEFAULT_OPTIONS := { "typingMatch": "exact" }
 
     ; Options:
@@ -32,6 +35,8 @@ class CommandSet extends Command {
         this._guiControl := gui.AddTextInput()
         this._inputChangedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, controller))
         this._returnPressedSubscription := this._guiControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, controller))
+        this._inputDestroyedSubscription := this._guiControl.SubscribeDestroyed(this._OnInputNotActive.Bind(this, controller))
+        this._inputDisabledSubscription := this._guiControl.SubscribeDisabled(this._OnInputNotActive.Bind(this, controller))
         gui.Show()
     }
 
@@ -144,6 +149,18 @@ class CommandSet extends Command {
             this._returnPressedSubscription.Unsubscribe()
             controller.GetGui().Destroy()
         }
+    }
+
+    _OnInputNotActive(controller) {
+        this._eventBus.Emit("disabled")
+        this._inputDestroyedSubscription.Unsubscribe()
+        this._inputDisabledSubscription.Unsubscribe()
+    }
+
+    ; Subscribe when `CommandSet` stops being active.
+    ; This happens when corresponding input is disabled or destroyed.
+    SubscribeNotActive(subscriber, options = "") {
+        this._eventBus.Subscribe("disabled", subscriber, options)
     }
 
     ; Returns new empty `CommandSet` with commands matching filter.

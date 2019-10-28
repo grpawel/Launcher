@@ -46,8 +46,7 @@ class Help extends Command {
     ; (D), Help.Run() called -> (S)
     ; (S), Help.Run() called -> (H)
     ; (H), Help.Run() called -> (S)
-    ; (S/H), command selected -> (D)
-    ; (S/H), GUI destroyed -> (D)
+    ; (S/H), command set not active -> (D)
     class _HelpAttachment {
         state := "detached"
 
@@ -57,7 +56,7 @@ class Help extends Command {
         }
 
         AttachAndShow() {
-            this._SubscribeWhenToDetach()
+            this._SubscribeCommandSetNotActive()
             this._guiControl := this._controller.GetGui().AddListView({position: "right", width: 300})
             this._SubscribeInput()
             this._controller.GetGui().Show()
@@ -81,7 +80,7 @@ class Help extends Command {
         _Detach() {
             if (this.state != "detached") {
                 this.state := "detached"
-                this._UnsubscribeWhenToDetach()
+                this._UnsubscribeCommandSetNotActive()
                 this._commandSet.SetPayload("helpAttachment", "")
             }
         }
@@ -103,19 +102,12 @@ class Help extends Command {
             this._commandSet.GetGuiControl().SetText(key)
         }
 
-        _OnNextCommandRunned(payload) {
-            if (payload.nextCommand.base.GetCommandName() == "Help") {
-                ; nextCommand could be user trying to close help.
-                ; If we call Detach() here,
-                ; Help.Run() would not see the attachment and would create help again.
-            } else {
-                this._Detach()
-            }
+        _UnsubscribeCommandSetNotActive() {
+            this._commandSetDisabledSubscription.Unsubscribe()
         }
 
-        _SubscribeWhenToDetach() {
-            this._nextCommandRunningSubscription := this._controller.SubscribeCommandAboutToRun(this._OnNextCommandRunned.Bind(this))
-            this._guiDestroyedSubscription := this._controller.GetGui().SubscribeGuiDestroyed(this._Detach.Bind(this))
+        _SubscribeCommandSetNotActive() {
+            this._commandSetDisabledSubscription := this._commandSet.SubscribeNotActive(this._Detach.Bind(this))
         }
 
         _SubscribeInput() {
@@ -126,11 +118,6 @@ class Help extends Command {
         _UnsubscribeInput() {
             this._inputChangedSubscription.Unsubscribe()
             this._rowDoubleClickedSubscription.Unsubscribe()
-        }
-
-        _UnsubscribeWhenToDetach() {
-            this._nextCommandRunningSubscription.Unsubscribe()
-            this._guiDestroyedSubscription.Unsubscribe()
         }
     }
 }
