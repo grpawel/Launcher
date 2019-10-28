@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%\src\Commands\Command.ahk
+﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 class CommandSet extends Command {
@@ -84,6 +84,13 @@ class CommandSet extends Command {
         }
     }
 
+    _OnReturnPressed(controller, input) {
+        if (input == "") {
+            return
+        }
+        return this._MatchImmediate(controller, input)
+    }
+
     _MatchExact(controller, input) {
         if (this._commands.HasKey(input)) {
             this._RunCommand(this._commands[input], controller)
@@ -95,6 +102,7 @@ class CommandSet extends Command {
     _MatchImmediate(controller, input) {
         commandKey := this._FindOnlyCommandKeyStartingWith(input)
         if (commandKey != "") {
+            this._guiControl.SetText(commandKey)
             this._RunCommand(this._commands[commandKey], controller)
             return true
         }
@@ -107,16 +115,6 @@ class CommandSet extends Command {
             if (isAtLeastN) {
                 this._MatchImmediate(controller, input)
             }
-        }
-    }
-
-    _OnReturnPressed(controller, input) {
-        if (input == "") {
-            return
-        }
-        matchingCommandKey := this._FindOnlyCommandKeyStartingWith(input)
-        if (matchingCommandKey != "") {
-            this._RunCommand(this._commands[matchingCommandKey], controller)
         }
     }
 
