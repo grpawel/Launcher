@@ -1,7 +1,7 @@
-#Include %A_ScriptDir%\src\Utils\CommandUtils.ahk
+#Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
 
 UserFunctions(controller) {
     desktops := { 2: "dev" }
     userSetter := new SetUserFromDesktop()
-    controller.SubscribeRootCommandAboutToRun(CommandAsSubscriber(userSetter, controller))
+    controller.SubscribeRootCommandAboutToRun(CommandToSubscriber(userSetter, controller))
 }

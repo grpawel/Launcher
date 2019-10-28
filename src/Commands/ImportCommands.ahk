@@ -18,7 +18,7 @@
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\SleepMs.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\WaitForGuiDestroyed.ahk
 
-#Include %A_ScriptDir%\src\Commands\Technical\WrapFunction.ahk
+#Include %A_ScriptDir%\src\Commands\Technical\FunctionToCommand.ahk
 
 #Include %A_ScriptDir%\src\Commands\Helpers\FolderCommands.ahk
 #Include %A_ScriptDir%\src\Commands\Helpers\WithBlockerDisabled.ahk

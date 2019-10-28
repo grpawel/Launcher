@@ -4,7 +4,7 @@
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Blockers\IsUserAllowed.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Environment\Openers\AsUserOpener.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
-#Include %A_ScriptDir%\src\Utils\CommandUtils.ahk
+#Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
 
 extensionManager.RegisterExtension(new UsersExtension())
 
@@ -29,17 +29,17 @@ class UsersExtension {
 
         controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
         runAsSetter := new SetUserFromUserConfig()
-        controller.SubscribeCommandAboutToRun(CommandAsSubscriber(runAsSetter, controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
+        controller.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
     }
 
     _DesktopsCompat(controller, desktopToUserMap) {
         if (desktopToUserMap != "") {
             desktopChanger := new ChangeDesktopFromUserConfig(desktopToUserMap)
-            controller.SubscribeCommandAboutToRun(CommandAsSubscriber(desktopChanger, controller), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
+            controller.SubscribeCommandAboutToRun(CommandToSubscriber(desktopChanger, controller), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
             ; priority for `userSetter` must be higher (means running later) than for `desktopChanger`
             ; first change desktop, then change user based on that desktop
             userSetter := new SetUserFromDesktop(desktopToUserMap)
-            controller.SubscribeCommandAboutToRun(CommandAsSubscriber(userSetter, controller), {priority: this.PRIORITIES["userFromDesktop"]})
+            controller.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, controller), {priority: this.PRIORITIES["userFromDesktop"]})
         }
     }
 }
