@@ -1,5 +1,6 @@
 examples := [ { id: 1, proc: "Basic", name: "Basic" }
-            , { id: 2, proc: "CreatingCommands", name: "Creating commands" } ]
+            , { id: 2, proc: "CreatingCommands", name: "Creating commands" }
+            , { id: 3, proc: "SelectingCommands", name: "Selecting commands" }  ]
 
 for i, example in examples {
     buttonName := "&"example.id ". " example.name
@@ -30,3 +31,4 @@ ExitExamples:
 
 #Include %A_ScriptDir%\Examples\Basic.ahk
 #Include %A_ScriptDir%\Examples\CreatingCommands.ahk
+#Include %A_ScriptDir%\Examples\SelectingCommands.ahk
