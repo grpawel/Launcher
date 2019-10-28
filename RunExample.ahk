@@ -1,4 +1,5 @@
-examples := [ { id: 1, proc: "Basic", name: "Basic" } ]
+examples := [ { id: 1, proc: "Basic", name: "Basic" }
+            , { id: 2, proc: "CreatingCommands", name: "Creating commands" } ]
 
 for i, example in examples {
     buttonName := "&"example.id ". " example.name
@@ -28,3 +29,4 @@ ExitExamples:
     ExitApp
 
 #Include %A_ScriptDir%\Examples\Basic.ahk
+#Include %A_ScriptDir%\Examples\CreatingCommands.ahk
