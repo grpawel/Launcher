@@ -2,6 +2,7 @@
 #Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
 #Include %A_ScriptDir%\src\Environment\Openers\SendTyper.ahk
 #Include %A_ScriptDir%\src\CommandBlocker.ahk
+#Include %A_ScriptDir%\src\Utils\FunctionUtils.ahk
 
 class Controller {
     _rootCommand := {}
@@ -69,11 +70,37 @@ class Controller {
             com.Run(this, context)
         } else {
             if (blockingResult.message != "") {
-                message := new ShowMessage(blockingResult.message
-                                          , { textColor: Colors.RED
-                                            , disablePrevious: true })
-                message.Run(this, context)
+                this._ShowBlockingMessageHacky(com, blockingResult.message)   
             }
+        }
+    }
+
+    _ShowBlockingMessageHacky(com, message) {
+        ; If command does not need gui, `CommandSet` will destroy the gui after command is finished.
+        ; We show the message when command would be run, so before gui is destroyed.
+        ; This has an effect of the message briefly blinking to the user.
+        ; To prevent this, we change the command so it says it needs gui - `CommandSet` won't destroy gui.
+        ; Then after user closes gui previous behavior is restored.
+        if (!com.DoesNeedGui()) {
+            originalMethod := com.DoesNeedGui
+            originalMethodIsFromBase := !com.HasKey("DoesNeedGui")
+            com.DoesNeedGui := Func("AlwaysTrue")
+            ; restore original behavior after gui is destroyed
+            new WaitForGuiDestroyed(new FunctionToCommand(this._RestoreOriginalDoesNeedGui.Bind(this, com, originalMethod, originalMethodIsFromBase)))
+                                .Run(this, {})
+        }
+        new ShowMessage(message, { textColor: Colors.RED
+                                 , disablePrevious: true })
+                       .Run(this, {})
+    }
+
+    _RestoreOriginalDoesNeedGui(com, originalMethod, orignalMethodIsFromBase) {
+        if (orignalMethodIsFromBase) {
+            ; `DoesNeedGui` method originally was from base object => delete our override
+            com.Delete("doesNeedGui")
+        } else {
+            ; `DoesNeedGui` method originally was from instance object itself => restore (probably rare)
+            com.DoesNeedGui := originalMethod
         }
     }
 

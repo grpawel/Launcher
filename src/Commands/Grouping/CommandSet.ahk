@@ -139,10 +139,8 @@ class CommandSet extends Command {
     }
 
     _RunCommand(matchedCommand, controller) {
-        destroyGuiAfter := !matchedCommand.DoesNeedGui()
         controller.RunCommand(matchedCommand, {caller: this })
-
-        if (destroyGuiAfter) {
+        if (!matchedCommand.DoesNeedGui()) {
             this._inputChangedSubscription.Unsubscribe()
             this._returnPressedSubscription.Unsubscribe()
             controller.GetGui().Destroy()

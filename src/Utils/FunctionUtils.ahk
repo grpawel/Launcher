@@ -1,0 +1,3 @@
+AlwaysTrue() {
+    return true
+}
