@@ -5,6 +5,6 @@ CommandToSubscriber(command, controller) {
     return Func("_CommandToSubscriber_Internal").Bind(command, controller)
 }
 
-_CommandToSubscriber_Internal(command, controller, payload) {
+_CommandToSubscriber_Internal(command, controller, payload = "") {
     return controller.RunCommandWithoutEvents(command, { event: {payload: payload}})
 }
