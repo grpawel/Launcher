@@ -27,7 +27,7 @@ class UsersExtension {
         }
         controller.GetBlocker().AddRule(Func("IsUserAllowedRule"), { name: "isUserAllowed" })
 
-        controller.UpdateEnvironment(MergeArrays({ user: ""}, AsUserOpener()))
+        controller.GetEnvironment().Update(MergeArrays({ user: ""}, AsUserOpener()))
         runAsSetter := new SetUserFromUserConfig()
         controller.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
     }

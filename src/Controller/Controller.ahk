@@ -16,8 +16,8 @@ class Controller {
     }
 
     _SetDefaultEnvironment() {
-        this.UpdateEnvironment(RunOpener())
-        this.UpdateEnvironment(SendTyper())
+        this._environment.Update(RunOpener())
+        this._environment.Update(SendTyper())
     }
 
     Execute() {
@@ -39,22 +39,6 @@ class Controller {
 
     GetGui() {
         return this._gui
-    }
-
-    ; Updates environment with changes. Currently there is no way to remove keys.
-    ; Returns object with changed keys in environment. Does not recurse. 
-    ; Newly added keys from `changes` are ignored.
-    UpdateEnvironment(changes) {
-        oldChangedValues := {}
-        newEnvironment := this._environment.WithOverrides(changes)
-        for key, oldValue in this._environment {
-            newValue := newEnvironment[key]
-            if (oldValue != newValue) {
-                oldChangedValues[key] := oldValue
-            }
-        }
-        this._environment := newEnvironment
-        return oldChangedValues
     }
 
     RunCommand(com, context = "") {

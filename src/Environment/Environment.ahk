@@ -13,18 +13,18 @@ class Environment {
     OpenFolder := 
     TypeText := 
 
-    ; Returns new `Environment` with values either from this object or `overrides`.
-    ; Existing values are not copied, so changes to them are visible in both objects.
-    WithOverrides(overrides) {
-        overridden := new Environment()
-        for key, value in this {
-            if (!overrides.HasKey(key)) {
-                overridden[key] := value
+
+    ; Change keys in this environment. 
+    ; Returns old values.
+    ; Currently only possible to update or add new entries, not remove.
+    Update(changes) {
+        oldValues := {}
+        for key, value in changes {
+            if (this.HasKey(key)) {
+                oldValues[key] := this[key]
             }
+            this[key] := changes[key]
         }
-        for key, value in overrides {
-            overridden[key] := value
-        }
-        return overridden
+        return oldValues
     }
 }
