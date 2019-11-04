@@ -15,13 +15,18 @@
 ;                      eg. `CommandSet` or any `Sequence` containing `CommandSet`.
 ; mode: "untilGuiDestroyed" (default) - command is reverted when GUI is destroyed.
 ; mode: "permanent" - command is not reverted, its actions are permanent until something else overrides them or script is reloaded.
+; wrapper: "transparent" (default) - returned command passes all method calls to `wrapped`,
+;                                    so in most other places behaves like `wrapped`.
+; wrapper: "opaque" - returns new command. Description, tags etc. must be set again.
 ;
 ; For explanation how it works, see also `WithHelpOpened` and `MethodDecorator` docs.
 WithCommandThenReverted(commandToRevert, wrapped, options = "") {
     static V := new ValidatorFactory()
-    static VAL := V.Object({ "mode": V.OneOf(["forCommand", "permanent", "untilGuiDestroyed"]) }
+    static VAL := V.Object({ "mode": V.OneOf(["forCommand", "permanent", "untilGuiDestroyed"])
+                           , "wrapper": V.OneOf(["transparent", "opaque"]) }
                         , { ignoreMissing: false, noOtherKeys: true })
-    static DEFAULT_OPTIONS := { mode: "untilGuiDestroyed" }
+    static DEFAULT_OPTIONS := { mode: "untilGuiDestroyed"
+                              , wrapper: "transparent" }
     options := MergeArrays(DEFAULT_OPTIONS, options)
     VAL.ValidateAndShow(options)
     
@@ -32,5 +37,9 @@ WithCommandThenReverted(commandToRevert, wrapped, options = "") {
     } else if (options.mode == "permanent") {
         seq := new Sequence([ commandToRevert, wrapped ])
     } 
-    return new MethodDecorator(seq, wrapped, ["Run"])
+    if (options.wrapper == "transparent") {
+        return new MethodDecorator(wrapped, seq, ["Run"])
+    } else {
+        return seq
+    }
 }
