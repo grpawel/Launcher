@@ -7,7 +7,7 @@
 ; If `predicate` returned true, `options.fallbackMessage` is used for the message.
 ; Running this command multiple times has no effect.
 
-; For more options, see `src\CommandBlocker.AddBlocking()` method.
+; For more options, see `src\CommandBlocker.AddRule()` method.
 class BlockCommands extends Command {
     __New(predicate, blockerOptions = "") {
         this._predicate := predicate
@@ -15,16 +15,16 @@ class BlockCommands extends Command {
     }
 
     Run(contr) {
-        this._EnsureBlockerNameIsSet()
-        contr.GetBlocker().AddBlocking(this._predicate, this._blockerOptions)
+        this._EnsureRuleNameIsSet()
+        contr.GetBlocker().AddRule(this._predicate, this._blockerOptions)
     }
 
     Revert(contr, context) {
-        this._EnsureBlockerNameIsSet()
+        this._EnsureRuleNameIsSet()
         new UnblockCommands(this._blockerOptions.name).Run(contr, context)
     }
 
-    _EnsureBlockerNameIsSet() {
+    _EnsureRuleNameIsSet() {
         ; Add blocker only once by using same name
         if (this._blockerOptions.name == "") {
             this._blockerOptions.name := RandomString(6)

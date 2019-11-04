@@ -3,13 +3,13 @@
 #Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
 ; Block commands using `predicate`, then run given command.
-; See `CommandBlocker.AddBlocking()` docs.
+; See `CommandBlocker.AddRule()` docs.
 ;
 ; Options:
 ; wrapper:... - options passed to `WithCommandThenReverted`.
-; blocker:... - options passed to `CommandBlocker.AddBlocking()`.
+; blocker:... - options passed to `CommandBlocker.AddRule()`.
 WithCommandsBlocked(predicate, wrapped, options = "") {
-    ; prevent always creating new blocker
+    ; prevent always creating new blocker rule
     if (options.blocker.name == "") {
         if (options.blocker == "") {
             options.blocker := {}

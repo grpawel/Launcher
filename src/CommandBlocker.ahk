@@ -1,28 +1,32 @@
+; Mechanism for blocking commands.
+; Commands about to run are checked with each rule.
+; If a single rule blocks the command, controller would not run the command.
 class CommandBlocker {
-    _blockers := []
+    _rules := []
 
-    ; Add blocker.
+    ; Add blocking rule.
     ; `predicateOrName` - either:
     ;   - function that takes `Command` and `Controller` for parameters
-    ;     and returns `true` or string with reason if command should be blocked, false otherwise.
-    ;   - name of previously added blocker. In this case options are ignored.
+    ;     and returns `true` or string if command should be blocked (false otherwise).
+    ;     String should contain reason for blocking and can be displayed to the user.
+    ;   - name of previously added rule. In this case options are ignored.
     ; Options:
     ; fallbackReason - reason displayed if predicate returned true
-    ; quiet (default: `false`) - do not display message to user
-    ; name - blocker name. Can be used to unblock later.
-    ;        Existing blocker with same name is replaced.
-    ; Returns blocker name.
+    ; quiet (boolean, default: `false`) - do not display message to user
+    ; name (string) - rule name. Can be used to disable the rule later.
+    ;        Existing rule with same name would be replaced.
+    ; Returns rule name.
 
-    AddBlocking(predicateOrName, options := "") {
+    AddRule(predicateOrName, options := "") {
         if (IsObject(predicateOrName)) {
-            return this._AddBlockingPredicate(predicateOrName, options)
+            return this._AddRulePredicate(predicateOrName, options)
         } else {
-            this._EnableBlocker(predicateOrName)
+            this.EnableRule(predicateOrName)
             return predicateOrName
         }
     }
 
-    _AddBlockingPredicate(predicate, options := "") {
+    _AddRulePredicate(predicate, options := "") {
         static DEFAULT_OPTIONS := { fallbackReason: ""
                                   , quiet: false
                                   , name: ""}
@@ -36,57 +40,57 @@ class CommandBlocker {
             options.name := RandomString(8)
         }
         VAL.ValidateAndShow(options)
-        blocker := new this._Blocker(predicate, options)
-        this._blockers[options.name] := blocker
+        rule := new this._Rule(predicate, options)
+        this._rules[options.name] := rule
         return options.name
     }
 
-    ; Add blocker again 
-    _EnableBlocker(name) {
-        this._blockers[name].Enable()
+    ; Enable existing rule again 
+    EnableRule(name) {
+        this._rules[name].Enable()
     }
 
-    ; Disable blocker using its name.
-    ; Returns true if blocker with given name was active, false if not found.
-    Unblock(blockerName) {
-        if (!this._blockers.HasKey(blockerName)) {
+    ; Disable rule using its name.
+    ; Returns false if rule was not found.
+    DisableRule(ruleName) {
+        if (!this._rules.HasKey(ruleName)) {
             return false
         }
-        this._blockers[blockerName].Disable()
+        this._rules[ruleName].Disable()
         return true
     }
 
-    ; Returns
-    ;   `false` if command is allowed to run
-    ;   `true` if command is blocked, but no message should be shown
-    ;   string message to show to user if command is blocked.
+    ; Returns object: 
+    ; { doBlock (boolean) - true if any of the enabled rules would block
+    ; , message (string) - message to display to the user (set if `doBlock` is `true`).
+    ;                      If more rules would block, message is from a single rule chosen in no particular order.
     IsCommandBlocked(com, contr) {
-        for i, blocker in this._blockers {
-            res := blocker.IsCommandBlocked(com, contr)
-            if (res.doBlock) {
-                return res
+        for i, rule in this._rules {
+            result := rule.IsCommandBlocked(com, contr)
+            if (result.doBlock) {
+                return result
             }
         }
         return { doBlock: false }
     }
 
-    class _Blocker {
+    class _Rule {
         __New(predicate, options) {
             this._predicate := predicate
             this._options := options
-            this._disabled := false
+            this._isDisabled := false
         }
 
         Disable() {
-            this._disabled := true
+            this._isDisabled := true
         }
 
         Enable() {
-            this._disabled := false
+            this._isDisabled := false
         }
 
         IsCommandBlocked(com, contr) {
-            if (this._disabled) {
+            if (this._isDisabled) {
                 return { doBlock: false }
             }
             predicate := this._predicate

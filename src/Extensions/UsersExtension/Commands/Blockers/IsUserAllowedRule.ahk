@@ -1,7 +1,7 @@
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 ; Checks if user config allows running with user from environment.
-IsUserAllowedBlocker(com, contr) {
+IsUserAllowedRule(com, contr) {
     user := contr.GetEnvironment()["user"]
     config := com.GetUserConfig()
     isOnBlacklist := config.blacklist == "all" 

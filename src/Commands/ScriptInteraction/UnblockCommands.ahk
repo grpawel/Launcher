@@ -1,15 +1,15 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class UnblockCommands extends Command {
-    __New(blockerName) {
-        this._blockerName := blockerName
+    __New(blockerRuleName) {
+        this._blockerRuleName := blockerRuleName
     }
 
     Run(contr) {
-        contr.GetBlocker().Unblock(this._blockerName)
+        contr.GetBlocker().DisableRule(this._blockerRuleName)
     }
 
     Revert(contr) {
-        contr.GetBlocker().AddBlocking(this._blockerName)
+        contr.GetBlocker().AddRule(this._blockerRuleName)
     }
 }
