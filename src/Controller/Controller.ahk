@@ -1,7 +1,7 @@
+#Include %A_ScriptDir%\src\Controller\CommandBlocker.ahk
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
 #Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
 #Include %A_ScriptDir%\src\Environment\Openers\SendTyper.ahk
-#Include %A_ScriptDir%\src\CommandBlocker.ahk
 #Include %A_ScriptDir%\src\Utils\FunctionUtils.ahk
 
 class Controller {

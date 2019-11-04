@@ -1,7 +1,7 @@
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\ChangeDesktopFromUserConfig.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\SetUserFromDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\SetUserFromUserConfig.ahk
-#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Blockers\IsUserAllowedRule.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Controller\IsUserAllowedRule.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Environment\Openers\AsUserOpener.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 #Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
