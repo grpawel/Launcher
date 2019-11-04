@@ -78,34 +78,47 @@ ToCompactString(obj) {
     }
 }
 
-ToMultilineString(obj, indent=2, spaces="") {
-    moreSpaces .= spaces . RepeatString(" ", indent)
+ToMultilineString(obj, indent=1) {
     if (IsObject(obj)) {
+        spaces := RepeatString(" ", indent)
         if (IsArrayWithoutGapsAndStringKeys(obj)) {
-            string := "[`n"
+            string := "["
             for key, value in obj {
-                string .= moreSpaces ToMultilineString(obj[key], indent, moreSpaces) "`n"
+                nested := ToMultilineString(value, indent)
+                string .= "`n" spaces StrReplace(nested, "`n", "`n" spaces)
             }
-            string .= spaces "]"
+            if (string != "[") {
+                string .= "`n]"
+            } else {
+                string .= "]"
+            }
+            return string
         } else {
-            string := "{`n"
+            string := "{" 
             for key, value in obj {
-                string .= moreSpaces key ": " ToMultilineString(obj[key], indent, moreSpaces) "`n"
+                nested := ToMultilineString(value, indent)
+                string .= "`n" spaces key ": " StrReplace(nested, "`n", "`n" spaces)
             }
-            string .= spaces "}"
+            if (string != "{") {
+                string .= "`n}"
+            } else {
+                string .= "}"
+            }
+            return string
         }
-        return string
     } else {
         return obj
     }
 }
 
+; Returns array index if `array` contains `searched`, 0 if not.
+; Array should contain only numerical keys >= 1.
 ArrayContains(array, searched) {
     for index, value in array {
         if (value == searched)
-            return true
+            return index
     }
-    return false
+    return 0
 }
 
 IsArray(obj) {
@@ -150,4 +163,12 @@ HasAnyKey(object) {
         return true
     }
     return false
+}
+
+Keys(object) {
+    keys := []
+    for key, o in object {
+        keys.Push(key)
+    }
+    return keys
 }

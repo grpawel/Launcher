@@ -35,5 +35,5 @@ RepeatString(string, times) {
     for i in range(times) {
         repeated .= string
     }
-    return string
+    return repeated
 }
