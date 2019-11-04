@@ -9,6 +9,10 @@
 ; `commandToRevert` must have `Revert()` method.
 ; 
 ; Options:
+; mode: "forCommand" - reverts when `wrapped` command returns from its `Run()` method.
+;                      Works with simple commands (`Open`),
+;                      does not work when `wrapped` does something outside `Run()` method,
+;                      eg. `CommandSet` or any `Sequence` containing `CommandSet`.
 ; mode: "untilGuiDestroyed" (default) - command is reverted when GUI is destroyed.
 ; mode: "permanent" - command is not reverted, its actions are permanent until something else overrides them or script is reloaded.
 ;
@@ -21,7 +25,9 @@ WithCommandThenReverted(commandToRevert, wrapped, options = "") {
     options := MergeArrays(DEFAULT_OPTIONS, options)
     VAL.ValidateAndShow(options)
     
-    if (options.mode == "untilGuiDestroyed") {
+    if (options.mode == "forCommand") {
+        seq := new Sequence([ commandToRevert, wrapped, new RevertCommand(commandToRevert) ])
+    } else if (options.mode == "untilGuiDestroyed") {
         seq := new Sequence([ commandToRevert, wrapped, new WaitForGuiDestroyed(new RevertCommand(commandToRevert)) ])
     } else if (options.mode == "permanent") {
         seq := new Sequence([ commandToRevert, wrapped ])
