@@ -49,7 +49,7 @@ class ValidatorObject extends BaseValidator {
 
                 message := validatorObj.Validate(value)
                 if (message != "") {
-                    messages.Push("``" key "``:" message)
+                    messages.Push("``" key "``: " message)
                 }
             }
             if (this._noOtherKeys) {

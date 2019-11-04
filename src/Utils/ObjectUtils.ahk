@@ -74,7 +74,7 @@ ToCompactString(obj) {
         }
         return string
     } else {
-        return obj
+        return """" obj """"
     }
 }
 
@@ -107,7 +107,7 @@ ToMultilineString(obj, indent=1) {
             return string
         }
     } else {
-        return obj
+        return """" obj """"
     }
 }
 
