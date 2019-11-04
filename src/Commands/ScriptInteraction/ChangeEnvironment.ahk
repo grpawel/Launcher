@@ -1,34 +1,28 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
+; Change some keys in environment.
+; Those changes can be reverted to old values by calling `Revert` method (eg. using `RevertCommand`).
+; Example:
+/*
+comset.AddCommand("fire", new ChangeEnvironment("browser": "firefox"))
+comset.AddCommand("chr", new ChangeEnvironment("browser": "chrome"))
+*/
+
+; Reversal of changes can have unexpected results when the environment is changed somewhere else in meantime.
+; If this commands adds new keys to environment, this cannot be currently reversed.
+
+; In complicated setups better do not reuse the same command object in multiple places when using `Revert` method.
+; Instead duplicate the command.
 class ChangeEnvironment extends Command {
-
-    ; Nothing is changed anywhere until this command is run.
-    ; Possible modes:
-    ; permanent - changes are permanent until the script is reloaded
-    ; untilGuiDestroyed - changes are reverted when GUI is destroyed
-    ; Reversal of changes can have unexpected results when the environment is changed somewhere else in meantime.
-    ; If this commands adds new keys to environment, this cannot be currently reversed.
-    __New(changes, mode = "permanent") {
+    __New(changes) {
         this._changes := changes
-        this._mode := mode
-        static V := new ValidatorFactory()
-        static VAL := V.OneOf(["permanent", "untilGuiDestroyed"])
-        VAL.ValidateAndShow(this._mode)
     }
 
-    Run(controller) {
-        changes := this._changes
-        if (this._mode == "permanent") {
-            controller.UpdateEnvironment(changes)
-        }
-        else if (this._mode == "untilGuiDestroyed") {
-            oldValues := controller.UpdateEnvironment(changes)
-            controller.GetGui().SubscribeGuiDestroyed(this._Revert.Bind(this, oldValues, controller)
-                                                      , { duration: "once" })
-        }
+    Run(contr) {
+        this._oldValues := contr.UpdateEnvironment(this._changes)
     }
 
-    _Revert(oldValues, controller) {
-        controller.UpdateEnvironment(oldValues)
+    Revert(contr) {
+        contr.UpdateEnvironment(this._oldValues)
     }
 }

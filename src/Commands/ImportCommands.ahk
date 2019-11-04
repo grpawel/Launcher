@@ -15,6 +15,7 @@
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\Help.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\Reload.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\ResetGui.ahk
+#Include %A_ScriptDir%\src\Commands\ScriptInteraction\RevertCommand.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\SleepMs.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\WaitForGuiDestroyed.ahk
 
