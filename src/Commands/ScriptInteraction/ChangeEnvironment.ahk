@@ -8,8 +8,8 @@ comset.AddCommand("fire", new ChangeEnvironment("browser": "firefox"))
 comset.AddCommand("chr", new ChangeEnvironment("browser": "chrome"))
 */
 
-; Reversal of changes can have unexpected results when the environment is changed somewhere else in meantime.
-; If this commands adds new keys to environment, this cannot be currently reversed.
+; Reverting changes can have unexpected results when the environment is changed in the meantime.
+; If this commands adds new keys to environment, this cannot be currently reverted.
 
 ; In complicated setups better do not reuse the same command object in multiple places when using `Revert` method.
 ; Instead duplicate the command.

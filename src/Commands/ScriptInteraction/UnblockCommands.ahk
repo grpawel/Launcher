@@ -8,4 +8,8 @@ class UnblockCommands extends Command {
     Run(contr) {
         contr.GetBlocker().Unblock(this._blockerName)
     }
+
+    Revert(contr) {
+        contr.GetBlocker().AddBlocking(this._blockerName)
+    }
 }

@@ -1,7 +1,7 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 ; Reset gui - remove all existing controls.
-; Environment changes made with `WithEnvironment` should not be reverted after running this command.
+; Does not destroy GUI - `WithCommandThenReverted` won't revert with "untilGuiDestroyed" setting.
 class ResetGui extends Command {
     _description := "Destroy GUI"
 
