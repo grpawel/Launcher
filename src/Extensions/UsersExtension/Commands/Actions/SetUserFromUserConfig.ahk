@@ -16,7 +16,7 @@ class SetUserFromUserConfig extends Command {
             return
         }
         user := config.runAs
-        userChange := new ChangeEnvironment({"user": user}, "untilGuiDestroyed")
+        userChange := new ChangeEnvironment({ settings: { "user": user } }, "untilGuiDestroyed")
         contr.RunCommand(userChange)
     }
 }

@@ -1,7 +1,5 @@
 #Include %A_ScriptDir%\src\Controller\CommandBlocker.ahk
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
-#Include %A_ScriptDir%\src\Environment\Openers\RunOpener.ahk
-#Include %A_ScriptDir%\src\Environment\Openers\SendTyper.ahk
 #Include %A_ScriptDir%\src\Utils\FunctionUtils.ahk
 
 class Controller {
@@ -11,13 +9,7 @@ class Controller {
     __New(environment, gui) {
         this._environment := environment
         this._gui := gui
-        this._SetDefaultEnvironment()
         this._blocker := new CommandBlocker()
-    }
-
-    _SetDefaultEnvironment() {
-        this._environment.Update(RunOpener())
-        this._environment.Update(SendTyper())
     }
 
     Execute() {

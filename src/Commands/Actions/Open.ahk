@@ -9,6 +9,6 @@ class Open extends Command {
 
     Run(controller) {
         env := controller.GetEnvironment()
-        env.OpenOther(this._toRun)
+        env.CallFunction("open", "default", this._toRun)
     }
 }

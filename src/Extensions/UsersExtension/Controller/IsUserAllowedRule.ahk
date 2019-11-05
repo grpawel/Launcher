@@ -2,7 +2,7 @@
 
 ; Checks if user config allows running with user from environment.
 IsUserAllowedRule(com, contr) {
-    user := contr.GetEnvironment()["user"]
+    user := contr.GetEnvironment().GetSetting("user")
     config := com.GetUserConfig()
     isOnBlacklist := config.blacklist == "all" 
                     || ArrayContains(config.blacklist, user)

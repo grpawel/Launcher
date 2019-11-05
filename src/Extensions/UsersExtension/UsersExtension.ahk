@@ -2,7 +2,7 @@
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\SetUserFromDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\SetUserFromUserConfig.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Controller\IsUserAllowedRule.ahk
-#Include %A_ScriptDir%\src\Extensions\UsersExtension\Environment\Openers\AsUserOpener.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Environment\Functions\AsUserOpener.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 #Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
 
@@ -27,7 +27,7 @@ class UsersExtension {
         }
         controller.GetBlocker().AddRule(Func("IsUserAllowedRule"), { name: "isUserAllowed" })
 
-        controller.GetEnvironment().Update(MergeArrays({ user: ""}, AsUserOpener()))
+        controller.GetEnvironment().Update({ settings: { user: ""}, functions: { open: Func("AsUserOpener") } })
         runAsSetter := new SetUserFromUserConfig()
         controller.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
     }
@@ -57,7 +57,7 @@ class UsersExtension {
 ; command.UserConfig({ switchFrom: ["user1"], switchTo: "user2" })
 ; 5) Allow all users and switch to 'user2' before running
 ; command.UserConfig({ switchTo: "user2" })
-; 6) Run as different user (equivalent to `WithEnvironment({user: "user1"}, command))
+; 6) Run as different user (equivalent to `WithEnvironment({settings: {user: "user1"}}, command))
 ; command.UserConfig({ runAs: "user1" })
 ; 7) A combination of above. Same user in multiple options can cause unexpected results.
 _Command_UserConfig(this, config) {

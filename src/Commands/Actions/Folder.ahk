@@ -9,6 +9,6 @@ class Folder extends Command {
 
     Run(controller) {
         env := controller.GetEnvironment()
-        env.OpenFolder(this._path, env)
+        env.CallFunction("open", "folder", this._path)
     }
 }

@@ -9,6 +9,6 @@ class TypeText extends Command {
 
     Run(controller) {
         env := controller.GetEnvironment()
-        env.TypeText(this._string)
+        env.CallFunction("type", "", this._string)
     }
 }

@@ -152,6 +152,14 @@ EnsureArray(ByRef var) {
     }
 }
 
+; Add key to object if it does not exist.
+; Key is initialized to `initialValue`.
+EnsureHasKey(obj, key, initialValue = "") {
+    if (!obj.HasKey(key)) {
+        obj[key] := initialValue
+    }
+}
+
 AnyKey(object) {
     for key, value in object {
         return key

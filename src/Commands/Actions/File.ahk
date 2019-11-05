@@ -9,7 +9,6 @@ class File extends Command {
 
     Run(controller) {
         env := controller.GetEnvironment()
-        contr := new Controller("", "")
-        env.OpenFile(this._path)
+        env.CallFunction("open", "file", this._path)
     }
 }

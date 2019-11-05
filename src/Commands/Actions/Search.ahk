@@ -1,7 +1,6 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 class Search extends Command {
-
     _keyPressedSubscription :=
 
     __New(urlTemplate) {
@@ -25,7 +24,7 @@ class Search extends Command {
         url := StrReplace(this._urlTemplate, "REPLACEME", input)
         url := StrReplace(url, " ", "+")
         env := controller.GetEnvironment()
-        env.OpenWebsite(url)
+        env.CallFunction("open", "browser", url)
         controller.GetGui().Destroy()
     }
 

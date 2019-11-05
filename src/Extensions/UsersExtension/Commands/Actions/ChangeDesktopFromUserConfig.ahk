@@ -2,7 +2,6 @@
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\ChangeDesktop.ahk
 
-
 class ChangeDesktopFromUserConfig extends Command {
     __New(desktopToUserMap) {
         this._desktopToUserMap := desktopToUserMap
@@ -14,7 +13,7 @@ class ChangeDesktopFromUserConfig extends Command {
         if (!config.HasKey("switchTo")) {
             return
         }
-        user := contr.GetEnvironment()["user"]
+        user := contr.GetEnvironment().GetSetting("user")
         switchFromCurrentUser := config.switchFrom == ""
                                 || config.switchFrom == "all"
                                 || ArrayContains(config.switchFrom, user)

@@ -10,6 +10,6 @@ class Web extends Command {
     Run(controller) {
         url := StrReplace(this._url, " ", "+")
         env := controller.GetEnvironment()
-        env.OpenWebsite(url)
+        env.CallFunction("open", "browser", url)
     }
 }
