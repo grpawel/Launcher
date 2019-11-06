@@ -160,6 +160,14 @@ EnsureHasKey(obj, key, initialValue = "") {
     }
 }
 
+; Workaround for not being able to use `{}` as default parameter
+EnsureIsObject(ByRef obj) {
+    if (obj == "") {
+        obj := {}
+    }
+    return obj
+}
+
 AnyKey(object) {
     for key, value in object {
         return key

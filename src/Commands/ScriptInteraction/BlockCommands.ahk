@@ -11,7 +11,7 @@
 class BlockCommands extends Command {
     __New(predicate, blockerOptions = "") {
         this._predicate := predicate
-        this._blockerOptions := blockerOptions
+        this._blockerOptions := EnsureIsObject(blockerOptions)
     }
 
     Run(contr) {
