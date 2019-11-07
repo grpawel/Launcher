@@ -64,6 +64,11 @@ class CommandSet extends Command {
         return this._commands[key]
     }
 
+    RemoveCommand(key) {
+        this._commands.Delete(key)
+        return this
+    }
+
     DoesNeedGui() {
         return true
     }

@@ -7,7 +7,9 @@
 #Include %A_ScriptDir%\src\Commands\Actions\TypeText.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\Web.ahk
 
+#Include %A_ScriptDir%\src\Commands\Grouping\AddCommand.ahk
 #Include %A_ScriptDir%\src\Commands\Grouping\CommandSet.ahk
+#Include %A_ScriptDir%\src\Commands\Grouping\RemoveCommand.ahk
 #Include %A_ScriptDir%\src\Commands\Grouping\Sequence.ahk
 
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\BlockCommands.ahk
