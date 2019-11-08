@@ -48,6 +48,11 @@ class GuiCommandBuilder extends Command {
         this._steps.Push(Func("_GuiCommandBuilder_SaveToFile").Bind(comFile))
         return this
     }
+
+    ShowSummary() {
+        this._steps.Push(Func("_GuiCommandBuilder_ShowSummary"))
+        return this
+    }
 }
 
 _GuiCommandBuilder_SelectCommandClass(nextStep, values) {
@@ -66,6 +71,10 @@ _GuiCommandBuilder_SaveToFile(comFile, nextStep, values) {
     return new _GuiCommandBuilder_SaveToFile(comFile, nextStep, values)
 }
 
+_GuiCommandBuilder_ShowSummary(nextStep, values) {
+    return new _GuiCommandBuilder_ShowSummary(nextStep, values)
+}
+
 ; Base class for all steps.
 class _GuiCommandBuilder_Step extends Command {
     ; nextStep - function that takes `values` and returns command.
@@ -80,6 +89,10 @@ class _GuiCommandBuilder_Step extends Command {
         contr.RunCommand(%nextStep%(this._values))
     }
 
+    GetAvailableCommands() {
+         return CommandsFileExtension.GetInstance().GetRegisteredCommands()
+    }
+
     DoesNeedGui() {
         return true
     }
@@ -91,7 +104,7 @@ class _GuiCommandBuilder_SelectCommandClass extends _GuiCommandBuilder_Step {
         gui.Reset()
         gui.AddText({ text: "Select command:", textColor: Colors.LIGHT_GRAY, textColorDisabled: Colors.LIGHT_GRAY })
         commandList := new CommandSet({ typingMatch: "immediate" })
-        availableCommands := CommandsFileExtension.GetInstance().GetRegisteredCommands()
+        availableCommands := this.GetAvailableCommands()
         for commandName, settings in availableCommands {
             values := this._values.Clone()
             values.name := commandName
@@ -163,7 +176,6 @@ class _GuiCommandBuilder_KeyDescriptionTags extends _GuiCommandBuilder_Step {
             return
         }
         this._FillValues()
-        gui.Reset()
         this.NextStep(contr)
     }
 
@@ -183,6 +195,30 @@ class _GuiCommandBuilder_SaveToFile extends _GuiCommandBuilder_Step {
 
     Run(contr) {
         this._commandsFile.NewCommand(this._values)
+        this.NextStep(contr)
+    }
+}
+
+class _GuiCommandBuilder_ShowSummary extends _GuiCommandBuilder_Step {
+    Run(contr) {
+        gui := contr.GetGui()
+        gui.Reset()
+        
+        gui.AddText({ text: "Success!", textColor: Colors.YELLOW })
+        rows := []
+        rows.Push(["Command:", this._values.name])
+        rows.Push(["Key:", this._values.key])
+        fields := this.GetAvailableCommands()[this._values.name].fields
+        for i, fieldName in fields {
+            rows.Push([fieldName, this._values.fields[i]])
+        }
+        rows.Push(["Description:", this._values.description])
+        rows.Push(["Tags:", Join(this._values.tags, ", ")])
+        
+        table := gui.AddListView({ width: 400 })
+        table.Populate(rows)
+
+        gui.Show()
         this.NextStep(contr)
     }
 }

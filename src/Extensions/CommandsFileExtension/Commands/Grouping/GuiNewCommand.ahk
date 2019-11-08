@@ -18,6 +18,7 @@ class GuiNewCommand extends Command {
             .ConstructorFields()
             .KeyDescriptionTags()
             .SaveToFile(this._commandsFile)
+            .ShowSummary("Command created!")
             .Create()
             .Run(contr, context)
     }
