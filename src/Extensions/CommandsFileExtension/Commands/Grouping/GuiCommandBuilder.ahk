@@ -8,6 +8,8 @@ class GuiCommandBuilder extends Command {
     _steps := []
 
     Create() {
+        ; Dummy last step, exists only to make Return key work in last command.
+        this._steps.Push(Func("_GuiCommandBuilder_ResetGuiAtEnd"))
         ; Bind second step to first one, third to second etc.
         ; We have to do it from last one, because binding returns new object
         ; that we bind with previous last one etc.
@@ -49,8 +51,8 @@ class GuiCommandBuilder extends Command {
         return this
     }
 
-    ShowSummary() {
-        this._steps.Push(Func("_GuiCommandBuilder_ShowSummary"))
+    ShowSummary(title) {
+        this._steps.Push(Func("_GuiCommandBuilder_ShowSummary").Bind(title))
         return this
     }
 }
@@ -71,8 +73,9 @@ _GuiCommandBuilder_SaveToFile(comFile, nextStep, values) {
     return new _GuiCommandBuilder_SaveToFile(comFile, nextStep, values)
 }
 
-_GuiCommandBuilder_ShowSummary(nextStep, values) {
-    return new _GuiCommandBuilder_ShowSummary(nextStep, values)
+_GuiCommandBuilder_ShowSummary(title, nextStep, values) {
+    return new _GuiCommandBuilder_ShowSummary(title, nextStep, values)
+}
 }
 
 ; Base class for all steps.
@@ -200,11 +203,17 @@ class _GuiCommandBuilder_SaveToFile extends _GuiCommandBuilder_Step {
 }
 
 class _GuiCommandBuilder_ShowSummary extends _GuiCommandBuilder_Step {
+    static _WIDTH := 400
+
+    __New(title, nextStep, values) {
+        this._title := title
+        base.__New(nextStep, values)
+    }
+
     Run(contr) {
         gui := contr.GetGui()
         gui.Reset()
-        
-        gui.AddText({ text: "Success!", textColor: Colors.YELLOW })
+        gui.AddText({ text: this._title, textColor: Colors.YELLOW, width: this._WIDTH })
         rows := []
         rows.Push(["Command:", this._values.name])
         rows.Push(["Key:", this._values.key])
@@ -214,11 +223,14 @@ class _GuiCommandBuilder_ShowSummary extends _GuiCommandBuilder_Step {
         }
         rows.Push(["Description:", this._values.description])
         rows.Push(["Tags:", Join(this._values.tags, ", ")])
-        
-        table := gui.AddListView({ width: 400 })
+        table := gui.AddListView({ width: this._WIDTH })
         table.Populate(rows)
-
         gui.Show()
+        this._returnPressedSubscription := gui.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, contr))
+    }
+
+    _OnReturnPressed(contr, focused) {
+        this._returnPressedSubscription.Unsubscribe()
         this.NextStep(contr)
     }
 }

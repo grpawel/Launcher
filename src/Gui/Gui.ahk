@@ -118,6 +118,7 @@ class Gui {
 
     _OnReturnPressed() {
         focusedControl := this._FindFocusedControl()
+        this._eventBus.Emit("returnPressed", focusedControl, focusedControl._controlName)
         focusedControl.NotifyReturnPressed()
     }
 
@@ -125,6 +126,10 @@ class Gui {
         name := this._name
         GuiControlGet, focusedControlName, %name%:FocusV
         return this._controls[focusedControlName]
+    }
+
+    SubscribeReturnPressed(subscriber, options = "") {
+        return this._eventBus.Subscribe("returnPressed", subscriber, options)
     }
 
     Hide() {
