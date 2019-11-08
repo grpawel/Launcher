@@ -28,63 +28,62 @@ class GuiCommandBuilder extends Command {
 
     ; Show commands saved in a file and select one for further editing.
     SelectExisting(comFile) {
-        this._steps.Push(Func("_GuiCommandBuilder_SelectExisting").Bind(comFile))
+        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_SelectExisting", comFile)
+        this._steps.Push(step)
         return this
     }
 
     ; Show commands registered in `CommandsFileExtension.RegisterCommand`
     ; and let user select one.
     SelectCommandClass() {
-        this._steps.Push(Func("_GuiCommandBuilder_SelectCommandClass"))
+        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_SelectCommandClass")
+        this._steps.Push(step)
         return this
     }
 
     ; Fill constructor fields.
     ConstructorFields() {
-        this._steps.Push(Func("_GuiCommandBuilder_ConstructorFields"))
+        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_ConstructorFields")
+        this._steps.Push(step)
         return this
     }
 
     ; Fill command key, description and tags.
     KeyDescriptionTags() {
-        this._steps.Push(Func("_GuiCommandBuilder_KeyDescriptionTags"))
+        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_KeyDescriptionTags")
+        this._steps.Push(step)
         return this
     }
 
     ; Save command to file
     SaveToFile(comFile) {
-        this._steps.Push(Func("_GuiCommandBuilder_SaveToFile").Bind(comFile))
+        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_SaveToFile", comFile)
+        this._steps.Push(step)
         return this
     }
 
     ShowSummary(title) {
-        this._steps.Push(Func("_GuiCommandBuilder_ShowSummary").Bind(title))
+        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_ShowSummary", title)
+        this._steps.Push(step)
         return this
     }
 }
 
-_GuiCommandBuilder_SelectExisting(comFile, nextStep, values) {
-    return new _GuiCommandBuilder_SelectExisting(comFile, nextStep, values)
+; Return function object bound to params. 
+; Two parameters are supposed to be left to bind - `nextStep` and `values`.
+; After calling will return new command with `className`.
+_GuiCommandBuilder_CreateStep(className, params*) {
+    static f := Func("_GuiCommandBuilder_CreateStep_Internal")
+    step := ObjBindMethod(f, "Call", className)
+    for i, param in params {
+        step := ObjBindMethod(step, "Call", param)
+    }
+    return step
 }
 
-_GuiCommandBuilder_SelectCommandClass(nextStep, values) {
-    return new _GuiCommandBuilder_SelectCommandClass(nextStep, values)
-}
-
-_GuiCommandBuilder_ConstructorFields(nextStep, values) {
-    return new _GuiCommandBuilder_ConstructorFields(nextStep, values)
-}
-
-_GuiCommandBuilder_KeyDescriptionTags(nextStep, values) {
-    return new _GuiCommandBuilder_KeyDescriptionTags(nextStep, values)
-}
-
-_GuiCommandBuilder_SaveToFile(comFile, nextStep, values) {
-    return new _GuiCommandBuilder_SaveToFile(comFile, nextStep, values)
-}
-
-_GuiCommandBuilder_ShowSummary(title, nextStep, values) {
-    return new _GuiCommandBuilder_ShowSummary(title, nextStep, values)
+; This function is needed, because binding directly to `__New()` does not properly initialize `this` object.
+_GuiCommandBuilder_CreateStep_Internal(className, params*) {
+    return new %className%(params*)
 }
 
 _GuiCommandBuilder_ResetGuiAtEnd(nextStep, values) {
