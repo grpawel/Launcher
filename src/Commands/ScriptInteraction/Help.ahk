@@ -81,6 +81,7 @@ class Help extends Command {
             if (this.state != "detached") {
                 this.state := "detached"
                 this._UnsubscribeCommandSetNotActive()
+                this._UnsubscribeInput()
                 this._commandSet.SetPayload("helpAttachment", "")
             }
         }
