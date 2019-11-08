@@ -188,3 +188,14 @@ Keys(object) {
     }
     return keys
 }
+
+RandomKey(obj) {
+    keys := Keys(obj)
+    return RandomArrayElement(keys)
+}
+
+RandomArrayElement(arr) {
+    max := arr.MaxIndex()
+    Random, index, 1, %max%
+    return arr[index]
+}
