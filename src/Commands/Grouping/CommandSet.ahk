@@ -82,7 +82,10 @@ class CommandSet extends Command {
             return
         }
         if (matchingMode == "immediate") {
-            this._MatchImmediate(controller, input)
+            isExact := this._MatchExact(controller, input)
+            if (!isExact) {
+                this._MatchImmediate(controller, input)
+            }
             return
         }
         if (IsArray(matchingMode) && matchingMode[1] == "atLeast") {
