@@ -102,6 +102,8 @@ SelectingCommands:                                          ; demo-specific
     enterShortcut.AddCommand("c", new Open("calc"))
     enterShortcutExplanation := new Sequence([ new ShowMessage("This example is configured as subexample 2, where you had to type whole key.`n"
                                                                . "There's a shortcut for that: press Enter when a single command matches.`n"
+                                                               . "If you want to commands matched only when you press Return, there's setting for that.`n"
+                                                               ; That setting is `{ typingMatch: "onlyReturn" }`.
                                                               , { textColor: Colors.YELLOW })
                                              , new ShowMessage("Type ""goooo"" and press Enter to run the command."
                                                               , { textColor: Colors.AQUA }) ])

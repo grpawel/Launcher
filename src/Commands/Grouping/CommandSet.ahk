@@ -16,12 +16,14 @@ class CommandSet extends Command {
     ;       "exact" - (default) whole key must be typed
     ;       "immediate" - run command as soon as only one key starts with input
     ;       ["atLeast", N] - try to match immediately if there are at least N characters
+    ;       "onlyReturn" - tries to match only when Return key is pressed
     __New(options = "") {
         this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
         static V := new ValidatorFactory()
         static VAL := V.Object({"typingMatch": V.Or([ V.Equal("exact")
                                                     , V.Equal("immediate")
-                                                    , V.Object({1: V.Equal("atLeast"), 2: V.PositiveInt()}) ]) })
+                                                    , V.Object({1: V.Equal("atLeast"), 2: V.PositiveInt()})
+                                                    , V.Equal("onlyReturn") ]) })
         VAL.ValidateAndShow(this._options)
         this.AddTags(["compound"])
     }
@@ -85,6 +87,10 @@ class CommandSet extends Command {
         }
         if (IsArray(matchingMode) && matchingMode[1] == "atLeast") {
             this._MatchAtLeastN(controller, input, matchingMode)
+            return
+        }
+        if (this._options.typingMatch == "onlyReturn") {
+            this._MatchExact(controller, input)
             return
         }
     }
