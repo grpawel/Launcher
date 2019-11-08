@@ -122,7 +122,7 @@ ArrayContains(array, searched) {
 }
 
 IsArray(obj) {
-    return !!obj.MaxIndex()
+    return !!obj.MaxIndex() || (IsObject(obj) && !HasAnyKey(obj))
 }
 
 IsArrayWithoutGapsAndStringKeys(obj) {
