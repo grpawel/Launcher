@@ -1,3 +1,6 @@
 [submodule "Lib/windows-desktop-switcher"]
 	path = Lib/windows-desktop-switcher
 	url = https://github.com/grpawel/windows-desktop-switcher
+[submodule "Lib/AutoHotkey-SerDes"]
+	path = Lib/AutoHotkey-SerDes
+	url = https://github.com/cocobelgica/AutoHotkey-SerDes.git
