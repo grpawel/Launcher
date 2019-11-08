@@ -19,6 +19,7 @@ class CommandsFile {
     }
 
     ; Write command to file. `values` should be `CommandValues` object.
+    ; Command with existing key will be replaced.
     NewCommand(values) {
         settings := this._ReadFile()
         settings.commands[values.key] := values

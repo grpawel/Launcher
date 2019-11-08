@@ -26,6 +26,12 @@ class GuiCommandBuilder extends Command {
         contr.RunCommand(%firstStep%(new CommandValues()))
     }
 
+    ; Show commands saved in a file and select one for further editing.
+    SelectExisting(comFile) {
+        this._steps.Push(Func("_GuiCommandBuilder_SelectExisting").Bind(comFile))
+        return this
+    }
+
     ; Show commands registered in `CommandsFileExtension.RegisterCommand`
     ; and let user select one.
     SelectCommandClass() {
@@ -57,6 +63,10 @@ class GuiCommandBuilder extends Command {
     }
 }
 
+_GuiCommandBuilder_SelectExisting(comFile, nextStep, values) {
+    return new _GuiCommandBuilder_SelectExisting(comFile, nextStep, values)
+}
+
 _GuiCommandBuilder_SelectCommandClass(nextStep, values) {
     return new _GuiCommandBuilder_SelectCommandClass(nextStep, values)
 }
@@ -76,6 +86,9 @@ _GuiCommandBuilder_SaveToFile(comFile, nextStep, values) {
 _GuiCommandBuilder_ShowSummary(title, nextStep, values) {
     return new _GuiCommandBuilder_ShowSummary(title, nextStep, values)
 }
+
+_GuiCommandBuilder_ResetGuiAtEnd(nextStep, values) {
+    return new ResetGui()
 }
 
 ; Base class for all steps.
@@ -101,12 +114,34 @@ class _GuiCommandBuilder_Step extends Command {
     }
 }
 
+
+class _GuiCommandBuilder_SelectExisting extends _GuiCommandBuilder_Step {
+    __New(comFile, nextStep, values) {
+        this._commandsFile := comFile
+        base.__New(nextStep, values)
+    }
+
+    Run(contr) {
+        gui := contr.GetGui()
+        gui.Reset()
+        gui.AddText({ text: "Select existing command:", textColor: Colors.LIGHT_GRAY, textColorDisabled: Colors.LIGHT_GRAY })
+        commands := new CommandSet()
+        valuesList := this._commandsFile.ReadCommandsValues()
+        for key, values in valuesList {
+            values.base := CommandValues
+            nextStep := this._nextStep
+            commands.AddCommand(values.key, %nextStep%(values).SetDescription(values.description))
+        }
+        contr.RunCommand(WithHelpOpened(commands))
+    }
+}
+
 class _GuiCommandBuilder_SelectCommandClass extends _GuiCommandBuilder_Step {
     Run(contr) {
         gui := contr.GetGui()
         gui.Reset()
         gui.AddText({ text: "Select command:", textColor: Colors.LIGHT_GRAY, textColorDisabled: Colors.LIGHT_GRAY })
-        commandList := new CommandSet({ typingMatch: "immediate" })
+        commandList := new CommandSet({ typingMatch: "onlyReturn" })
         availableCommands := this.GetAvailableCommands()
         for commandName, settings in availableCommands {
             values := this._values.Clone()
@@ -115,6 +150,9 @@ class _GuiCommandBuilder_SelectCommandClass extends _GuiCommandBuilder_Step {
             commandList.AddCommand(commandName, %nextStep%(values).SetDescription(settings.comment))
         }
         contr.RunCommand(WithHelpOpened(commandList))
+        if (this._values.name != "") {
+            commandList.GetGuiControl().SetText(this._values.name)
+        }
     }
 }
 
@@ -134,6 +172,9 @@ class _GuiCommandBuilder_ConstructorFields extends _GuiCommandBuilder_Step {
             input := gui.AddTextInput()
             input.SubscribeReturnPressed(submitHandler)
             this._inputs.Push(input)
+            if (this._values.fields[i] != "") {
+                input.SetText(this._values.fields[i])
+            }
         }
         gui.Show()
     }
@@ -154,10 +195,19 @@ class _GuiCommandBuilder_KeyDescriptionTags extends _GuiCommandBuilder_Step {
         gui.AddText({ text: "Command: " this._values.name "(" Join(this._values.fields, ", ") ")", textColor: Colors.YELLOW })
         gui.AddText({ text: "Command key:" })
         this._keyInput := gui.AddTextInput()
+        if (this._values.key != "") {
+            this._keyInput.SetText(this._values.key)
+        }
         gui.AddText({ text: "Description:" })
         this._descriptionInput := gui.AddTextInput()
+        if (this._values.description != "") {
+            this._descriptionInput.SetText(this._values.description)
+        }
         gui.AddText({ text: "Tags (separated by commas, spaces are ignored):" })
         this._tagsInput := gui.AddTextInput()
+        if (HasAnyKey(this._values.tags)) {
+            this._tagsInput.SetText(Join(this._values.tags, ", "))
+        }
 
         submitHandler := this._UserSubmitted.Bind(this, contr)
         this._keyInput.SubscribeReturnPressed(submitHandler)
