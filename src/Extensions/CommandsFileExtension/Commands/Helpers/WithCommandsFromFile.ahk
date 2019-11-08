@@ -10,11 +10,16 @@ WithCommandsFromFile(comFile, comSet) {
     for key, values in commandsValues {
         comSet.AddCommand(key, CommandValues.ToCommandStatic(values))
     }
-    comFile.SubscribeNewCommand(Func("_WithCommandsFromFile_OnNewCommand").Bind(comSet))
+    comFile.SubscribeCommandCreated(Func("_WithCommandsFromFile_OnCommandCreated").Bind(comSet))
+    comFile.SubscribeCommandDeleted(Func("_WithCommandsFromFile_OnCommandDeleted").Bind(comSet))
     return comSet
 }
 
-_WithCommandsFromFile_OnNewCommand(comSet, values) {
+_WithCommandsFromFile_OnCommandCreated(comSet, values) {
     com := values.ToCommand()
     comSet.AddCommand(values.key, com)
+}
+
+_WithCommandsFromFile_OnCommandDeleted(comSet, values) {
+    comSet.RemoveCommand(values.key)
 }

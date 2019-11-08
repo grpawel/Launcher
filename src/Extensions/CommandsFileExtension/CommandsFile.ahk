@@ -23,13 +23,24 @@ class CommandsFile {
     NewCommand(values) {
         settings := this._ReadFile()
         settings.commands[values.key] := values
-        this._eventBus.Emit("newCommand", values)
+        SerDes(settings, this._filePath, 2)
+        this._eventBus.Emit("commandCreated", values)
+    }
+
+    DeleteCommand(values) {
+        settings := this._ReadFile()
+        settings.commands.Delete(values.key)
+        this._eventBus.Emit("commandDeleted", values)
         SerDes(settings, this._filePath, 2)
     }
 
     ; Subscribe when `WriteCommandValues` was called.
-    SubscribeNewCommand(subscriber, options := "") {
-        this._eventBus.Subscribe("newCommand", subscriber, options)
+    SubscribeCommandCreated(subscriber, options := "") {
+        this._eventBus.Subscribe("commandCreated", subscriber, options)
+    }
+
+    SubscribeCommandDeleted(subscriber, options := "") {
+        this._eventBus.Subscribe("commandDeleted", subscriber, options)
     }
 
     _ReadFile() {

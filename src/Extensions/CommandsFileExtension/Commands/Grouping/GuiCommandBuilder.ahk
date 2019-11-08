@@ -62,6 +62,14 @@ class GuiCommandBuilder extends Command {
         return this
     }
 
+    ; Delete command from file
+    DeleteFromFile(comFile) {
+        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_DeleteFromFile", comFile)
+        this._steps.Push(step)
+        return this
+    }
+
+
     ShowSummary(title) {
         step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_ShowSummary", title)
         this._steps.Push(step)
@@ -247,6 +255,18 @@ class _GuiCommandBuilder_SaveToFile extends _GuiCommandBuilder_Step {
 
     Run(contr) {
         this._commandsFile.NewCommand(this._values)
+        this.NextStep(contr)
+    }
+}
+
+class _GuiCommandBuilder_DeleteFromFile extends _GuiCommandBuilder_Step {
+    __New(comFile, nextStep, values) {
+        this._commandsFile := comFile
+        base.__New(nextStep, values)
+    }
+
+    Run(contr) {
+        this._commandsFile.DeleteCommand(this._values)
         this.NextStep(contr)
     }
 }
