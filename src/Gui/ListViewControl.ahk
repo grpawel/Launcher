@@ -76,6 +76,7 @@ class ListViewControl {
     Destroy() {
         ; Break circular references (https://www.autohotkey.com/docs/Objects.htm#Circular_References).
         this._gui := ""
+        this._eventBus.UnsubscribeAll()
         this._eventBus := ""
     }
 

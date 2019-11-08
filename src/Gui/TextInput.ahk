@@ -99,6 +99,7 @@ class TextInput {
     Destroy() {
         ; Break circular references (https://www.autohotkey.com/docs/Objects.htm#Circular_References).
         this._eventBus.Emit("destroyed")
+        this._eventBus.UnsubscribeAll()
         this._gui := ""
         this._eventBus := ""
     }

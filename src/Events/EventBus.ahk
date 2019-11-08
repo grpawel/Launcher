@@ -47,6 +47,15 @@ class EventBus {
         this._subscribers[eventName].Delete(key)
     }
 
+    ; Unsubscribe all subscribers from all events.
+    UnsubscribeAll() {
+        for eventName, subscriberList in this._subscribers {
+            for key, subscriber in subscriberList {
+                subscriber.Unsubscribe()
+            }
+        }
+    }
+
     Emit(eventName, payload*) {
         if (!this._subscribers.HasKey(eventName)) {
             return
