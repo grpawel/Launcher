@@ -19,3 +19,4 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include %A_ScriptDir%\src\Controller\ExtensionManager.ahk
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\DesktopsExtension.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\UsersExtension.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\CommandsFileExtension.ahk

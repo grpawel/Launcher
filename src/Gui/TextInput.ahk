@@ -30,6 +30,7 @@ class TextInput {
         local returnPressHandler := this._OnReturnPressed.Bind(this)
         Gui, %guiName%: Add, Edit, %style% v%controlName% -WantReturn
         GuiControl, %guiName%: +g, %controlName%, %keyPressHandler%
+        Gui, %guiName%: Margin, 15, 15
         return
     }
 
@@ -77,6 +78,13 @@ class TextInput {
         controlName := this._controlName
         guiName := this._gui.GetName()
         GuiControl, %guiName%: Text, %controlName%, %value%
+    }
+
+    GetText() {
+        guiName := this._gui.GetName()
+        controlName := this._controlName
+        GuiControlGet, value,, %controlName%
+        return value
     }
 
     Disable() {
