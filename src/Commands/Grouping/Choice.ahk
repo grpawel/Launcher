@@ -4,6 +4,7 @@
 ; `function` receives controller, context and `choices` (second argument to this command).
 ; Should return some string key.
 ; `choices` is map from keys returned by function to command.
+; If `functions` returns something not present as key in `choices`, `defaultCommand` is used instead.
 ; Examples:
 /*
 WorkOrFreeTime() {
@@ -42,18 +43,27 @@ comset.AddCommand("rand", new Choice(Func("RandomChoice"), searches))
 comset.AddCommand("next", new Choice(Func("NextChoice"), searches))
 */
 class Choice extends Command {
-    __New(function, choices) {
+    __New(function, choices, defaultCommand = "") {
         this._function := function
         this._choices := choices
+        this._defaultCommand := defaultCommand
         this._selectedCommandNeedsGui := false
     }
 
     Run(contr, context) {
-        function := this._function
-        selectedKey := %function%(contr, context, this._choices)
-        com := this._choices[selectedKey]
+        com := this._GetCommand(contr, context)
         this._selectedCommandNeedsGui := com.DoesNeedGui()
         contr.RunCommand(com, context)
+    }
+
+    _GetCommand(contr, context) {
+        function := this._function
+        selectedKey := %function%(contr, context, this._choices)
+        if (this._choices.HasKey(selectedKey)) {
+            return this._choices[selectedKey]
+        } else {
+            return this._defaultCommand
+        }
     }
 
     DoesNeedGui() {
