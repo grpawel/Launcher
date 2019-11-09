@@ -1,4 +1,4 @@
-﻿; This example shows ways of creating commands.
+; This example shows ways of creating commands.
 ; You should read the code, testing in gui is not required.
 
 ; To run this example run `RunExample.ahk` from parent directory and select "2. Creating commands".
@@ -11,7 +11,7 @@
 
 
 
-#Include %A_ScriptDir%\IncludeAll.ahk
+#Include %A_ScriptDir%\src\IncludeAll.ahk
 
 CreatingCommands:                                           ; only-for-demo
     MsgBox, Press`nCtrl + Shift + /`nto open GUI.           ; only-for-demo

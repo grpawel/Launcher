@@ -11,7 +11,7 @@
 
 
 ; Include all necessary files from the project.
-#Include %A_ScriptDir%\IncludeAll.ahk
+#Include %A_ScriptDir%\src\IncludeAll.ahk
 
 Basic:                                                          ; only-for-demo
     MsgBox, Press`nCtrl + Shift + /`nto open GUI.               ; only-for-demo

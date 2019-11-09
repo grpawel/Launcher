@@ -1,5 +1,7 @@
-#Include %A_ScriptDir%\IncludeAll.ahk
-#Include %A_ScriptDir%\UserCommands.ahk
+#Include %A_ScriptDir%\src\IncludeAll.ahk
+
+#Include %A_ScriptDir%\UserConfig\UserCommands.ahk
+
 rootCommand := CreateCommands()
 main := new Controller(new Environment(), new Gui())
 main.SetRootCommand(rootCommand)

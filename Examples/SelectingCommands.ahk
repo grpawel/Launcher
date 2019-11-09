@@ -12,7 +12,7 @@
 
 
 
-#Include %A_ScriptDir%\IncludeAll.ahk
+#Include %A_ScriptDir%\src\IncludeAll.ahk
 
 SelectingCommands:                                          ; demo-specific
     MsgBox, Press`nCtrl + Shift + /`nto open GUI.           ; demo-specific
