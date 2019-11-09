@@ -1,6 +1,6 @@
 #Include %A_ScriptDir%\src\Controller\CommandBlocker.ahk
 #Include %A_ScriptDir%\src\Events\EventBus.ahk
-#Include %A_ScriptDir%\src\Utils\FunctionUtils.ahk
+#Include %A_ScriptDir%\src\Functions\Predicates.ahk
 
 class Controller {
     _rootCommand := {}
@@ -60,7 +60,7 @@ class Controller {
         if (!com.DoesNeedGui()) {
             originalMethod := com.DoesNeedGui
             originalMethodIsFromBase := !com.HasKey("DoesNeedGui")
-            com.DoesNeedGui := Func("AlwaysTrue")
+            com.DoesNeedGui := AlwaysTrue()
             ; restore original behavior after gui is destroyed
             new WaitForGuiDestroyed(new FunctionToCommand(this._RestoreOriginalDoesNeedGui.Bind(this, com, originalMethod, originalMethodIsFromBase)))
                                 .Run(this, {})

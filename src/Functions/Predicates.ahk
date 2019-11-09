@@ -68,3 +68,11 @@ OrFuncPredicate(predicates, object) {
     }
     return false
 }
+
+AlwaysTrue() {
+    return Func("AlwaysTruePredicate")
+}
+
+AlwaysTruePredicate(params*) {
+    return true
+}

@@ -1,3 +1,0 @@
-AlwaysTrue() {
-    return true
-}
