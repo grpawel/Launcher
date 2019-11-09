@@ -1,6 +1,9 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
 ; Show message within gui.
+; `message` can be string or function object.
+; If calling `message` returns anything other than empty string, the returned value is shown.
+; `message` is called with controller and context.
 ; Options:
 ; "textColor": color of text message. If not given default one from Gui is used.
 ; "disablePrevious": disable previous inputs in Gui. Default is false.
@@ -18,17 +21,28 @@ class ShowMessage extends Command {
         VAL.ValidateAndShow(this._options)
     }
 
-    Run(controller) {
+    Run(contr) {
         if (this._options.disablePrevious) {
-            controller.GetGui().DisableAll()
+            contr.GetGui().DisableAll()
         }
-        controlOptions := { text: this._message }
+        message := this._GetMessage(contr, context)
+        controlOptions := { text: message }
         if (this._options.textColor != "") {
             controlOptions.textColor := this._options.textColor
             controlOptions.textColorDisabled := this._options.textColor
         }
-        controller.GetGui().AddText(controlOptions)
-        controller.GetGui().Show()
+        contr.GetGui().AddText(controlOptions)
+        contr.GetGui().Show()
+    }
+
+    _GetMessage(contr, context) {
+        message := this._message
+        callResult := %message%(contr, context)
+        if (callResult != "") {
+            return callResult
+        } else {
+            return message
+        }
     }
 
     DoesNeedGui() {
