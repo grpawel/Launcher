@@ -12,6 +12,18 @@ RandomString(length) {
     return string
 }
 
+; Returns random string using only a-z characters.
+RandomAzString(length) {
+    ascii_begin := Asc("a")
+    ascii_end := Asc("z")
+    string := ""
+    for i in range(length) {
+        Random, letter, ascii_begin, ascii_end
+        string .= Chr(letter)
+    }
+    return string
+}
+
 Join(stringArray, separator) {
     joined := ""
     isFirstElement := true
