@@ -1,5 +1,4 @@
 class Subscription {
-
     __New(eventBus, params) {
         this._eventBus := eventBus
         this._params := params
@@ -8,7 +7,7 @@ class Subscription {
 
     Unsubscribe() {
         if (this._isUnsubscribed) {
-            Throw, "Cannot unsubscribe twice."
+            return
         }
         this._eventBus._Unsubscribe(this._params)
         this._isUnsubscribed := true
