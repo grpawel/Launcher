@@ -1,8 +1,7 @@
 #Include %A_ScriptDir%\src\Environment\ImportFunctions.ahk
 
 class Environment {
-    ; Settings can be used to open files, websites etc. in specific programs.
-    settings := { browser: "C:\Program Files\Mozilla Firefox\firefox.exe"
+    settings := { browser: "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
                 , file: ""
                 , folder: "explorer"
                 , default: "" }
