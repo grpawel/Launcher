@@ -9,6 +9,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include %A_ScriptDir%\src\Validation\Validators.ahk
 #Include %A_ScriptDir%\src\Commands\ImportCommands.ahk
 #Include %A_ScriptDir%\src\Environment\ImportFunctions.ahk
+#Include %A_ScriptDir%\src\Functions\Functions.ahk
 #Include %A_ScriptDir%\src\Functions\Predicates.ahk
 #Include %A_ScriptDir%\src\Commands\CommandFactory.ahk
 
