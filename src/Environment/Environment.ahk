@@ -8,8 +8,9 @@ class Environment {
 
     ; Functions for opening, typing etc.
     ; Arguments: this object, setting, user argument
+    ; By convention these functions are nouns to differentiate them from commands.
     functions := { open: Func("RunOpener")
-                 , copy: Func("CopyToClipboard")
+                 , copy: Func("ToClipboardCopier")
                  , type: Func("SendTyper") }
 
     ; Call function with given name.

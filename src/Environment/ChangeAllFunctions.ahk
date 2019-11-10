@@ -3,7 +3,7 @@
 ; Example:
 /*
 ; All commands using some function from env will have its argument copied to clipboard
-new ChangeEnvironment(ChangeAllFunctions("CopyToClipboard"))
+new ChangeEnvironment(ChangeAllFunctions("ToClipboardCopier"))
 
 
 */
