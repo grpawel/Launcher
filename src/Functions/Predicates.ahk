@@ -69,6 +69,20 @@ OrFuncPredicate(predicates, object) {
     return false
 }
 
+; Returns true if all of the given functions returns true.
+AndFunc(predicates*) {
+    return Func("AndFuncPredicate").Bind(predicates)
+}
+
+AndFuncPredicate(predicates, object) {
+    for _, predicate in predicates {
+        if (%predicate%(object) == false) {
+            return false
+        }
+    }
+    return true
+}
+
 AlwaysTrue() {
     return Func("AlwaysTruePredicate")
 }
