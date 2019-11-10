@@ -2,6 +2,7 @@
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiEditCommand.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiMoveCommand.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiNewCommand.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\ExportFileCommands.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Helpers\WithCommandsFromFile.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\CommandsFile.ahk
 

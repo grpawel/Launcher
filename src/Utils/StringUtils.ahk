@@ -38,6 +38,23 @@ Join(stringArray, separator) {
     return joined
 }
 
+Wrap(obj, prefix, postfix) {
+    if (isArray(obj)) {
+        return WrapArray(obj, prefix, postfix)
+    }
+    else {
+        return prefix obj postfix
+    }
+}
+
+WrapArray(stringArray, prefix, postfix) {
+    wrapped := []
+    for i, string in stringArray {
+        wrapped[i] := prefix string postfix
+    }
+    return wrapped
+}
+
 StartsWith(haystack, needle) {
     return InStr(haystack, needle) == 1
 }
