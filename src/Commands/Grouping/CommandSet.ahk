@@ -102,7 +102,7 @@ class CommandSet extends Command {
         if (input == "") {
             return
         }
-        return this._MatchImmediate(controller, input)
+        this._MatchImmediate(controller, input)
     }
 
     _MatchExact(controller, input) {
@@ -116,8 +116,9 @@ class CommandSet extends Command {
     _MatchImmediate(controller, input) {
         commandKey := this._FindOnlyCommandKeyStartingWith(input)
         if (commandKey != "") {
+            ; we already have the command, but setting text in input sends event,
+            ; then _MatchExact runs the command.
             this._guiControl.SetText(commandKey)
-            this._RunCommand(this._commands[commandKey], controller)
             return true
         }
         return false
