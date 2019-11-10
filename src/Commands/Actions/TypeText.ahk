@@ -7,8 +7,9 @@ class TypeText extends Command {
         this.AddTags(["web", "hasPath"])
     }
 
-    Run(controller) {
-        env := controller.GetEnvironment()
-        env.CallFunction("type", "", this._string)
+    Run(contr, context) {
+        string := GetValue(this._string, contr, context)
+        env := contr.GetEnvironment()
+        env.CallFunction("type", "", string)
     }
 }

@@ -7,9 +7,10 @@ class Web extends Command {
         this.AddTags(["web", "hasPath"])
     }
 
-    Run(controller) {
-        url := StrReplace(this._url, " ", "+")
-        env := controller.GetEnvironment()
+    Run(contr, context) {
+        url := GetValue(this._url, contr, context)
+        url := StrReplace(url, " ", "+")
+        env := contr.GetEnvironment()
         env.CallFunction("open", "browser", url)
     }
 }

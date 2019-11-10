@@ -6,7 +6,8 @@ class SleepMs extends Command {
         this._description := "Sleep for " durationMs " ms"
     }
 
-    Run(controller) {
-        Sleep % this._durationMs
+    Run(contr, context) {
+        durationMs := GetValue(this._durationMs, contr, context)
+        Sleep, durationMs
     }
 }

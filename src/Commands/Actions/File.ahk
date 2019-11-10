@@ -7,8 +7,9 @@ class File extends Command {
         this.AddTags(["file", "hasPath"])
     }
 
-    Run(controller) {
-        env := controller.GetEnvironment()
+    Run(contr, context) {
+        env := contr.GetEnvironment()
+        path := GetValue(this._path, contr, context)
         env.CallFunction("open", "file", this._path)
     }
 }

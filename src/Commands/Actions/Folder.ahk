@@ -7,8 +7,9 @@ class Folder extends Command {
         this.AddTags(["folder", "hasPath"])
     }
 
-    Run(controller) {
-        env := controller.GetEnvironment()
-        env.CallFunction("open", "folder", this._path)
+    Run(contr, context) {
+        env := contr.GetEnvironment()
+        path := GetValue(this._path, contr, context)
+        env.CallFunction("open", "folder", path)
     }
 }

@@ -25,7 +25,7 @@ class ShowMessage extends Command {
         if (this._options.disablePrevious) {
             contr.GetGui().DisableAll()
         }
-        message := this._GetMessage(contr, context)
+        message := GetValue(this._message, contr, context)
         controlOptions := { text: message }
         if (this._options.textColor != "") {
             controlOptions.textColor := this._options.textColor
@@ -33,16 +33,6 @@ class ShowMessage extends Command {
         }
         contr.GetGui().AddText(controlOptions)
         contr.GetGui().Show()
-    }
-
-    _GetMessage(contr, context) {
-        message := this._message
-        callResult := %message%(contr, context)
-        if (callResult != "") {
-            return callResult
-        } else {
-            return message
-        }
     }
 
     DoesNeedGui() {

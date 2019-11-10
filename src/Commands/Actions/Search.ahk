@@ -8,24 +8,25 @@ class Search extends Command {
         this.AddTags(["web", "hasPath"])
     }
 
-    Run(controller) {
-        gui := controller.GetGui()
+    Run(contr, context) {
+        gui := contr.GetGui()
         gui.DisableAll()
         if (this.GetDescription() != "") {
             gui.AddText({ text: this.GetDescription() })
         }
         guiControl := gui.AddTextInput()
-        this._keyPressedSubscription := guiControl.SubscribeReturnPressed(this._OnUserInput.Bind(this, controller))
+        this._keyPressedSubscription := guiControl.SubscribeReturnPressed(this._OnUserInput.Bind(this, contr, context))
         gui.Show()
     }
 
-    _OnUserInput(controller, input) {
+    _OnUserInput(contr, context, input) {
         this._keyPressedSubscription.Unsubscribe()
-        url := StrReplace(this._urlTemplate, "REPLACEME", input)
+        urlTemplate := GetValue(this._urlTemplate, contr, context)
+        url := StrReplace(GetValue(urlTemplate, contr, context), "REPLACEME", input)
         url := StrReplace(url, " ", "+")
-        env := controller.GetEnvironment()
+        env := contr.GetEnvironment()
         env.CallFunction("open", "browser", url)
-        controller.GetGui().Destroy()
+        contr.GetGui().Destroy()
     }
 
     DoesNeedGui() {

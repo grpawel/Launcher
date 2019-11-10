@@ -9,33 +9,34 @@ class RunOtherScript extends Command {
         this._description := command " " name " script"
     }
 
-    Run(controller) {
+    Run(contr, context) {
+        name := GetValue(this._name, contr, context)
+        path := GetValue(this._path, contr, context)
+
         if (this._command == "open") {
-            this._Open()
+            this._Open(path)
         } else if (this._command == "close") {
-            this._Close()
+            this._Close(name)
         } else if (this._command == "toggle") {
-            this._Toggle()
+            this._Toggle(name, path)
         }
     }
 
-    _Toggle() {
-        if (this._IsScriptRunning()) {
-            this._Close()
+    _Toggle(name, path) {
+        if (this._IsScriptRunning(name)) {
+            this._Close(name)
         } else {
-            this._Open()
+            this._Open(path)
         }
     }
 
-    _Open() {
-        path := this._path
+    _Open(path) {
         Run, %path%
     }
 
-    _Close() {
+    _Close(name) {
         DetectHiddenWindows On
         SetTitleMatchMode RegEx
-        name := this._name
         IfWinExist, i)%name%.* ahk_class AutoHotkey
         {
             WinClose
@@ -51,11 +52,10 @@ class RunOtherScript extends Command {
         }
     }
 
-    _IsScriptRunning() {
+    _IsScriptRunning(name) {
         DetectHiddenWindows, On
         SetTitleMatchMode, 2
         ;SetTitleMatchMode, Slow
-        name := this._name
         IfWinExist, %name%
         {
             return true

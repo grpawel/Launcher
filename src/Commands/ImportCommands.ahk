@@ -1,3 +1,4 @@
+#Include %A_ScriptDir%\src\Commands\Actions\Copy.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\File.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\Folder.ahk
 #Include %A_ScriptDir%\src\Commands\Actions\Open.ahk

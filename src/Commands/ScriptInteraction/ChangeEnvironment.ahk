@@ -18,8 +18,9 @@ class ChangeEnvironment extends Command {
         this._changes := changes
     }
 
-    Run(contr) {
-        this._oldValues := contr.GetEnvironment().Update(this._changes)
+    Run(contr, context) {
+        changes := GetValue(this._changes, contr, context)
+        this._oldValues := contr.GetEnvironment().Update(changes)
     }
 
     Revert(contr) {

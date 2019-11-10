@@ -8,8 +8,10 @@ class Open extends Command {
         this.AddTags(["hasPath"])
     }
 
-    Run(contr) {
+    Run(contr, context) {
         env := contr.GetEnvironment()
-        env.CallFunction("open", this._envSetting, this._toRun)
+        envSetting := GetValue(this._envSetting, contr, context)
+        toRun := GetValue(this._toRun, contr, context)
+        env.CallFunction("open", envSetting, toRun)
     }
 }
