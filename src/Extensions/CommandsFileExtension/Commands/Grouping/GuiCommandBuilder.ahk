@@ -167,6 +167,10 @@ class _GuiCommandBuilder_ConstructorFields extends _GuiCommandBuilder_Step {
     Run(contr) {
         availableCommands := CommandsFileExtension.GetInstance().GetRegisteredCommands()
         fields := availableCommands[this._values.name].fields
+        if (Keys(fields).Length() == 0) {
+            this.NextStep(contr)
+            return
+        }
         gui := contr.GetGui()
         gui.Reset()
         gui.AddText({ text: "Command: " this._values.name, textColor: Colors.YELLOW })
