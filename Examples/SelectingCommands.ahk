@@ -120,8 +120,8 @@ SelectingCommands:                                          ; demo-specific
                                               . "the only way to select longer one is by using the list on the right.`n"
                                              , { textColor: Colors.YELLOW })
     commands.addCommand("6", new Sequence([ new ResetGui()
-                                          , enterShortcutExplanation
-                                          , WithHelpOpened(enterShortcut) ])
+                                          , overlappingExplanation
+                                          , WithHelpOpened(overlapping) ])
                                          .SetDescription("Overlapping command keys"))
 
 
