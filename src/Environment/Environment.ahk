@@ -11,7 +11,8 @@ class Environment {
     ; By convention these functions are nouns to differentiate them from commands.
     functions := { open: Func("RunOpener")
                  , copy: Func("ToClipboardCopier")
-                 , type: Func("SendTyper") }
+                 , type: Func("SendTyper")
+                 , show: Func("InWindowShower")  }
 
     ; Call function with given name.
     ; `settingName` is taken from environment (e.g. program name). Can be empty.
