@@ -50,4 +50,8 @@ class Environment {
     GetSetting(settingName) {
         return this.settings[settingName]
     }
+
+    GetFunctionNames() {
+        return Keys(this.functions)
+    }
 }
