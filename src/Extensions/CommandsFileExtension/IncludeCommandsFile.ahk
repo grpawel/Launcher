@@ -12,20 +12,20 @@ comSet := new CommandSet()
 comSet.IncludeCommandsFile(file)
 */
 _CommandSet_IncludeCommandsFile(this, comFile) {
-    commandsValues := comFile.ReadCommandsValues()
-    for key, values in commandsValues {
-        this.AddCommand(key, CommandValues.ToCommandStatic(values))
+    commandDTOs := comFile.ReadCommandDTOs()
+    for key, dto in commandDTOs {
+        this.AddCommand(key, CommandDTO.ToCommandStatic(dto))
     }
     comFile.SubscribeCommandCreated(Func("_CommandSet_OnCommandCreatedInFile").Bind(this))
     comFile.SubscribeCommandDeleted(Func("_CommandSet_OnCommandDeletedFromFile").Bind(this))
     return this
 }
 
-_CommandSet_OnCommandCreatedInFile(comSet, values) {
-    com := values.ToCommand()
-    comSet.AddCommand(values.key, com)
+_CommandSet_OnCommandCreatedInFile(comSet, dto) {
+    com := dto.ToCommand()
+    comSet.AddCommand(dto.key, com)
 }
 
-_CommandSet_OnCommandDeletedFromFile(comSet, values) {
-    comSet.RemoveCommand(values.key)
+_CommandSet_OnCommandDeletedFromFile(comSet, dto) {
+    comSet.RemoveCommand(dto.key)
 }

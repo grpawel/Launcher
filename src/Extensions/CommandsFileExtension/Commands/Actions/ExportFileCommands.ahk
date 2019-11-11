@@ -11,11 +11,11 @@ class ExportFileCommands extends Command {
     }
 
     Run(contr, context) {
-        valuesList := this._commandsFile.ReadCommandsValues()
+        dtoList := this._commandsFile.ReadCommandDTOs()
         str := ""
-        for key, value in valuesList {
-            constructorArgs := Join(Wrap(value.fields, """", """"), ", ")
-            str .= "`ncomSet.AddCommand(""" value.key """, new " value.name "(" constructorArgs "))"
+        for key, dto in dtoList {
+            constructorArgs := Join(Wrap(dto.fields, """", """"), ", ")
+            str .= "`ncomSet.AddCommand(""" dto.key """, new " dto.name "(" constructorArgs "))"
         }
         env := contr.GetEnvironment()
         env.CallFunction("show", "", str)

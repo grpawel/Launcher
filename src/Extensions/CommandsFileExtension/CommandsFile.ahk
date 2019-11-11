@@ -12,29 +12,29 @@ class CommandsFile {
     }
 
     ; Returns map with command keys as keys (as in `CommandSet.AddCommands()` method).
-    ; Map values have same structure as `CommandValues` object, but `base` is not set.
-    ReadCommandsValues() {
+    ; Map values have same structure as `CommandDTO` object, but `base` is not set.
+    ReadCommandDTOs() {
         settings := this._ReadFile()
         return settings.commands
     }
 
-    ; Write command to file. `values` should be `CommandValues` object.
+    ; Write command to file. `dto` should be `CommandDTO` object.
     ; Command with existing key will be replaced.
-    NewCommand(values) {
+    NewCommand(dto) {
         settings := this._ReadFile()
-        settings.commands[values.key] := values
+        settings.commands[dto.key] := dto
         SerDes(settings, this._filePath, 2)
-        this._eventBus.Emit("commandCreated", values)
+        this._eventBus.Emit("commandCreated", dto)
     }
 
-    DeleteCommand(values) {
+    DeleteCommand(dto) {
         settings := this._ReadFile()
-        settings.commands.Delete(values.key)
-        this._eventBus.Emit("commandDeleted", values)
+        settings.commands.Delete(dto.key)
+        this._eventBus.Emit("commandDeleted", dto)
         SerDes(settings, this._filePath, 2)
     }
 
-    ; Subscribe when `WriteCommandValues` was called.
+    ; Subscribe when `NewCommand` was called.
     SubscribeCommandCreated(subscriber, options := "") {
         this._eventBus.Subscribe("commandCreated", subscriber, options)
     }
