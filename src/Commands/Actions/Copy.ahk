@@ -4,6 +4,7 @@ class Copy extends Command {
     __New(toCopy) {
         this._toCopy := toCopy
         this._description := "Copy """ toCopy """ to clipboard"
+        this.AddTags(["usesEnv", "funcCopy"])
     }
 
     Run(contr, context) {

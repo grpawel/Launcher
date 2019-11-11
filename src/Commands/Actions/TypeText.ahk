@@ -4,7 +4,7 @@ class TypeText extends Command {
     __New(string) {
         this._string := string
         this._description := "Type " . string
-        this.AddTags(["web", "hasPath"])
+        this.AddTags(["usesEnv", "funcType"])
     }
 
     Run(contr, context) {

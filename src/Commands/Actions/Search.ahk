@@ -5,7 +5,7 @@ class Search extends Command {
 
     __New(urlTemplate) {
         this._urlTemplate := urlTemplate
-        this.AddTags(["web", "hasPath"])
+        this.AddTags(["usesEnv", "funcOpen"])
     }
 
     Run(contr, context) {

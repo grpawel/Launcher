@@ -4,7 +4,7 @@ class Web extends Command {
     __New(url) {
         this._url := url
         this._description := "Open " url
-        this.AddTags(["web", "hasPath"])
+        this.AddTags(["usesEnv", "funcOpen", "web"])
     }
 
     Run(contr, context) {

@@ -5,7 +5,7 @@ class Open extends Command {
         this._toRun := toRun
         this._description := "Open " this._toRun
         this._envSetting := envSetting
-        this.AddTags(["hasPath"])
+        this.AddTags(["usesEnv", "funcOpen"])
     }
 
     Run(contr, context) {

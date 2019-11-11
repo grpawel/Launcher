@@ -7,6 +7,7 @@ class ShowInWindow extends Command {
     __New(string) {
         this._string := string
         this._description := "Show string in window"
+        this.AddTags(["usesEnv", "funcShow"])
     }
 
     Run(contr, context) {
