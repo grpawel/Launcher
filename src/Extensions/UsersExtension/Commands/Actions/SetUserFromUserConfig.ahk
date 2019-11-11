@@ -5,6 +5,7 @@
 ; Changes user in environment to user configured in next command.
 ; Intended to subscribe to `commandAboutToRun` from controller.
 class SetUserFromUserConfig extends Command {
+    _description := "Set user from command config"
     __New(desktopToUserMap) {
         this._desktopToUserMap := desktopToUserMap
     }

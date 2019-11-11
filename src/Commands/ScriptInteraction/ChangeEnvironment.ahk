@@ -14,6 +14,8 @@ comset.AddCommand("chr", new ChangeEnvironment({settings: { browser: "chrome" }}
 ; In complicated setups better do not reuse the same command object in multiple places when using `Revert` method.
 ; Instead duplicate the command.
 class ChangeEnvironment extends Command {
+    _description := "Change environment"
+
     __New(changes) {
         this._changes := changes
     }

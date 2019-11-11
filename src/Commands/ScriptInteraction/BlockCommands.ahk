@@ -9,6 +9,8 @@
 
 ; For more options, see `src\CommandBlocker.AddRule()` method.
 class BlockCommands extends Command {
+    _description := "Block some commands"
+
     __New(predicate, blockerOptions = "") {
         this._predicate := predicate
         this._blockerOptions := EnsureIsObject(blockerOptions)

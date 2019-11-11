@@ -5,6 +5,7 @@ class Search extends Command {
 
     __New(urlTemplate) {
         this._urlTemplate := urlTemplate
+        this._description := "Search " urlTemplate
         this.AddTags(["usesEnv", "funcOpen"])
     }
 

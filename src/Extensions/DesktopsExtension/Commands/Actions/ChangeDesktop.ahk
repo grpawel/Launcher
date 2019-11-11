@@ -5,6 +5,7 @@
 class ChangeDesktop extends Command {
     __New(num) {
         this._number := num
+        this._description := "Change desktop to " num
     }
 
     Run(controller) {

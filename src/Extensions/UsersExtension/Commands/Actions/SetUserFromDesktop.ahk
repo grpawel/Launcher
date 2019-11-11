@@ -11,6 +11,8 @@
 ; Requires DesktopsExtension to be active.
 
 class SetUserFromDesktop extends Command {
+    _description := "Set user from desktop"
+
     __New(desktopToUserMap) {
         this._desktopToUserMap := desktopToUserMap
     }

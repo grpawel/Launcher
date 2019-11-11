@@ -4,6 +4,7 @@
 class WaitForGuiDestroyed extends Command {
     __New(command) {
         this._command := command
+        this._description := "Run " command.GetDescription() " after GUI is destroyed"
     }
 
     Run(controller, context) {

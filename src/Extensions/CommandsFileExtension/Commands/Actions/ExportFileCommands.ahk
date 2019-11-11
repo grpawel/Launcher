@@ -15,6 +15,7 @@ class ExportFileCommands extends Command {
     __New(comFile) {
         this._commandsFile := comFile
         this.AddTags(["usesEnv", "funcShow"])
+        this._description := "Export commands file"
     }
 
     Run(contr, context) {

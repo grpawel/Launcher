@@ -3,6 +3,7 @@
 class UnblockCommands extends Command {
     __New(blockerRuleName) {
         this._blockerRuleName := blockerRuleName
+        this._description := "Unblock some commands (rule " blockerRuleName ")"
     }
 
     Run(contr) {
