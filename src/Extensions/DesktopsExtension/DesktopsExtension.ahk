@@ -11,4 +11,17 @@ ExtensionManager.RegisterExtension(DesktopsExtension)
 
 class DesktopsExtension {
     static NAME := "desktops"
+
+    Attach(contr) {
+        commandsFileExt := contr.GetExtensionManager().GetExtension("commandsFile")
+        if (commandsFileExt != "") {
+            this._RegisterCommands(commandsFileExt)
+        }
+    }
+
+    _RegisterCommands(commandsFileExt) {
+        commandsFileExt.RegisterCommand("ChangeDesktop", "Change desktop", ["Desktop number"])
+        commandsFileExt.RegisterCommand("CreateDesktop", "Create new desktop", [])
+        commandsFileExt.RegisterCommand("DeleteDesktop", "Delete current desktop", [])
+    }
 }
