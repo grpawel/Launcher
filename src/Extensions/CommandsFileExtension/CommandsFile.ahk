@@ -35,10 +35,12 @@ class CommandsFile {
     }
 
     ; Subscribe when `NewCommand` was called.
+    ; Payload: `CommandDTO`
     SubscribeCommandCreated(subscriber, options := "") {
         this._eventBus.Subscribe("commandCreated", subscriber, options)
     }
 
+    ; Payload: `CommandDTO`
     SubscribeCommandDeleted(subscriber, options := "") {
         this._eventBus.Subscribe("commandDeleted", subscriber, options)
     }

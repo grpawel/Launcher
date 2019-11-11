@@ -80,10 +80,12 @@ class Controller {
         }
     }
 
+    ; Payload: `{ nextCommand: command }`
     SubscribeCommandAboutToRun(subscriber, options = "") {
         return this._eventBus.Subscribe("commandAboutToRun", subscriber, options)
     }
 
+    ; Payload: `{ rootCommand: command }`
     SubscribeRootCommandAboutToRun(subscriber, options = "") {
         return this._eventBus.Subscribe("rootCommandAboutToRun", subscriber, options)
     }

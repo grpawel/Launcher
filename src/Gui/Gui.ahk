@@ -128,6 +128,8 @@ class Gui {
         return this._controls[focusedControlName]
     }
 
+    ; Payload: `focusedControl, name`
+    ; name - name of focused control
     SubscribeReturnPressed(subscriber, options = "") {
         return this._eventBus.Subscribe("returnPressed", subscriber, options)
     }
@@ -180,6 +182,7 @@ class Gui {
         return this._name
     }
 
+    ; Payload is empty
     SubscribeGuiDestroyed(subscriber, options = "") {
         return this._eventBus.Subscribe("guiDestroyed", subscriber, options)
     }

@@ -42,18 +42,22 @@ class TextInput {
                 , " ")
     }
 
+    ; Payload: input text (string)
     SubscribeInputChanged(subscriber, options = "") {
         return this._eventBus.Subscribe("inputChanged", subscriber, options)
     }
 
+    ; Payload: input text (string)
     SubscribeReturnPressed(subscriber, options = "") {
         return this._eventBus.Subscribe("returnPressed", subscriber, options)
     }
 
+    ; Payload is empty
     SubscribeDestroyed(subscriber, options = "") {
         return this._eventBus.Subscribe("destroyed", subscriber, options)
     }
 
+    ; Payload is empty
     SubscribeDisabled(subscriber, options = "") {
         return this._eventBus.Subscribe("disabled", subscriber, options)
     }

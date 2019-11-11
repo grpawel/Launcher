@@ -70,6 +70,7 @@ class CommandSet extends Command {
 
     ; Subscribe when `CommandSet` stops being active.
     ; This happens when corresponding input is disabled or destroyed.
+    ; Payload is empty.
     SubscribeNotActive(subscriber, options = "") {
         this._eventBus.Subscribe("disabled", subscriber, options)
     }

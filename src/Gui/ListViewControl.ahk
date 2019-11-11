@@ -97,6 +97,7 @@ class ListViewControl {
         this._eventBus.Emit("rowSelected", rowText)
     }
 
+    ; Payload: text from first column
     SubscribeRowSelected(subscriber, options = "") {
         this._eventBus.Subscribe("rowSelected", subscriber, options)
     }
