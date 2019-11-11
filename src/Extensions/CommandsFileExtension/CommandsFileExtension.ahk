@@ -1,10 +1,12 @@
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiDeleteCommand.ahk
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiEditCommand.ahk
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiMoveCommand.ahk
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiNewCommand.ahk
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\ExportFileCommands.ahk
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Helpers\WithCommandsFromFile.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\DeleteCommandDialog.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\EditCommandDialog.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\MoveCommandDialog.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\CreateCommandDialog.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Actions\ExportFileCommands.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\CommandsFile.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\IncludeCommandsFile.ahk
+
+#Include %A_ScriptDir%\src\Commands\Grouping\CommandSet.ahk
 
 extensionManager.RegisterExtension(new CommandsFileExtension())
 
@@ -18,6 +20,7 @@ class CommandsFileExtension {
     __New() {
         if (CommandsFileExtension._instance == "") {
             CommandsFileExtension._instance := this
+            CommandSet.IncludeCommandsFile := Func("_CommandSet_IncludeCommandsFile")
             return this
         } else {
             return CommandsFileExtension._instance

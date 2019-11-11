@@ -4,15 +4,17 @@
 
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\CommandValues.ahk
 
-class GuiCommandBuilder extends Command {
+; Builder for creating gui dialogs for creating, deleting etc. commands from command file.
+class CommandDialogBuilder extends Command {
     _steps := []
 
-    Create() {
+    ; Returns command that goes through all used steps.
+    Build() {
         ; Dummy last step, exists only to make Return key work in last command.
-        this._steps.Push(Func("_GuiCommandBuilder_ResetGuiAtEnd"))
+        this._steps.Push(Func("_CommandDialogBuilder_Step_ResetGui"))
         ; Bind second step to first one, third to second etc.
         ; We have to do it from last one, because binding returns new object
-        ; that we bind with previous last one etc.
+        ; that we bind with previous last one and so on.
         for i in range(this._steps.MaxIndex(), 0, -1) {
             step := this._steps[i]
             step := ObjBindMethod(step, "Call", this._steps[i+1])
@@ -28,7 +30,7 @@ class GuiCommandBuilder extends Command {
 
     ; Show commands saved in a file and select one for further editing.
     SelectExisting(comFile) {
-        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_SelectExisting", comFile)
+        step := _CommandDialogBuilder_CreateStep("_CommandDialogBuilder_SelectExisting", comFile)
         this._steps.Push(step)
         return this
     }
@@ -36,42 +38,41 @@ class GuiCommandBuilder extends Command {
     ; Show commands registered in `CommandsFileExtension.RegisterCommand`
     ; and let user select one.
     SelectCommandClass() {
-        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_SelectCommandClass")
+        step := _CommandDialogBuilder_CreateStep("_CommandDialogBuilder_SelectCommandClass")
         this._steps.Push(step)
         return this
     }
 
     ; Fill constructor fields.
     ConstructorFields() {
-        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_ConstructorFields")
+        step := _CommandDialogBuilder_CreateStep("_CommandDialogBuilder_ConstructorFields")
         this._steps.Push(step)
         return this
     }
 
     ; Fill command key, description and tags.
     KeyDescriptionTags() {
-        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_KeyDescriptionTags")
+        step := _CommandDialogBuilder_CreateStep("_CommandDialogBuilder_KeyDescriptionTags")
         this._steps.Push(step)
         return this
     }
 
     ; Save command to file
     SaveToFile(comFile) {
-        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_SaveToFile", comFile)
+        step := _CommandDialogBuilder_CreateStep("_CommandDialogBuilder_SaveToFile", comFile)
         this._steps.Push(step)
         return this
     }
 
     ; Delete command from file
     DeleteFromFile(comFile) {
-        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_DeleteFromFile", comFile)
+        step := _CommandDialogBuilder_CreateStep("_CommandDialogBuilder_DeleteFromFile", comFile)
         this._steps.Push(step)
         return this
     }
 
-
     ShowSummary(title) {
-        step := _GuiCommandBuilder_CreateStep("_GuiCommandBuilder_ShowSummary", title)
+        step := _CommandDialogBuilder_CreateStep("_CommandDialogBuilder_ShowSummary", title)
         this._steps.Push(step)
         return this
     }
@@ -80,8 +81,8 @@ class GuiCommandBuilder extends Command {
 ; Return function object bound to params. 
 ; Two parameters are supposed to be left to bind - `nextStep` and `values`.
 ; After calling will return new command with `className`.
-_GuiCommandBuilder_CreateStep(className, params*) {
-    static f := Func("_GuiCommandBuilder_CreateStep_Internal")
+_CommandDialogBuilder_CreateStep(className, params*) {
+    static f := Func("_CommandDialogBuilder_Step_New")
     step := ObjBindMethod(f, "Call", className)
     for i, param in params {
         step := ObjBindMethod(step, "Call", param)
@@ -90,16 +91,16 @@ _GuiCommandBuilder_CreateStep(className, params*) {
 }
 
 ; This function is needed, because binding directly to `__New()` does not properly initialize `this` object.
-_GuiCommandBuilder_CreateStep_Internal(className, params*) {
+_CommandDialogBuilder_Step_New(className, params*) {
     return new %className%(params*)
 }
 
-_GuiCommandBuilder_ResetGuiAtEnd(nextStep, values) {
+_CommandDialogBuilder_Step_ResetGui(nextStep, values) {
     return new ResetGui()
 }
 
 ; Base class for all steps.
-class _GuiCommandBuilder_Step extends Command {
+class _CommandDialogBuilder_Step extends Command {
     ; nextStep - function that takes `values` and returns command.
     ; values - `CommandValues` object.
     __New(nextStep, values) {
@@ -122,7 +123,7 @@ class _GuiCommandBuilder_Step extends Command {
 }
 
 
-class _GuiCommandBuilder_SelectExisting extends _GuiCommandBuilder_Step {
+class _CommandDialogBuilder_SelectExisting extends _CommandDialogBuilder_Step {
     __New(comFile, nextStep, values) {
         this._commandsFile := comFile
         base.__New(nextStep, values)
@@ -143,7 +144,7 @@ class _GuiCommandBuilder_SelectExisting extends _GuiCommandBuilder_Step {
     }
 }
 
-class _GuiCommandBuilder_SelectCommandClass extends _GuiCommandBuilder_Step {
+class _CommandDialogBuilder_SelectCommandClass extends _CommandDialogBuilder_Step {
     Run(contr) {
         gui := contr.GetGui()
         gui.Reset()
@@ -163,7 +164,7 @@ class _GuiCommandBuilder_SelectCommandClass extends _GuiCommandBuilder_Step {
     }
 }
 
-class _GuiCommandBuilder_ConstructorFields extends _GuiCommandBuilder_Step {
+class _CommandDialogBuilder_ConstructorFields extends _CommandDialogBuilder_Step {
     Run(contr) {
         availableCommands := CommandsFileExtension.GetInstance().GetRegisteredCommands()
         fields := availableCommands[this._values.name].fields
@@ -199,7 +200,7 @@ class _GuiCommandBuilder_ConstructorFields extends _GuiCommandBuilder_Step {
     }
 }
 
-class _GuiCommandBuilder_KeyDescriptionTags extends _GuiCommandBuilder_Step {
+class _CommandDialogBuilder_KeyDescriptionTags extends _CommandDialogBuilder_Step {
     Run(contr) {
         gui := contr.GetGui()
         gui.Reset()
@@ -251,7 +252,7 @@ class _GuiCommandBuilder_KeyDescriptionTags extends _GuiCommandBuilder_Step {
     }
 }
 
-class _GuiCommandBuilder_SaveToFile extends _GuiCommandBuilder_Step {
+class _CommandDialogBuilder_SaveToFile extends _CommandDialogBuilder_Step {
     __New(comFile, nextStep, values) {
         this._commandsFile := comFile
         base.__New(nextStep, values)
@@ -263,7 +264,7 @@ class _GuiCommandBuilder_SaveToFile extends _GuiCommandBuilder_Step {
     }
 }
 
-class _GuiCommandBuilder_DeleteFromFile extends _GuiCommandBuilder_Step {
+class _CommandDialogBuilder_DeleteFromFile extends _CommandDialogBuilder_Step {
     __New(comFile, nextStep, values) {
         this._commandsFile := comFile
         base.__New(nextStep, values)
@@ -275,7 +276,7 @@ class _GuiCommandBuilder_DeleteFromFile extends _GuiCommandBuilder_Step {
     }
 }
 
-class _GuiCommandBuilder_ShowSummary extends _GuiCommandBuilder_Step {
+class _CommandDialogBuilder_ShowSummary extends _CommandDialogBuilder_Step {
     static _WIDTH := 400
 
     __New(title, nextStep, values) {

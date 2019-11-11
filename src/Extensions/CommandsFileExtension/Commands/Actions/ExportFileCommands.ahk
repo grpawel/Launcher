@@ -1,9 +1,7 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
-#Include %A_ScriptDir%\src\Gui\Colors.ahk
 #Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiCommandBuilder.ahk
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Helpers\WithCommandsFromFile.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\CommandDialogBuilder.ahk
 
 ; Export commands from file to format usable in .ahk files.
 ; `comFile` - `CommandsFile` object

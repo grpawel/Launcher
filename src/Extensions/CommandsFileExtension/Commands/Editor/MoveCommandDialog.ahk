@@ -2,11 +2,10 @@
 #Include %A_ScriptDir%\src\Gui\Colors.ahk
 #Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Grouping\GuiCommandBuilder.ahk
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Helpers\WithCommandsFromFile.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\CommandDialogBuilder.ahk
 
 ; Move command from one file to another.
-class GuiMoveCommand extends Command {
+class MoveCommandDialog extends Command {
     __New(fromFile, toFile) {
         this._fromFile := fromFile
         this._toFile := toFile
@@ -14,13 +13,13 @@ class GuiMoveCommand extends Command {
     }
 
     Run(contr, context) {
-        new GuiCommandBuilder()
+        new CommandDialogBuilder()
             .SelectExisting(this._fromFile)
             .ShowSummary("Moving command: Close GUI to cancel")
             .DeleteFromFile(this._fromFile)
             .SaveToFile(this._toFile)
             .ShowSummary("Command moved!")
-            .Create()
+            .Build()
             .Run(contr, context)
     }
 
