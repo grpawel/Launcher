@@ -66,3 +66,18 @@ RepeatString(string, times) {
     }
     return repeated
 }
+
+CountOccurences(string, substring) {
+    StrReplace(string, substring, substring, occurences)
+    return occurences
+}
+
+; Ensure that `var` is in [min, max] range
+EnsureBetween(var, min, max) {
+    if (var < min) {
+        var := min
+    } else if (var > max) {
+        var := max
+    }
+    return var
+}
