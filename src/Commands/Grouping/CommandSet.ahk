@@ -1,14 +1,14 @@
 ﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
+; Store a list of commands with their keys
+; Shows input in gui and runs matching command
+; 
+; Split into three classes for readability.
 class CommandSet extends Command {
-    _commands := {}
-    _guiControl :=
+    _gui :=
+    _backend :=
     _eventBus := new EventBus()
-    _inputChangedSubscription :=
-    _returnPressedSubscription :=
-    _inputDestroyedSubscription := 
-    _inputDisabledSubscription := 
     static _DEFAULT_OPTIONS := { "typingMatch": "exact" }
 
     ; Options:
@@ -26,146 +26,46 @@ class CommandSet extends Command {
                                                     , V.Equal("onlyReturn") ]) })
         VAL.ValidateAndShow(this._options)
         this.AddTags(["compound"])
+
+        this._backend := new _CommandSetBackend()
+        this._gui := new _CommandSetGui(this, this._backend, this._options.typingMatch)
     }
 
-    Run(controller) {
-        gui := controller.GetGui()
-        gui.DisableAll()
-        if (this.GetDescription() != "") {
-            gui.AddText({ text: this.GetDescription() })
-        }
-        this._guiControl := gui.AddTextInput()
-        this._inputChangedSubscription := this._guiControl.SubscribeInputChanged(this._OnUserInput.Bind(this, controller))
-        this._returnPressedSubscription := this._guiControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, controller))
-        this._inputDestroyedSubscription := this._guiControl.SubscribeDestroyed(this._OnInputNotActive.Bind(this, controller))
-        this._inputDisabledSubscription := this._guiControl.SubscribeDisabled(this._OnInputNotActive.Bind(this, controller))
-        gui.Show()
+    Run(contr) {
+        this._gui.Run(contr)
     }
 
     AddCommand(key, com) {
-        this._commands[key] := com
+        this._backend.commands[key] := com
         return this
     }
 
     AddCommands(arr) {
         if (IsFunc(arr.GetCommands)) {
             ; arr is CommandSet or similar
-            AddAll(this._commands, arr.GetCommands())
+            AddAll(this._backend.commands, arr.GetCommands())
         } else {
             ; arr is an array
-            AddAll(this._commands, arr)
+            AddAll(this._backend.commands, arr)
         }
         return this
     }
 
     GetCommands() {
-        return this._commands
+        return this._backend.commands
     }
 
     GetCommand(key) {
-        return this._commands[key]
+        return this._backend.commands[key]
     }
 
     RemoveCommand(key) {
-        this._commands.Delete(key)
+        this._backend.commands.Delete(key)
         return this
     }
 
     DoesNeedGui() {
         return true
-    }
-
-    _OnUserInput(controller, input) {
-        matchingMode := this._options.typingMatch
-        if (matchingMode == "exact") {
-            this._MatchExact(controller, input)
-            return
-        }
-        if (matchingMode == "immediate") {
-            isExact := this._MatchExact(controller, input)
-            if (!isExact) {
-                this._MatchImmediate(controller, input)
-            }
-            return
-        }
-        if (IsArray(matchingMode) && matchingMode[1] == "atLeast") {
-            this._MatchAtLeastN(controller, input, matchingMode)
-            return
-        }
-        if (this._options.typingMatch == "onlyReturn") {
-            this._MatchExact(controller, input)
-            return
-        }
-    }
-
-    _OnReturnPressed(controller, input) {
-        if (input == "") {
-            return
-        }
-        this._MatchImmediate(controller, input)
-    }
-
-    _MatchExact(controller, input) {
-        if (this._commands.HasKey(input)) {
-            this._RunCommand(this._commands[input], controller)
-            return true
-        }
-        return false
-    }
-
-    _MatchImmediate(controller, input) {
-        commandKey := this._FindOnlyCommandKeyStartingWith(input)
-        if (commandKey != "") {
-            ; we already have the command, but setting text in input sends event,
-            ; then _MatchExact runs the command.
-            this._guiControl.SetText(commandKey)
-            return true
-        }
-        return false
-    }
-
-    _MatchAtLeastN(controller, input, matchingMode) {
-        if (!this._MatchExact(controller, input)) {
-            isAtLeastN := StrLen(input) >= matchingMode[2]
-            if (isAtLeastN) {
-                this._MatchImmediate(controller, input)
-            }
-        }
-    }
-
-    ; Returns command key only if exactly one key starts with given beginning.
-    _FindOnlyCommandKeyStartingWith(beginning) {
-        matchingCommandKeys := []
-        for key, value in this._commands {
-            if (StartsWith(key, beginning)) {
-                matchingCommandKeys.Push(key)
-                if (matchingCommandKeys.Length() > 1) {
-                    ; found multiple matching command before - can stop here
-                    ; TODO: instead message to user
-                    return ""
-                }
-            }
-        }
-        if (matchingCommandKeys.Length() == 1) {
-            return matchingCommandKeys[1]
-        } else {
-            return ""
-        }
-    }
-
-    _RunCommand(matchedCommand, controller) {
-        controller.RunCommand(matchedCommand, {caller: this })
-        if (!matchedCommand.DoesNeedGui()) {
-            this._inputChangedSubscription.Unsubscribe()
-            this._returnPressedSubscription.Unsubscribe()
-            controller.GetGui().Destroy()
-        }
-    }
-
-    _OnInputNotActive(controller) {
-        this._eventBus.Emit("disabled")
-        this._inputDestroyedSubscription.Unsubscribe()
-        this._inputDisabledSubscription.Unsubscribe()
     }
 
     ; Subscribe when `CommandSet` stops being active.
@@ -180,13 +80,13 @@ class CommandSet extends Command {
     ; New `CommandSet` instead of commands only is returned mostly for chaining filters.
     FilterCommands(filter) {
         filtered := {}
-        for name, com in this._commands {
+        for name, com in this._backend.commands {
             if (%filter%(com)) {
                 filtered[name] := com
             }
         }
         filteredCommandSet := new CommandSet()
-        filteredCommandSet._commands := filtered
+        filteredCommandSet._backend.commands := filtered
         return filteredCommandSet
     }
 
@@ -194,11 +94,134 @@ class CommandSet extends Command {
     ; List of commands itself is not shared - adding commands adds them only to single commandSet.
     Duplicate() {
         duplicate := base.Duplicate()
-        duplicate._commands := ObjClone(this._commands)
+        duplicate._backend.commands := ObjClone(this._backend.commands)
         return duplicate
     }
 
     GetGuiControl() {
-        return this._guiControl
+        return this._gui.inputControl
+    }
+}
+
+class _CommandSetGui {
+    _commandSet := 
+
+    inputControl :=
+
+    _inputChangedSubscription :=
+    _returnPressedSubscription :=
+    _inputDestroyedSubscription := 
+    _inputDisabledSubscription := 
+
+    __New(comSet, backend, matchingMode) {
+        this._commandSet := comSet
+        this._backend := backend
+        this._matchingMode := matchingMode
+    }
+
+    Run(contr) {
+        gui := contr.GetGui()
+        gui.DisableAll()
+        if (this._commandSet.GetDescription() != "") {
+            gui.AddText({ text: this._commandSet.GetDescription() })
+        }
+        this.inputControl := gui.AddTextInput()
+        this._inputChangedSubscription := this.inputControl.SubscribeInputChanged(this._OnUserInput.Bind(this, contr))
+        this._returnPressedSubscription := this.inputControl.SubscribeReturnPressed(this._OnReturnPressed.Bind(this, contr))
+        this._inputDestroyedSubscription := this.inputControl.SubscribeDestroyed(this._OnInputNotActive.Bind(this, contr))
+        this._inputDisabledSubscription := this.inputControl.SubscribeDisabled(this._OnInputNotActive.Bind(this, contr))
+        gui.Show()
+    }
+
+    _OnUserInput(contr, input) {
+        if (this._matchingMode == "exact") {
+            this._MatchExactAndRun(contr, input)
+            return
+        }
+        if (this._matchingMode == "immediate") {
+            runnedCommand := this._MatchExactAndRun(contr, input)
+            if (!runnedCommand) {
+                this._SetInputIfOneMatches(contr, input)
+            }
+            return
+        }
+        if (this._matchingMode[1] == "atLeast") {
+            runnedCommand := this._MatchExactAndRun(contr, input)
+            if (!runnedCommand) {
+                isAtLeastN := StrLen(input) >= this._matchingMode[2]
+                if (isAtLeastN) {
+                    this._SetInputIfOneMatches(contr, input)
+                }
+            }
+            return
+        }
+    }
+
+    _OnReturnPressed(contr, input) {
+        if (input == "") {
+            return
+        }
+        commandKey := this._SetInputIfOneMatches(contr, input)
+        if (this._matchingMode == "onlyReturn" && commandKey != "") {
+            this._RunCommand(this._backend.commands[commandKey], contr)
+        }
+    }
+
+    _MatchExactAndRun(contr, input) {
+        if (this._backend.commands.HasKey(input)) {
+            this._RunCommand(this._backend.commands[input], contr)
+            return true
+        }
+        return false
+    }
+
+    ; Set input field to full command key, if only one command key starts with input
+    ; Returns full key if matched or empty string
+    _SetInputIfOneMatches(contr, input) {
+        commandKey := this._backend.FindOnlyCommandKeyStartingWith(input)
+        if (commandKey != "") {
+            this.inputControl.SetText(commandKey)
+            return commandKey
+        }
+        return ""
+    }
+
+    _RunCommand(matchedCommand, contr) {
+        contr.RunCommand(matchedCommand, {caller: this._commandSet })
+        if (!matchedCommand.DoesNeedGui()) {
+            this._inputChangedSubscription.Unsubscribe()
+            this._returnPressedSubscription.Unsubscribe()
+            contr.GetGui().Destroy()
+        }
+    }
+
+    _OnInputNotActive(contr) {
+        this._commandSet._eventBus.Emit("disabled")
+        this._inputDestroyedSubscription.Unsubscribe()
+        this._inputDisabledSubscription.Unsubscribe()
+    }
+}
+
+class _CommandSetBackend {
+    commands := {}
+
+    ; Returns command key only if exactly one key starts with given beginning.
+    FindOnlyCommandKeyStartingWith(beginning) {
+        matchingCommandKeys := []
+        for key, value in this.commands {
+            if (StartsWith(key, beginning)) {
+                matchingCommandKeys.Push(key)
+                if (matchingCommandKeys.Length() > 1) {
+                    ; found multiple matching command before - can stop here
+                    ; TODO: instead message to user
+                    return ""
+                }
+            }
+        }
+        if (matchingCommandKeys.Length() == 1) {
+            return matchingCommandKeys[1]
+        } else {
+            return ""
+        }
     }
 }
