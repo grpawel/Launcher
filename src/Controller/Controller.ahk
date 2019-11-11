@@ -10,6 +10,7 @@ class Controller {
         this._environment := environment
         this._gui := gui
         this._blocker := new CommandBlocker()
+        this._extensionManager := new ExtensionManager(this)
     }
 
     Execute() {
@@ -92,5 +93,9 @@ class Controller {
 
     GetBlocker() {
         return this._blocker
+    }
+
+    GetExtensionManager() {
+        return this._extensionManager
     }
 }

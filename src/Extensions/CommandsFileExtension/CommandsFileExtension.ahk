@@ -1,42 +1,45 @@
+#Include %A_ScriptDir%\src\Extensions\ExtensionManager.ahk
+#Include %A_ScriptDir%\src\Commands\Grouping\CommandSet.ahk
+
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\DeleteCommandDialog.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\EditCommandDialog.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\MoveCommandDialog.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\CreateCommandDialog.ahk
-#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Actions\ExportFileCommands.ahk
+#Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\ScriptInteraction\ExportFileCommands.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\CommandsFile.ahk
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\IncludeCommandsFile.ahk
 
-#Include %A_ScriptDir%\src\Commands\Grouping\CommandSet.ahk
 
-extensionManager.RegisterExtension(new CommandsFileExtension())
+ExtensionManager.RegisterExtension(CommandsFileExtension)
+
+CommandSet.IncludeCommandsFile := Func("_CommandSet_IncludeCommandsFile")
 
 class CommandsFileExtension {
-    name := "desktops"
+    static NAME := "commandsFile"
 
-    _commandSettings := {}
+    static _COMMANDS_SETTINGS := {}
 
-    ; Singleton is required to have commands registered in one global object.
-    static _instance :=
     __New() {
-        if (CommandsFileExtension._instance == "") {
-            CommandsFileExtension._instance := this
-            CommandSet.IncludeCommandsFile := Func("_CommandSet_IncludeCommandsFile")
-            return this
-        } else {
-            return CommandsFileExtension._instance
-        }
+        this._commandsSettings := CommandsFileExtension._COMMANDS_SETTINGS.Clone()
     }
 
-    GetInstance() {
-        return CommandsFileExtension._instance
+    Attach(contr, settings = "") {
     }
 
+    ; Register command for specific controller.
     RegisterCommand(commandName, comment, constructorFields) {
-        this._commandSettings[commandName] := { comment: comment, fields: constructorFields }
+        this._commandsSettings[commandName] := { comment: comment, fields: constructorFields }
+    }
+
+    ; (static)
+    ; Register command for all controllers.
+    ; Extensions for controller should be activated after calling this command
+    RegisterCommandGlobal(commandName, comment, constructorFields) {
+        this._COMMANDS_SETTINGS[commandName] := { comment: comment, fields: constructorFields }
     }
 
     GetRegisteredCommands() {
-        return this._commandSettings
+        return this._commandsSettings
     }
 }
 

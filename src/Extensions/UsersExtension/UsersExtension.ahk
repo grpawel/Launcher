@@ -1,46 +1,51 @@
-#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\ChangeDesktopFromUserConfig.ahk
-#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\SetUserFromDesktop.ahk
-#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Actions\SetUserFromUserConfig.ahk
+#Include %A_ScriptDir%\src\Extensions\ExtensionManager.ahk
+#Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
+#Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
+
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\ChangeDesktopFromUserConfig.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\SetUserFromDesktop.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\SetUserFromUserConfig.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Controller\IsUserAllowedRule.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Environment\Functions\AsUserOpener.ahk
-#Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
-#Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
 
-extensionManager.RegisterExtension(new UsersExtension())
+extensionManager.RegisterExtension(UsersExtension)
+
+Command.UserConfig := Func("_Command_UserConfig")
+Command.GetUserConfig := Func("_Command_GetUserConfig")
+Command.RunAs := Func("_Command_RunAs")
 
 class UsersExtension {
-    name := "users"
+    static NAME := "users"
 
     static PRIORITIES := { "desktopFromCommandConfig": 8
                          , "userFromDesktop": 16
                          , "userFromCommandConfig": 24 }
 
-    __New() {
-        Command.UserConfig := Func("_Command_UserConfig")
-        Command.GetUserConfig := Func("_Command_GetUserConfig")
-    }
-
-    Attach(controller, availableExtensions, settings = "") {
-        desktopToUserMap := settings.desktopToUserMap
-        if (availableExtensions.HasKey("desktops")) {
-            this._DesktopsCompat(controller, desktopToUserMap)
+    Attach(contr, settings = "") {
+        this._settings := settings
+        if (contr.GetExtensionManager().GetExtension("desktops") != "") {
+            this._DesktopsCompat(contr, settings.desktopToUserMap)
         }
-        controller.GetBlocker().AddRule(Func("IsUserAllowedRule"), { name: "isUserAllowed" })
+        contr.GetBlocker().AddRule(Func("IsUserAllowedRule"), { name: "isUserAllowed" })
 
-        controller.GetEnvironment().Update({ settings: { user: ""}, functions: { open: Func("AsUserOpener") } })
+        contr.GetEnvironment().Update({ settings: { user: ""}, functions: { open: Func("AsUserOpener") } })
         runAsSetter := new SetUserFromUserConfig()
-        controller.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
+        contr.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, contr), {priority: this.PRIORITIES["userFromCommandConfig"]})
     }
 
-    _DesktopsCompat(controller, desktopToUserMap) {
+    _DesktopsCompat(contr, desktopToUserMap) {
         if (desktopToUserMap != "") {
             desktopChanger := new ChangeDesktopFromUserConfig(desktopToUserMap)
-            controller.SubscribeCommandAboutToRun(CommandToSubscriber(desktopChanger, controller), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
+            contr.SubscribeCommandAboutToRun(CommandToSubscriber(desktopChanger, contr), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
             ; priority for `userSetter` must be higher (means running later) than for `desktopChanger`
             ; first change desktop, then change user based on that desktop
             userSetter := new SetUserFromDesktop(desktopToUserMap)
-            controller.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, controller), {priority: this.PRIORITIES["userFromDesktop"]})
+            contr.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, contr), {priority: this.PRIORITIES["userFromDesktop"]})
         }
+    }
+
+    GetDesktopToUserMap() {
+        return this._settings.desktopToUserMap
     }
 }
 

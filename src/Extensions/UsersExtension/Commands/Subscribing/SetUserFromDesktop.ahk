@@ -1,15 +1,18 @@
 #Include %A_ScriptDir%\src\Commands\Command.ahk
 
-; Changes user in environment based on current desktop.
+; Changes user setting in environment based on current desktop.
 ; Intended to be subscribed to GUI opening,
 ; so the user can be changed using another command.
 ;
-; Takes object mapping desktop to username, eg.:
-; { "1": "games", "2": "work" }
-; For desktop number not in map user is an empty string.
+; Uses mapping desktop to username:
+/*
+{ "1": "games", "2": "work" }
+*/
+; 
+; Be careful, different controllers might have different configurations so results may vary.
+; If desktop is not included in mapping the user is set to an empty string.
 ;
 ; Requires DesktopsExtension to be active.
-
 class SetUserFromDesktop extends Command {
     _description := "Set user from desktop"
 
@@ -17,13 +20,13 @@ class SetUserFromDesktop extends Command {
         this._desktopToUserMap := desktopToUserMap
     }
 
-    Run(controller, context="") {
-        desktop := controller.GetDesktop()
+    Run(contr, context="") {
+        desktop := GetDesktop()
         newUser := this._desktopToUserMap[desktop]
-        oldUser := controller.GetEnvironment().GetSetting("user")
+        oldUser := contr.GetEnvironment().GetSetting("user")
         if (newUser != oldUser) {
             envChanger := new ChangeEnvironment({ settings: { user: newUser } })
-            controller.RunCommandWithoutEvents(envChanger, { caller: this })
+            contr.RunCommandWithoutEvents(envChanger, { caller: this })
         }
     }
 }

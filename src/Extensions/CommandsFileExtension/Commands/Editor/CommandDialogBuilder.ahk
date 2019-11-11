@@ -113,8 +113,8 @@ class _CommandDialogBuilder_Step extends Command {
         contr.RunCommand(%nextStep%(this._dto))
     }
 
-    GetAvailableCommands() {
-         return CommandsFileExtension.GetInstance().GetRegisteredCommands()
+    GetAvailableCommands(contr) {
+         return contr.GetExtensionManager().GetExtension("commandsFile").GetRegisteredCommands()
     }
 
     DoesNeedGui() {
@@ -150,7 +150,7 @@ class _CommandDialogBuilder_SelectCommandClass extends _CommandDialogBuilder_Ste
         gui.Reset()
         gui.AddText({ text: "Select command:", textColor: Colors.LIGHT_GRAY, textColorDisabled: Colors.LIGHT_GRAY })
         commandList := new CommandSet({ typingMatch: "onlyReturn" })
-        availableCommands := this.GetAvailableCommands()
+        availableCommands := this.GetAvailableCommands(contr)
         for commandName, settings in availableCommands {
             dto := this._dto.Clone()
             dto.name := commandName
@@ -166,7 +166,7 @@ class _CommandDialogBuilder_SelectCommandClass extends _CommandDialogBuilder_Ste
 
 class _CommandDialogBuilder_ConstructorFields extends _CommandDialogBuilder_Step {
     Run(contr) {
-        availableCommands := CommandsFileExtension.GetInstance().GetRegisteredCommands()
+        availableCommands := this.GetAvailableCommands(contr)
         fields := availableCommands[this._dto.name].fields
         if (Keys(fields).Length() == 0) {
             this.NextStep(contr)
@@ -291,7 +291,7 @@ class _CommandDialogBuilder_ShowSummary extends _CommandDialogBuilder_Step {
         rows := []
         rows.Push(["Command:", this._dto.name])
         rows.Push(["Key:", this._dto.key])
-        fields := this.GetAvailableCommands()[this._dto.name].fields
+        fields := this.GetAvailableCommands(contr)[this._dto.name].fields
         for i, fieldName in fields {
             rows.Push([fieldName, this._dto.fields[i]])
         }
