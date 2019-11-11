@@ -48,6 +48,7 @@ class Choice extends Command {
         this._choices := choices
         this._defaultCommand := defaultCommand
         this._selectedCommandNeedsGui := false
+        this.AddTags(["composite"])
     }
 
     Run(contr, context) {

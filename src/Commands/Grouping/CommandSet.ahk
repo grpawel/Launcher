@@ -25,10 +25,10 @@ class CommandSet extends Command {
                                                     , V.Object({1: V.Equal("atLeast"), 2: V.PositiveInt()})
                                                     , V.Equal("onlyReturn") ]) })
         VAL.ValidateAndShow(this._options)
-        this.AddTags(["compound"])
 
         this._backend := new _CommandSetBackend()
         this._gui := new _CommandSetGui(this, this._backend, this._options.typingMatch)
+        this.AddTags(["composite"])
     }
 
     Run(contr) {

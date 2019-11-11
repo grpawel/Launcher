@@ -4,7 +4,7 @@
 class Sequence extends Command {
     __New(commands) {
         this._commands := commands
-        this.AddTags(["compound"])
+        this.AddTags(["composite"])
     }
 
     Run(controller) {
