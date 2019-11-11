@@ -4,6 +4,7 @@
 class TextInput {
     _isSetup := false
     _eventBus := new EventBus()
+    _doNotEmitEventsOnThisValue := {}
 
     __New(gui, name, options) {
         this._gui := gui
@@ -69,7 +70,11 @@ class TextInput {
     _OnKeyPressed() {
         controlName := this._controlName
         GuiControlGet, value,, %controlName%
-        this._eventBus.Emit("inputChanged", value)
+        if (this._doNotEmitEventsOnThisValue == value) {
+            this._doNotEmitEventsOnThisValue := {}
+        } else {
+            this._eventBus.Emit("inputChanged", value)
+        }
     }
 
     _OnReturnPressed() {
@@ -78,9 +83,16 @@ class TextInput {
         this._eventBus.Emit("returnPressed", value)
     }
 
-    SetText(value) {
+    ; Options:
+    ; "noEvents": boolean (default false) - Do not emit "inputChanged" event
+    SetText(value, options = "") {
         controlName := this._controlName
         guiName := this._gui.GetName()
+        if (options.noEvents) {
+            ; As it turns out vlabels are not reliable.
+            ; Sometimes when using this method `_OnKeyPressed` is not called.
+            this._doNotEmitEventsOnThisValue := value
+        }
         GuiControl, %guiName%: Text, %controlName%, %value%
     }
 

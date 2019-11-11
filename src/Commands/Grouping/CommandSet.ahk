@@ -1,4 +1,4 @@
-﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 ; Store a list of commands with their keys
@@ -142,7 +142,7 @@ class _CommandSetGui {
         if (this._matchingMode == "immediate") {
             runnedCommand := this._MatchExactAndRun(contr, input)
             if (!runnedCommand) {
-                this._SetInputIfOneMatches(contr, input)
+                this._MatchBeginningAndRun(contr, input)
             }
             return
         }
@@ -151,7 +151,7 @@ class _CommandSetGui {
             if (!runnedCommand) {
                 isAtLeastN := StrLen(input) >= this._matchingMode[2]
                 if (isAtLeastN) {
-                    this._SetInputIfOneMatches(contr, input)
+                    this._MatchBeginningAndRun(contr, input)
                 }
             }
             return
@@ -162,7 +162,7 @@ class _CommandSetGui {
         if (input == "") {
             return
         }
-        commandKey := this._SetInputIfOneMatches(contr, input)
+        commandKey := this._MatchBeginningAndRun(contr, input)
         if (this._matchingMode == "onlyReturn" && commandKey != "") {
             this._RunCommand(this._backend.commands[commandKey], contr)
         }
@@ -178,10 +178,11 @@ class _CommandSetGui {
 
     ; Set input field to full command key, if only one command key starts with input
     ; Returns full key if matched or empty string
-    _SetInputIfOneMatches(contr, input) {
+    _MatchBeginningAndRun(contr, input) {
         commandKey := this._backend.FindOnlyCommandKeyStartingWith(input)
         if (commandKey != "") {
-            this.inputControl.SetText(commandKey)
+            this.inputControl.SetText(commandKey, { noEvents: true })
+            this._RunCommand(this._backend.commands[commandKey], contr)
             return commandKey
         }
         return ""
