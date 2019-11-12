@@ -2,11 +2,12 @@
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\ChangeDesktop.ahk
 
+; Change desktop to one associated with user from command config.
+; Intended to subscribe to `commandAboutToRun` from controller,
+; so the command will be run on correct desktop.
+;
+; Requires DesktopsExtension to be active.
 class ChangeDesktopFromUserConfig extends Command {
-    __New(desktopToUserMap) {
-        this._desktopToUserMap := desktopToUserMap
-    }
-
     Run(contr, context) {
         com := context.event.payload.nextCommand
         config := com.GetUserConfig()
@@ -18,7 +19,8 @@ class ChangeDesktopFromUserConfig extends Command {
                                 || config.switchFrom == "all"
                                 || ArrayContains(config.switchFrom, user)
         if (switchFromCurrentUser) {
-            desktop := Flip(this._desktopToUserMap)[config.switchTo]
+            desktopToUserMap := contr.GetExtensionManager().GetExtension("users").GetDesktopToUserMap()
+            desktop := Flip(desktopToUserMap)[config.switchTo]
             desktopChange := new ChangeDesktop(desktop)
             contr.RunCommand(desktopChange)
         }

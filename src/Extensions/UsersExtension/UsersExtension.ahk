@@ -6,6 +6,7 @@
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\ChangeDesktopFromUserConfig.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\SetUserFromDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\SetUserFromUserConfig.ahk
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\ScriptInteraction\EditDesktopToUserDialog.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Controller\IsUserAllowedRule.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Environment\Functions\AsUserOpener.ahk
 
@@ -24,8 +25,8 @@ class UsersExtension {
 
     Attach(contr, settings = "") {
         this._settings := settings
-        if (contr.GetExtensionManager().GetExtension("desktops") != "") {
-            this._DesktopsCompat(contr, settings.desktopToUserMap)
+        if (contr.GetExtensionManager().GetExtension("desktops") != "" && this._settings.desktopToUserMap != "") {
+            this._DesktopsCompat(contr)
         }
         commandsFileExt := contr.GetExtensionManager().GetExtension("commandsFile")
         if (commandsFileExt != "") {
@@ -38,15 +39,13 @@ class UsersExtension {
         contr.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, contr), {priority: this.PRIORITIES["userFromCommandConfig"]})
     }
 
-    _DesktopsCompat(contr, desktopToUserMap) {
-        if (desktopToUserMap != "") {
-            desktopChanger := new ChangeDesktopFromUserConfig(desktopToUserMap)
-            contr.SubscribeCommandAboutToRun(CommandToSubscriber(desktopChanger, contr), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
-            ; priority for `userSetter` must be higher (means running later) than for `desktopChanger`
-            ; first change desktop, then change user based on that desktop
-            userSetter := new SetUserFromDesktop(desktopToUserMap)
-            contr.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, contr), {priority: this.PRIORITIES["userFromDesktop"]})
-        }
+    _DesktopsCompat(contr) {
+        desktopChanger := new ChangeDesktopFromUserConfig()
+        contr.SubscribeCommandAboutToRun(CommandToSubscriber(desktopChanger, contr), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
+        ; priority for `userSetter` must be higher (means running later) than for `desktopChanger`
+        ; first change desktop, then change user based on that desktop
+        userSetter := new SetUserFromDesktop()
+        contr.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, contr), {priority: this.PRIORITIES["userFromDesktop"]})
     }
 
     _CommandsFileCompat(commandsFileExt) {
@@ -55,6 +54,10 @@ class UsersExtension {
 
     GetDesktopToUserMap() {
         return this._settings.desktopToUserMap
+    }
+
+    SetDesktopToUserMap(desktopToUserMap) {
+        this._settings.desktopToUserMap := desktopToUserMap
     }
 }
 
