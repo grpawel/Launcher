@@ -21,7 +21,7 @@ class SetUserFromDesktop extends Command {
     }
 
     Run(contr, context="") {
-        desktop := GetDesktop()
+        desktop := GetDesktopFunction()
         newUser := this._desktopToUserMap[desktop]
         oldUser := contr.GetEnvironment().GetSetting("user")
         if (newUser != oldUser) {

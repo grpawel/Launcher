@@ -5,7 +5,7 @@
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\ChangeDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\CreateDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\DeleteDesktop.ahk
-#Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Functions\GetDesktop.ahk
+#Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Functions\ValueFunctions.ahk
 
 ExtensionManager.RegisterExtension(DesktopsExtension)
 
