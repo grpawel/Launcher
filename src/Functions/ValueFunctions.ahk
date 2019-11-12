@@ -21,10 +21,9 @@ GetUserInput(options := "") {
 
 _GetUserInput(title, defaultValue, contr, context) {
     gui := contr.GetGui()
-    gui.DisableAll()
     title := GetValue(title, contr, context)
     if (title != "") {
-        gui.AddText({ text: title })
+        textControl := gui.AddText({ text: title })
     }
     inputControl := gui.AddTextInput()
     state := { submitted: false
@@ -38,7 +37,8 @@ _GetUserInput(title, defaultValue, contr, context) {
     while (!state.submitted) {
         ; spinlock this thread
     }
-    gui.DisableAll()
+    textControl.Disable()
+    inputControl.Disable()
     return state.input
 }
 

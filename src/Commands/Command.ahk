@@ -31,6 +31,10 @@ class Command {
         return false
     }
 
+    UsesExistingControl() {
+        return false
+    }
+
     ; Methods used in internals, e.g. in Help.
     SetPayload(key, payload) {
         if (!this.HasKey("_payload")) {

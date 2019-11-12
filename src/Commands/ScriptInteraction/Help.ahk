@@ -36,6 +36,10 @@ class Help extends Command {
         return true
     }
 
+    UsesExistingControl() {
+        return true
+    }
+
     ; There are three possible states:
     ; (D) Detached: user has not opened help yet, user opened another CommandSet or GUI is destroyed.
     ; (S) Shown: subscribed to user input and command selection; attached to CommandSet
@@ -80,6 +84,7 @@ class Help extends Command {
         _Detach() {
             if (this.state != "detached") {
                 this.state := "detached"
+                this._guiControl.Disable()
                 this._UnsubscribeCommandSetNotActive()
                 this._UnsubscribeInput()
                 this._commandSet.SetPayload("helpAttachment", "")

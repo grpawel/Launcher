@@ -171,12 +171,6 @@ class Gui {
         return this._state == "opened"
     }
 
-    DisableAll() {
-        for i, control in this._controls {
-            control.Disable()
-        }
-    }
-
     GetName() {
         name := this._name
         return this._name

@@ -11,7 +11,6 @@ class Search extends Command {
 
     Run(contr, context) {
         gui := contr.GetGui()
-        gui.DisableAll()
         if (this.GetDescription() != "") {
             gui.AddText({ text: this.GetDescription() })
         }

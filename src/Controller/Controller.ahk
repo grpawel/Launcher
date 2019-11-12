@@ -66,8 +66,7 @@ class Controller {
             new WaitForGuiDestroyed(new FunctionToCommand(this._RestoreOriginalDoesNeedGui.Bind(this, com, originalMethod, originalMethodIsFromBase)))
                                 .Run(this, {})
         }
-        new ShowMessage(message, { textColor: Colors.RED
-                                 , disablePrevious: true })
+        new ShowMessage(message, { textColor: Colors.RED })
                        .Run(this, {})
     }
 

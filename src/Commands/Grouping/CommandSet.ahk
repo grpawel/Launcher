@@ -122,7 +122,6 @@ class _CommandSetGui {
 
     Run(contr) {
         gui := contr.GetGui()
-        gui.DisableAll()
         if (this._commandSet.GetDescription() != "") {
             gui.AddText({ text: this._commandSet.GetDescription() })
         }
@@ -189,6 +188,9 @@ class _CommandSetGui {
     }
 
     _RunCommand(matchedCommand, contr) {
+        if (!matchedCommand.UsesExistingControl()) {
+            this.inputControl.Disable()
+        }
         contr.RunCommand(matchedCommand, {caller: this._commandSet })
         if (!matchedCommand.DoesNeedGui()) {
             this._inputChangedSubscription.Unsubscribe()
