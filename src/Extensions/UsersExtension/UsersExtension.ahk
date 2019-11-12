@@ -2,6 +2,7 @@
 #Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
+#Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\ScriptInteraction\ChangeUser.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\ChangeDesktopFromUserConfig.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\SetUserFromDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\Subscribing\SetUserFromUserConfig.ahk
@@ -26,6 +27,10 @@ class UsersExtension {
         if (contr.GetExtensionManager().GetExtension("desktops") != "") {
             this._DesktopsCompat(contr, settings.desktopToUserMap)
         }
+        commandsFileExt := contr.GetExtensionManager().GetExtension("commandsFile")
+        if (commandsFileExt != "") {
+            this._CommandsFileCompat(commandsFileExt)
+        }
         contr.GetBlocker().AddRule(Func("IsUserAllowedRule"), { name: "isUserAllowed" })
 
         contr.GetEnvironment().Update({ settings: { user: ""}, functions: { open: Func("AsUserOpener") } })
@@ -42,6 +47,10 @@ class UsersExtension {
             userSetter := new SetUserFromDesktop(desktopToUserMap)
             contr.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, contr), {priority: this.PRIORITIES["userFromDesktop"]})
         }
+    }
+
+    _CommandsFileCompat(commandsFileExt) {
+        commandsFileExt.RegisterCommand("ChangeUser", "Change user", ["User name"])
     }
 
     GetDesktopToUserMap() {
