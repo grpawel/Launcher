@@ -13,7 +13,7 @@ class SetUserFromDesktop extends Command {
 
     Run(contr, context="") {
         desktop := GetDesktopFunction()
-        desktopToUserMap := contr.GetExtensionManager().GetExtension("users").GetDesktopToUserMap()
+        desktopToUserMap := contr.GetExtension("users").GetDesktopToUserMap()
         newUser := desktopToUserMap[desktop]
         oldUser := contr.GetEnvironment().GetSetting("user")
         if (newUser != oldUser) {

@@ -97,4 +97,8 @@ class Controller {
     GetExtensionManager() {
         return this._extensionManager
     }
+
+    GetExtension(name) {
+        return this._extensionManager.GetExtension(name)
+    }
 }

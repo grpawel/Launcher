@@ -19,6 +19,7 @@ class ExtensionManager {
     ; If extension is not attached, its functions are not used with given controller.
     ; `extensionNames` (string[] | "all") - extensions to use
     ; `settings` - extension specific settings
+    ; Should be called with all extensions at once, not activate extensions one by one.
     ; Examples:
     /*
     extensionManager.Activate(contr, "all", { ext1: { setting1: "abc" }, ext2: { setting: "def" } })

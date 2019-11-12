@@ -25,10 +25,10 @@ class UsersExtension {
 
     Attach(contr, settings = "") {
         this._settings := settings
-        if (contr.GetExtensionManager().GetExtension("desktops") != "" && this._settings.desktopToUserMap != "") {
+        if (contr.GetExtension("desktops") != "" && this._settings.desktopToUserMap != "") {
             this._DesktopsCompat(contr)
         }
-        commandsFileExt := contr.GetExtensionManager().GetExtension("commandsFile")
+        commandsFileExt := contr.GetExtension("commandsFile")
         if (commandsFileExt != "") {
             this._CommandsFileCompat(commandsFileExt)
         }

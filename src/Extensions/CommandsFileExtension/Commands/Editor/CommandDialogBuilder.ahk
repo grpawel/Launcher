@@ -114,7 +114,7 @@ class _CommandDialogBuilder_Step extends Command {
     }
 
     GetAvailableCommands(contr) {
-         return contr.GetExtensionManager().GetExtension("commandsFile").GetRegisteredCommands()
+         return contr.GetExtension("commandsFile").GetRegisteredCommands()
     }
 
     DoesNeedGui() {

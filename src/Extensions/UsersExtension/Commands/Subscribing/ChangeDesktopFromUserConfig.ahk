@@ -19,7 +19,7 @@ class ChangeDesktopFromUserConfig extends Command {
                                 || config.switchFrom == "all"
                                 || ArrayContains(config.switchFrom, user)
         if (switchFromCurrentUser) {
-            desktopToUserMap := contr.GetExtensionManager().GetExtension("users").GetDesktopToUserMap()
+            desktopToUserMap := contr.GetExtension("users").GetDesktopToUserMap()
             desktop := Flip(desktopToUserMap)[config.switchTo]
             desktopChange := new ChangeDesktop(desktop)
             contr.RunCommand(desktopChange)

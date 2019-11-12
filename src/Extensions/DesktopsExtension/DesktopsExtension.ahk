@@ -13,7 +13,7 @@ class DesktopsExtension {
     static NAME := "desktops"
 
     Attach(contr) {
-        commandsFileExt := contr.GetExtensionManager().GetExtension("commandsFile")
+        commandsFileExt := contr.GetExtension("commandsFile")
         if (commandsFileExt != "") {
             this._RegisterCommands(commandsFileExt)
         }

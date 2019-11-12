@@ -7,7 +7,7 @@ class EditDesktopToUserDialog extends Command {
     _description := "Edit desktop to user associations"
 
     Run(contr, context) {
-        desktopToUserMap := contr.GetExtensionManager().GetExtension("users").GetDesktopToUserMap()
+        desktopToUserMap := contr.GetExtension("users").GetDesktopToUserMap()
         gui := contr.GetGui()
         userInputs := []
         totalDesktops := GetTotalDesktopsFunction()
@@ -29,7 +29,7 @@ class EditDesktopToUserDialog extends Command {
             input.Disable()
         }
         contr.GetGui().Destroy()
-        contr.GetExtensionManager().GetExtension("users").SetDesktopToUserMap(newMap)
+        contr.GetExtension("users").SetDesktopToUserMap(newMap)
     }
 
     DoesNeedGui() {
