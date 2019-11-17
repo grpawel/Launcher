@@ -15,6 +15,7 @@
 #Include %A_ScriptDir%\src\Commands\Grouping\CommandSet.ahk
 #Include %A_ScriptDir%\src\Commands\Grouping\RemoveCommand.ahk
 #Include %A_ScriptDir%\src\Commands\Grouping\Sequence.ahk
+#Include %A_ScriptDir%\src\Commands\Grouping\ShareControls.ahk
 
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\BlockCommands.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\ChangeEnvironment.ahk
