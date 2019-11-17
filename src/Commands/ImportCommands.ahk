@@ -18,6 +18,7 @@
 #Include %A_ScriptDir%\src\Commands\Grouping\ShareControls.ahk
 
 #Include %A_ScriptDir%\src\Commands\Helpers\FolderCommands.ahk
+#Include %A_ScriptDir%\src\Commands\Helpers\InputHotstrings.ahk
 
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\BlockCommands.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\ChangeEnvironment.ahk
