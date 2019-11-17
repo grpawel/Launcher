@@ -2,7 +2,7 @@
 ; There are multiple subexamples. Each one shows different functionality or setting.
 
 
-; To run this example run `RunExample.ahk` from parent directory and select "3. Selecting commands".
+; To run this example run `RunExample.ahk` from parent directory and select "3. Using GUI".
 
 ; If you want to use this file with your own commands:
 ;  1. Copy this file to main directory (the one containing `src`, `Examples` and other folders).
@@ -14,8 +14,8 @@
 
 #Include %A_ScriptDir%\src\IncludeAll.ahk
 
-SelectingCommands:                                          ; demo-specific
-    MsgBox, Press`nCtrl + Shift + /`nto open GUI.           ; demo-specific
+UsingGuiExample:                                            ; only-for-demo
+    MsgBox, Press`nCtrl + Shift + /`nto open GUI.           ; only-for-demo
 
     commands := new CommandSet().SetDescription("How to select a command")
     
@@ -44,8 +44,7 @@ SelectingCommands:                                          ; demo-specific
     exact.AddCommand("google", new Open("https://google.com"))
     exact.AddCommand("goodreads", new Open("https://goodreads.com"))
     exact.AddCommand("amazon", new Open("https://amazon.com"))
-    exactExplanation := new Sequence([ new ShowMessage("CommandSet can be configured for having to type whole command key.`n"
-                                                       . "This is what you did in previous examples."
+    exactExplanation := new Sequence([ new ShowMessage("By default you have to type whole key."
                                                       , { textColor: Colors.YELLOW })
                                      , new ShowMessage("Type ""goodreads"" to run ""goodreads""."
                                                       , { textColor: Colors.AQUA }) ])
@@ -119,23 +118,23 @@ SelectingCommands:                                          ; demo-specific
     overlappingExplanation := new ShowMessage("If you have two commands where one key is a beginning of the other,`n"
                                               . "the only way to select longer one is by using the list on the right.`n"
                                              , { textColor: Colors.YELLOW })
-    commands.addCommand("6", new Sequence([ new ResetGui()
+    commands.AddCommand("6", new Sequence([ new ResetGui()
                                           , overlappingExplanation
                                           , WithHelpOpened(overlapping) ])
                                          .SetDescription("Overlapping command keys"))
 
-
+    commands.AddCommand("rel", new Reload())
     contr := new Controller(new Environment(), new Gui())
     contr.SetRootCommand(WithHelpOpened(commands))
 
-    activeExample := "selectingCommands"                    ; demo-specific
-    return                                                  ; demo-specific
+    activeExample := "usingGui"                             ; only-for-demo
+    return                                                  ; only-for-demo
 
-#If (activeExample == "selectingCommands")                  ; demo-specific
-{                                                           ; demo-specific
+#If (activeExample == "usingGui")                           ; only-for-demo
+{                                                           ; only-for-demo
     +^/::
         contr.Execute()
         return
-}                                                           ; demo-specific
+}                                                           ; only-for-demo
 
 #Include %A_ScriptDir%\src\Gui\GuiEscapes.ahk

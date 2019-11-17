@@ -13,7 +13,7 @@
 ; Include all necessary files from the project.
 #Include %A_ScriptDir%\src\IncludeAll.ahk
 
-Basic:                                                          ; only-for-demo
+BasicExample:                                                   ; only-for-demo
     MsgBox, Press`nCtrl + Shift + /`nto open GUI.               ; only-for-demo
 
     ; CommandSet stores and matches your commands.
@@ -28,6 +28,9 @@ Basic:                                                          ; only-for-demo
     commands.AddCommand("calc", new Open("calc"))
     commands.AddCommand("hosts", new Open("C:\Windows\system32\drivers\etc\hosts").SetDescription("hosts file"))
 
+    ; Show additional input, then open website with REPLACEME replaced
+    commands.AddCommand("d ", new Search("https://duckduckgo.com?q=REPLACEME").SetDescription("Search in DuckDuckGo"))
+
     ; Add commands in a loop. These would open folders for drives in your computer.
     for letter in RangeAscii("C", "F") {
         commands.AddCommand(letter "/", new Open(letter ":\"))
@@ -35,7 +38,8 @@ Basic:                                                          ; only-for-demo
 
     ; Typing `?` will show or hide help - side window listing all available commands.
     commands.AddCommand("?", new Help(commands))
-    ; Typing `rel` will reload script. Reloading is necessary when you added or removed a command in a file.
+    ; Typing `rel` will reload script.
+    ; Reloading is necessary when you added a new command in a file and want to use it.
     commands.AddCommand("rel", new Reload())
 
     ; `WithHelpOpened` returns the same CommandSet, but it will have Help opened by default.
@@ -51,7 +55,7 @@ Basic:                                                          ; only-for-demo
 {                                                               ; only-for-demo
     ; Ctrl + Shift + /
     +^/::
-        ; Run command given to controller - CommandSet `commands`, which shows input field.
+        ; Show gui with input field
         contr.Execute()
         return
 }                                                               ; only-for-demo

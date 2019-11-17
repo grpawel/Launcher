@@ -1,6 +1,6 @@
-examples := [ { id: 1, proc: "Basic", name: "Basic" }
-            , { id: 2, proc: "CreatingCommands", name: "Creating commands" }
-            , { id: 3, proc: "SelectingCommands", name: "Selecting commands" }  ]
+examples := [ { id: 1, proc: "BasicExample", name: "Basic" }
+            , { id: 2, proc: "CreatingCommandsExample", name: "Creating commands" }
+            , { id: 3, proc: "UsingGuiExample", name: "Using GUI" } ]
 
 for i, example in examples {
     buttonName := "&"example.id ". " example.name
@@ -29,6 +29,6 @@ ResetExamples:
 ExitExamples:
     ExitApp
 
-#Include %A_ScriptDir%\Examples\Basic.ahk
-#Include %A_ScriptDir%\Examples\CreatingCommands.ahk
-#Include %A_ScriptDir%\Examples\SelectingCommands.ahk
+#Include %A_ScriptDir%\Examples\1_Basic.ahk
+#Include %A_ScriptDir%\Examples\2_CreatingCommands.ahk
+#Include %A_ScriptDir%\Examples\3_UsingGui.ahk

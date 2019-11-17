@@ -13,7 +13,7 @@
 
 #Include %A_ScriptDir%\src\IncludeAll.ahk
 
-CreatingCommands:                                           ; only-for-demo
+CreatingCommandsExample:                                    ; only-for-demo
     MsgBox, Press`nCtrl + Shift + /`nto open GUI.           ; only-for-demo
 
     commands := new CommandSet().SetDescription("Creating commands")
@@ -47,7 +47,7 @@ CreatingCommands:                                           ; only-for-demo
     
     ; Use command factory:
     ; Instead of `new Open(...)`, you can call method on the factory: `_.Open(...)`
-    ; By doing that your script is a little bit shorter.
+    ; Doing that makes your script a little bit shorter.
     _ := new CommandFactory()
     commands.AddCommand("note", _.Open("notepad"))
     ; If you make a typo and the command is wrong, you will be notified. `new` fails silently.
@@ -66,13 +66,15 @@ CreatingCommands:                                           ; only-for-demo
     commands.AddCommand("msg", _.FunctionToCommand(Func("ShowSomeMessages")).SetDescription(""))
 
 
+    commands.AddCommand("?", _.Help(commands))
+    commands.AddCommand("rel", _.Reload())
     contr := new Controller(new Environment(), new Gui())
     contr.SetRootCommand(WithHelpOpened(commands))
 
     activeExample := "creatingCommands"                     ; only-for-demo
     return                                                  ; only-for-demo
 
-; Commands should extend `Command` class. This gives description, tags and other functionalities.
+; Commands should extend `Command` class. This gives them description, tags and other functionalities.
 ; The command will be picked up by `CommandFactory`.
 class YourOwnCommand extends Command {
     ; Constructor. Use it to pass some configuration to the command.
@@ -96,7 +98,7 @@ class YourOwnCommand extends Command {
     }
 }
 
-; Function arguments are same as those in `Command.Run` method.
+; Function arguments are the same as those in `Command.Run` method.
 ShowSomeMessages(contr, context) {
     contr.GetGui().Destroy()
     MsgBox % "Running your own function"
