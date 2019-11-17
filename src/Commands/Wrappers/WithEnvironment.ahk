@@ -1,5 +1,5 @@
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\ChangeEnvironment.ahk
-#Include %A_ScriptDir%\src\Commands\Helpers\WithCommandThenReverted.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithCommandThenReverted.ahk
 
 ; Change environment for some time and run command.
 ; For options see `WithCommandThenReverted` docs.

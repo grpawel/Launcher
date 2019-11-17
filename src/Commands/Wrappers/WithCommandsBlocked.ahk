@@ -1,5 +1,5 @@
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\BlockCommands.ahk
-#Include %A_ScriptDir%\src\Commands\Helpers\WithCommandThenReverted.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithCommandThenReverted.ahk
 #Include %A_ScriptDir%\src\Utils\StringUtils.ahk
 
 ; Block commands using `predicate`, then run given command.

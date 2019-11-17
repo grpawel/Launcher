@@ -1,5 +1,5 @@
-#Include %A_ScriptDir%\src\Commands\Helpers\WithCommandThenReverted.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\UnblockCommands.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithCommandThenReverted.ahk
 
 ; Disable some rule for some time, then run command.
 ; See `CommandBlocker.Unblock()` method docs.

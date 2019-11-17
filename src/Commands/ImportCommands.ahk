@@ -17,6 +17,8 @@
 #Include %A_ScriptDir%\src\Commands\Grouping\Sequence.ahk
 #Include %A_ScriptDir%\src\Commands\Grouping\ShareControls.ahk
 
+#Include %A_ScriptDir%\src\Commands\Helpers\FolderCommands.ahk
+
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\BlockCommands.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\ChangeEnvironment.ahk
 #Include %A_ScriptDir%\src\Commands\ScriptInteraction\Help.ahk
@@ -29,9 +31,8 @@
 
 #Include %A_ScriptDir%\src\Commands\Technical\FunctionToCommand.ahk
 
-#Include %A_ScriptDir%\src\Commands\Helpers\FolderCommands.ahk
-#Include %A_ScriptDir%\src\Commands\Helpers\WithBlockerRuleDisabled.ahk
-#Include %A_ScriptDir%\src\Commands\Helpers\WithCommandsBlocked.ahk
-#Include %A_ScriptDir%\src\Commands\Helpers\WithCommandThenReverted.ahk
-#Include %A_ScriptDir%\src\Commands\Helpers\WithEnvironment.ahk
-#Include %A_ScriptDir%\src\Commands\Helpers\WithHelpOpened.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithBlockerRuleDisabled.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithCommandsBlocked.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithCommandThenReverted.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithEnvironment.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithHelpOpened.ahk
