@@ -65,11 +65,11 @@ class ShareControls extends Command {
         for i, command in this._commands {
             guiDecorator := new this._GuiDecorator(shared, i)
             decoratedGui := new MethodDecorator(gui, guiDecorator, ["AddTextInput", "AddListView", "AddText", "Destroy"])
-            decoratedController := new MethodDecorator(contr, new this._ControllerDecorator(decoratedGui), ["GetGui"])
-            ; `decoratedController.RunCommand` still calls `command.Run` with original controller
-            ; we want to pass `decoratedController` to the command, but still allow blocking the command
-            withControllerCommand := new MethodDecorator(command, new UseController(decoratedController, command), ["Run"])
-            contr.RunCommand(withControllerCommand, context)
+            controllerDecorator := new this._ControllerDecorator(contr, decoratedGui)
+            decoratedController := new MethodDecorator(contr, controllerDecorator, ["GetGui", "RunCommand", "RunCommandWithoutEvents"])
+            controllerDecorator.SetDecorated(decoratedController)
+
+            contr.RunCommand(command, context, decoratedController)
         }
     }
 
@@ -78,12 +78,25 @@ class ShareControls extends Command {
     }
 
     class _ControllerDecorator {
-        __New(decoratedGui) {
+        __New(original, decoratedGui) {
+            this._original := original
             this._decoratedGui := decoratedGui
+        }
+
+        SetDecorated(decorated) {
+            this._decorated := decorated
         }
 
         GetGui() {
             return this._decoratedGui
+        }
+
+        RunCommand(com, context = "", contr = "") {
+            return this._original.RunCommand(com, context, this._decorated)
+        }
+
+        RunCommandWithoutEvents(com, context = "", contr = "") {
+            return this._original.RunCommand(com, context, this._decorated)
         }
     }
 

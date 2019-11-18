@@ -34,17 +34,20 @@ class Controller {
         return this._gui
     }
 
-    RunCommand(com, context = "") {
+    ; Run given command.
+    ; Allows to change controller used for `com` command or any next command that `com` may run.
+    RunCommand(com, context = "", contr = "") {
         this._eventBus.Emit("commandAboutToRun", { nextCommand: com })
-        this.RunCommandWithoutEvents(com, context)
+        this.RunCommandWithoutEvents(com, context, contr)
     }
 
     ; Run command without firing events.
-    ; Stops loops when command subscribes `commandAboutToRun` - it would run again and again infinitely.
-    RunCommandWithoutEvents(com, context) {
+    ; Is needed because subscribers to `commandAboutToRun` can run commands - it would get stuck in a loop.
+    RunCommandWithoutEvents(com, context, contr = "") {
         blockingResult := this._blocker.IsCommandBlocked(com, this)
         if (!blockingResult.doBlock) {
-            com.Run(this, context)
+            contr := contr == "" ? this : contr
+            com.Run(contr, context)
         } else {
             if (blockingResult.message != "") {
                 this._ShowBlockingMessageHacky(com, blockingResult.message)   
