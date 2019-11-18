@@ -7,9 +7,9 @@ class Sequence extends Command {
         this.AddTags(["composite"])
     }
 
-    Run(controller) {
+    Run(contr, context) {
         for i, com in this._commands {
-            controller.RunCommand(com, { caller: this })
+            contr.RunCommand(com, MergeArrays(context, { caller: this }))
         }
         return result
     }
@@ -20,8 +20,10 @@ class Sequence extends Command {
 
     DoesNeedGui() {
         for i, com in this._commands.Clone() {
-                anyCommandNeeds := anyCommandNeeds || com.DoesNeedGui()
+            if (com.DoesNeedGui()) {
+                return true
+            }
         }
-            return anyCommandNeeds
+        return false
     }
 }
