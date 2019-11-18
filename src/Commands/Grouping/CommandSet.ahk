@@ -1,33 +1,41 @@
-#Include %A_ScriptDir%\src\Commands\Command.ahk
+﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
-; Store a list of commands with their keys
-; Shows input in gui and runs matching command
+; Store a list of commands with their keys.
+; Shows input in gui and runs matching command.
 ; 
 ; Split into three classes for readability.
+; Options:
+; typingMatch - how to match commands when typing:
+;   "exact" - (default) whole key must be typed
+;   "immediate" - run command as soon as only one key starts with input
+;   ["atLeast", N] - try to match immediately if there are at least N characters
+;   "onlyReturn" - tries to match only when Return key is pressed
+; destroyGuiAfter: 
+;   "notNeedingCommand" (default) - destroy gui after running command that does not need gui
+;   "always" - always destroy gui after running command
+;   "never" - never destroy gui after running command
 class CommandSet extends Command {
     _gui :=
     _backend :=
     _eventBus := new EventBus()
-    static _DEFAULT_OPTIONS := { "typingMatch": "exact" }
+    static _DEFAULT_OPTIONS := { typingMatch: "exact"
+                               , destroyGuiAfter: "notNeedingCommand" }
 
-    ; Options:
-    ; typingMatch - how to match commands when typing:
-    ;       "exact" - (default) whole key must be typed
-    ;       "immediate" - run command as soon as only one key starts with input
-    ;       ["atLeast", N] - try to match immediately if there are at least N characters
-    ;       "onlyReturn" - tries to match only when Return key is pressed
     __New(options = "") {
         this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
         static V := new ValidatorFactory()
-        static VAL := V.Object({"typingMatch": V.Or([ V.Equal("exact")
+        static VAL := V.Object({ "typingMatch": V.Or([ V.Equal("exact")
                                                     , V.Equal("immediate")
                                                     , V.Object({1: V.Equal("atLeast"), 2: V.PositiveInt()})
-                                                    , V.Equal("onlyReturn") ]) })
+                                                    , V.Equal("onlyReturn") ])
+                               , "destroyGuiAfter": V.OneOf([ "notNeedingCommand"
+                                                            , "always"
+                                                            , "never" ]) })
         VAL.ValidateAndShow(this._options)
 
         this._backend := new _CommandSetBackend()
-        this._gui := new _CommandSetGui(this, this._backend, this._options.typingMatch)
+        this._gui := new _CommandSetGui(this, this._backend, this._options.typingMatch, this._options.destroyGuiAfter)
         this.AddTags(["composite"])
     }
 
@@ -114,10 +122,11 @@ class _CommandSetGui {
     _inputDestroyedSubscription := 
     _inputDisabledSubscription := 
 
-    __New(comSet, backend, matchingMode) {
+    __New(comSet, backend, matchingMode, destroyGuiMode) {
         this._commandSet := comSet
         this._backend := backend
         this._matchingMode := matchingMode
+        this._destroyGuiMode := destroyGuiMode
     }
 
     Run(contr) {
@@ -192,7 +201,10 @@ class _CommandSetGui {
             this.inputControl.Disable()
         }
         contr.RunCommand(matchedCommand, {caller: this._commandSet })
-        if (!matchedCommand.DoesNeedGui()) {
+        destroyGui := this._destroyGuiMode == "notNeedingCommand" && !matchedCommand.DoesNeedGui()
+                    || this._destroyGuiMode == "always"
+        noDestroyGui := this._destroyGuiMode == "never"
+        if (destroyGui && !noDestroyGui) {
             this._inputChangedSubscription.Unsubscribe()
             this._returnPressedSubscription.Unsubscribe()
             contr.GetGui().Destroy()

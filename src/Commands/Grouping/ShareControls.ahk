@@ -9,6 +9,7 @@
 ; If a command uses two controls of same type (eg. two inputs) both are created.
 ; Can be used to combine for example `Search` and `CommandSet` commands.
 ; Order in which commands receive events is random.
+; Gui is destroyed after all given commands try to destroy it (minus noDestroyCommands option).
 ; Options:
 ; order: "usePriorities" - (default) commands will receive events in order,
 ;                          so event from control is first received by `commands[1]`, then `commands[2]` etc.
@@ -17,6 +18,7 @@
 ; order: "random" - commands will receive events from controls in random order.
 ;                   No limit to number of controls.
 ; allowDisabling: boolean (default: true) - allow commands to disable controls. Has no effect on destroying gui.
+; noDestroyCommands: int (default: 0) - number of commands that do not attempt to destroy gui. 
 ; Example:
 /*
 ; Use common input for all searches - will open three websites
@@ -27,24 +29,26 @@ new ShareControls([ new ShowMessage("Use multiple search engines")
 */
 /*
 ; Add "hotstrings" to search
-searchHotstrings := new CommandSet()
+searchHotstrings := new CommandSet({ destroyGuiAfter: "never" })
 searchHotstrings.AddCommand("ahk", new TypeText("{Backspace}{Backspace}{Backspace}AutoHotkey ", { when: "immediate" }))
 searchHotstrings.AddCommand("w10", new TypeText("{Backspace}{Backspace}{Backspace}Windows 10 ", { when: "immediate" }))
 
 new ShareControls([ _.Search("google.com/search?q=REPLACEME").SetDescription("Search Google")
                   , searchHotstrings ]
-                 , { allowDisabling: false }).SetDescription("Search with hotstrings")
+                 , { allowDisabling: false, noDestroyCommands: 1 }).SetDescription("Search with hotstrings")
 */
 
 class ShareControls extends Command {
     static _DEFAULT_OPTIONS := { "order": "usePriorities"
-                               , "allowDisabling": true }
+                               , "allowDisabling": true
+                               , "noDestroyCommands": 0 }
 
     __New(commands, options = "") {
         this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
         static V := new ValidatorFactory()
         static VAL := V.Object({ "order": V.OneOf(["usePriorities", "random"])
-                               , "allowDisabling": V.Boolean() })
+                               , "allowDisabling": V.Boolean()
+                               , "noDestroyCommands": V.PositiveInt() })
         VAL.ValidateAndShow(this._options)
 
         this._commands := commands
@@ -53,10 +57,11 @@ class ShareControls extends Command {
     Run(contr, context) {
         gui := contr.GetGui()
         sharedOptions := {}
+        sharedOptions.guiDestroyAttempts := this._commands.Length() - this._options.noDestroyCommands
         sharedOptions.overrideSubscriptionPriority := this._options.order == "usePriorities"
         sharedOptions.allowDisabling := this._options.allowDisabling
 
-        shared := new ShareControls._Shared(gui, this._commands.Length(), sharedOptions)
+        shared := new ShareControls._Shared(gui, sharedOptions)
         for i, command in this._commands {
             guiDecorator := new this._GuiDecorator(shared, i)
             decoratedGui := new MethodDecorator(gui, guiDecorator, ["AddTextInput", "AddListView", "AddText", "Destroy"])
@@ -86,9 +91,9 @@ class ShareControls extends Command {
     class _Shared {
         _controlsByName := {}
 
-        __New(gui, commandsCount, sharedOptions) {
+        __New(gui, sharedOptions) {
             this._gui := gui
-            this._activeCommands := commandsCount
+            this._guiDestroyAttemptsLeft := sharedOptions.guiDestroyAttempts
             this._overrideSubscriptionPriority := sharedOptions.overrideSubscriptionPriority
             this._allowDisabling := sharedOptions.allowDisabling
         }
@@ -122,8 +127,8 @@ class ShareControls extends Command {
 
         ; Destroy gui after each command calls `gui.Destroy()`
         Destroy() {
-            this._activeCommands -= 1
-            if (this._activeCommands <= 0) {
+            this._guiDestroyAttemptsLeft -= 1
+            if (this._guiDestroyAttemptsLeft <= 0) {
                 this._gui.Destroy()
             }
         }
