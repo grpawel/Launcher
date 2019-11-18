@@ -14,10 +14,14 @@ class Sequence extends Command {
         return result
     }
 
+    GetCommands() {
+        return this._commands
+    }
+
     DoesNeedGui() {
         for i, com in this._commands.Clone() {
                 anyCommandNeeds := anyCommandNeeds || com.DoesNeedGui()
-            }
+        }
             return anyCommandNeeds
     }
 }
