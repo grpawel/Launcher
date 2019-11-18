@@ -142,9 +142,7 @@ class Gui {
 
     Destroy() {
         this._Destroy()
-        this._eventBus.Emit("guiDestroyed") 
-        #WinActivateForce
-        WinActivate
+        this._eventBus.Emit("guiDestroyed")
     }
 
     Reset() {
