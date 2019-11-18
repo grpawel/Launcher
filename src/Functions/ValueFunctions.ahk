@@ -13,6 +13,7 @@ GetEnvironmentSettingFunction(setting, contr, context) {
 
 ; Shows input in gui. Returns entered string value.
 ; If user closes gui before pressing Return key, `options.defaultValue` is returned.
+; Known limitation: gets stuck when previous command was selected using Enter key.
 GetUserInput(options := "") {
     static DEFAULT_OPTIONS := { title: "", defaultValue: "Default value" }
     options := MergeArrays(DEFAULT_OPTIONS, options)
