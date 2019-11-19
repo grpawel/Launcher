@@ -36,14 +36,14 @@ class Gui {
                 , windowColor: Colors.ALMOST_BLACK
                 , controlColor: Colors.DARK_GRAY }
         static V := new ValidatorFactory()
-        static VAL := V.Object(   { "width": V.PositiveInt()
-                                , "textColor": V.String()
-                                , "windowColor": V.String()
-                                , "controlColor": V.String()
-                                , "position": V.Object({ "x": V.Integer()
-                                                       , "y": V.Integer()}
-                                                    , { ignoreMissing: true })}
-                            , { ignoreMissing: true })
+        static VAL := V.Object({ "width": V.PositiveInt()
+                               , "textColor": V.String()
+                               , "windowColor": V.String()
+                               , "controlColor": V.String()
+                               , "position": V.Object({ "x": V.Integer()
+                                                      , "y": V.Integer() }
+                                                     , { allowMissingKeys: true }) }
+                            , { allowMissingKeys: true })
         options := MergeArrays(DEFAULT_OPTIONS, options)
         VAL.ValidateAndShow(options)
         return options

@@ -33,8 +33,7 @@ class CommandBlocker {
         static V := new ValidatorFactory()
         static VAL := V.Object({ "fallbackReason": V.String()
                                , "quiet": V.Boolean()
-                               , "name": V.String() }
-                            , { ignoreMissing: false, noOtherKeys: true })
+                               , "name": V.String() })
         options := MergeArrays(DEFAULT_OPTIONS, options)
         if (options.name == "") {
             options.name := RandomString(8)

@@ -79,12 +79,12 @@ class UsersExtension {
 ; 7) A combination of above. Same user in multiple options can cause unexpected results.
 _Command_UserConfig(this, config) {
     static V := new ValidatorFactory()
-    static VAL := V.Object( { "blacklist": V.Or([V.Equal("all"), V.ObjectEachValue(V.String())])
-                            , "whitelist": V.Or([V.Equal("all"), V.ObjectEachValue(V.String())])
-                            , "switchFrom": V.ObjectEachValue(V.String())
-                            , "switchTo": V.String()
-                            , "runAs": V.String() }
-                        , {ignoreMissing: true, noOtherKeys: false} )
+    static VAL := V.Object({ "blacklist": V.Or([V.Equal("all"), V.ObjectEachValue(V.String())])
+                           , "whitelist": V.Or([V.Equal("all"), V.ObjectEachValue(V.String())])
+                           , "switchFrom": V.ObjectEachValue(V.String())
+                           , "switchTo": V.String()
+                           , "runAs": V.String() }
+                        , { allowMissingKeys: true, allowOtherKeys: false } )
     if (this._userConfig == "") {
         this._userConfig := {}
     }

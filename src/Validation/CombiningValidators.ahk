@@ -39,27 +39,30 @@ class ValidatorAnd extends BaseValidator {
 }
 
 class ValidatorObject extends BaseValidator {
+    static _DEFAULT_OPTIONS := { "allowMissingKeys": false
+                               , "allowOtherKeys": false
+                               , "allowEmptyVariable": false }
+
     _Set(validatorObjByKey, options) {
         this._validatorObjByKey := validatorObjByKey
-        this._noOtherKeys := options["noOtherKeys"]
-        this._ignoreMissing := options["ignoreMissing"]
+        this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
         static V := new ValidatorFactory()
-        static VAL := V.Or( [ V.Object(   { "noOtherKeys": V.Boolean()
-                                        , "ignoreMissing": V.Boolean() }
-                                    , { ignoreMissing: true, noOtherKeys: true })
-                            , V.Empty() ])
-        VAL.ValidateAndShow(options)
+        static VAL := V.Object({ "allowOtherKeys": V.Boolean()
+                               , "allowMissingKeys": V.Boolean()
+                               , "allowEmptyVariable": V.Boolean() }
+                              , { allowMissingKeys: true, allowOtherKeys: false, allowEmptyVariable: true })
+        VAL.ValidateAndShow(this._options)
     }
 
     Validate(obj) {
         messages := []
-        if (!IsObject(obj)) {
+        if (!IsObject(obj) && !this._options.allowEmptyVariable) {
             messages.Push("``" ToCompactString(obj) "`` is not an object.")
         }
         else {
             for key, validatorObj in this._validatorObjByKey {
                 if (!obj.HasKey(key)) {
-                    if (!this._ignoreMissing) {
+                    if (!this._options.allowMissingKeys) {
                         messages.Push("missing key ``" key "`` in ``" ToCompactString(obj) "``.")
                     }
                     continue
@@ -71,7 +74,7 @@ class ValidatorObject extends BaseValidator {
                     messages.Push("``" key "``: " message)
                 }
             }
-            if (this._noOtherKeys) {
+            if (!this._options.allowOtherKeys) {
                 for key, v in obj {
                     if (!this._validatorObjByKey.HasKey(key)) {
                         messages.Push(" unnecessary key ``" key "`` in ``" ToCompactString(obj) "``.")

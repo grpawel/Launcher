@@ -7,14 +7,14 @@
 ; Options:
 ; "textColor": color of text message. If not given default one from Gui is used.
 class ShowMessage extends Command {
-
     __New(message, options = "") {
         this._message := message
         this._description := "Show message """ message """"
         static V := new ValidatorFactory()
-        static VAL := V.Or([ V.Empty()
-                           , V.Object({ "textColor": V.String() }
-                                     , { ignoreMissing: true, noOtherKeys: true }) ])
+        static VAL := V.Object({ "textColor": V.String() }
+                              , { allowMissingKeys: true
+                                , allowOtherKeys: false
+                                , allowEmptyVariable: true })
         this._options := options
         VAL.ValidateAndShow(this._options)
     }

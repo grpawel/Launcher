@@ -23,8 +23,7 @@
 WithCommandThenReverted(commandToRevert, wrapped, options = "") {
     static V := new ValidatorFactory()
     static VAL := V.Object({ "mode": V.OneOf(["forCommand", "permanent", "untilGuiDestroyed"])
-                           , "wrapper": V.OneOf(["transparent", "opaque"]) }
-                        , { ignoreMissing: false, noOtherKeys: true })
+                           , "wrapper": V.OneOf(["transparent", "opaque"]) })
     static DEFAULT_OPTIONS := { mode: "untilGuiDestroyed"
                               , wrapper: "transparent" }
     options := MergeArrays(DEFAULT_OPTIONS, options)

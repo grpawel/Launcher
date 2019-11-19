@@ -26,9 +26,9 @@ class CommandSet extends Command {
         this._options := MergeArrays(this._DEFAULT_OPTIONS, options)
         static V := new ValidatorFactory()
         static VAL := V.Object({ "typingMatch": V.Or([ V.Equal("exact")
-                                                    , V.Equal("immediate")
-                                                    , V.Object({1: V.Equal("atLeast"), 2: V.PositiveInt()})
-                                                    , V.Equal("onlyReturn") ])
+                                                     , V.Equal("immediate")
+                                                     , V.Object({ 1: V.Equal("atLeast"), 2: V.PositiveInt() })
+                                                     , V.Equal("onlyReturn") ])
                                , "destroyGuiAfter": V.OneOf([ "notNeedingCommand"
                                                             , "always"
                                                             , "never" ]) })

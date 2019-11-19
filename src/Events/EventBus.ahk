@@ -20,8 +20,8 @@ class EventBus {
     ; Do not rely on apparent behavior.
     Subscribe(eventName, subscriber, options = "") {
         static V := new ValidatorFactory()
-        static VAL := V.Object( { "duration": V.OneOf(["everytime", "once"])
-                                , "priority": V.Between(1, 32) })
+        static VAL := V.Object({ "duration": V.OneOf(["everytime", "once"])
+                               , "priority": V.Between(1, 32) })
         static DEFAULT_OPTIONS = { "duration": "everytime"
                                  , "priority": 16 }
         options := MergeArrays(DEFAULT_OPTIONS, options)
