@@ -1,11 +1,16 @@
+; Sample root file.
+; To change hotkeys and other configuration copy it into main folder.
+
 #Include %A_ScriptDir%\src\IncludeAll.ahk
-
-#Include %A_ScriptDir%\UserConfig\UserCommands.ahk
-
+ 
+ ; Change this file to your copy of UserCommandsSample.ahk
+#Include %A_ScriptDir%\UserConfig\UserCommandsSample.ahk
 rootCommand := CreateCommands()
+
 main := new Controller(new Environment(), new Gui())
 main.SetRootCommand(rootCommand)
-extensionManager.Attach(main, "all", {users: {desktopToUserMap: desktopToUserMap}})
+main.GetExtensionManager().AttachAll({users: {desktopToUserMap: desktopToUserMap}})
+                          .Activate()
 
 ^/::
     main.Execute()

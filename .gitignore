@@ -1,4 +1,6 @@
 Launcher.ahk
+UserConfig/*
+!UserConfig/UserCommandsSample.ahk
 
 # Created by https://www.gitignore.io/api/git,vim,linux,macos,windows,notepadpp,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=git,vim,linux,macos,windows,notepadpp,visualstudiocode
