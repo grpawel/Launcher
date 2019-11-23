@@ -1,6 +1,7 @@
 #Include <windows-desktop-switcher/functions>
 
 #Include %A_ScriptDir%\src\Extensions\ExtensionManager.ahk
+#Include %A_ScriptDir%\src\Extensions\Extension.ahk
 
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\ChangeDesktop.ahk
 #Include %A_ScriptDir%\src\Extensions\DesktopsExtension\Commands\Actions\CreateDesktop.ahk
@@ -9,13 +10,12 @@
 
 ExtensionManager.RegisterExtension(DesktopsExtension)
 
-class DesktopsExtension {
+class DesktopsExtension extends Extension {
     static NAME := "desktops"
 
-    Attach(contr) {
-        commandsFileExt := contr.GetExtension("commandsFile")
-        if (commandsFileExt != "") {
-            this._RegisterCommands(commandsFileExt)
+    Activate(extensions) {
+        if (extensions.HasKey("commandsFile")) {
+            this._RegisterCommands(extensions["commandsFile"])
         }
     }
 

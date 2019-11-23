@@ -1,4 +1,5 @@
 #Include %A_ScriptDir%\src\Extensions\ExtensionManager.ahk
+#Include %A_ScriptDir%\src\Extensions\Extension.ahk
 #Include %A_ScriptDir%\src\Commands\Grouping\CommandSet.ahk
 
 #Include %A_ScriptDir%\src\Extensions\CommandsFileExtension\Commands\Editor\DeleteCommandDialog.ahk
@@ -14,16 +15,13 @@ ExtensionManager.RegisterExtension(CommandsFileExtension)
 
 CommandSet.IncludeCommandsFile := Func("_CommandSet_IncludeCommandsFile")
 
-class CommandsFileExtension {
+class CommandsFileExtension extends Extension {
     static NAME := "commandsFile"
 
     static _COMMANDS_SETTINGS := {}
 
     __New() {
         this._commandsSettings := CommandsFileExtension._COMMANDS_SETTINGS.Clone()
-    }
-
-    Attach(contr, settings = "") {
     }
 
     ; Register command for specific controller.

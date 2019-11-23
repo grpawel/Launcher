@@ -1,4 +1,5 @@
 #Include %A_ScriptDir%\src\Extensions\ExtensionManager.ahk
+#Include %A_ScriptDir%\src\Extensions\Extension.ahk
 #Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
@@ -16,7 +17,7 @@ Command.UserConfig := Func("_Command_UserConfig")
 Command.GetUserConfig := Func("_Command_GetUserConfig")
 Command.RunAs := Func("_Command_RunAs")
 
-class UsersExtension {
+class UsersExtension extends Extension {
     static NAME := "users"
 
     static PRIORITIES := { "desktopFromCommandConfig": 8
@@ -24,28 +25,31 @@ class UsersExtension {
                          , "userFromCommandConfig": 24 }
 
     Attach(contr, settings = "") {
+        this._controller := contr
         this._settings := settings
-        if (contr.GetExtension("desktops") != "" && this._settings.desktopToUserMap != "") {
-            this._DesktopsCompat(contr)
-        }
-        commandsFileExt := contr.GetExtension("commandsFile")
-        if (commandsFileExt != "") {
-            this._CommandsFileCompat(commandsFileExt)
-        }
-        contr.GetBlocker().AddRule(Func("IsUserAllowedRule"), { name: "isUserAllowed" })
-
-        contr.GetEnvironment().Update({ settings: { user: ""}, functions: { open: Func("AsUserOpener") } })
-        runAsSetter := new SetUserFromUserConfig()
-        contr.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, contr), {priority: this.PRIORITIES["userFromCommandConfig"]})
     }
 
-    _DesktopsCompat(contr) {
+    Activate(extensions) {
+        if (extensions.HasKey("desktops") && this._settings.desktopToUserMap != "") {
+            this._DesktopsCompat()
+        }
+        if (extensions.HasKey("commandsFile")) {
+            this._CommandsFileCompat(extensions["commandsFile"])
+        }
+        this._controller.GetBlocker().AddRule(Func("IsUserAllowedRule"), { name: "isUserAllowed" })
+        this._controller.GetEnvironment().Update({ settings: { user: ""}, functions: { open: Func("AsUserOpener") } })
+
+        runAsSetter := new SetUserFromUserConfig()
+        this._controller.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, this._controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
+    }
+
+    _DesktopsCompat() {
         desktopChanger := new ChangeDesktopFromUserConfig()
-        contr.SubscribeCommandAboutToRun(CommandToSubscriber(desktopChanger, contr), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
+        this._controller.SubscribeCommandAboutToRun(CommandToSubscriber(desktopChanger, this._controller), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
         ; priority for `userSetter` must be higher (means running later) than for `desktopChanger`
         ; first change desktop, then change user based on that desktop
         userSetter := new SetUserFromDesktop()
-        contr.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, contr), {priority: this.PRIORITIES["userFromDesktop"]})
+        this._controller.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, this._controller), {priority: this.PRIORITIES["userFromDesktop"]})
     }
 
     _CommandsFileCompat(commandsFileExt) {
