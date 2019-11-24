@@ -26,7 +26,7 @@ IsClass(classes) {
 }
 
 IsClassPredicate(classes, object) {
-    return ArrayContains(classes, object.__Class)
+    return ArrayContains(classes, object.__Class) > 0
 }
 
 ; Check command name
@@ -37,7 +37,7 @@ IsCommand(commandNames) {
 
 IsCommandPredicate(commandNames, com) {
     commandName := com.GetCommandName()
-    return ArrayContains(commandNames, commandName)
+    return ArrayContains(commandNames, commandName) > 0
 }
 
 ; Check tags
