@@ -14,6 +14,7 @@ main.SetRootCommand(rootCommand)
 main.GetExtensionManager().AttachAll().Activate()
 */
 
+; Ctrl+/
 ^/::
     main.Execute()
     return
