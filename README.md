@@ -46,7 +46,13 @@ Unfortunately only works with Windows.
 
 ### Install extension dependencies (optional)
 
-1. Run `git submodule update --init --recursive` to install dependencies needed for extensions
+1. To install dependencies first time:
+
+`git submodule update --init --recursive`
+
+2. To update dependencies:
+
+`git pull --recurse-submodules`
 
 ### Create repository for your commands (optional)
 
