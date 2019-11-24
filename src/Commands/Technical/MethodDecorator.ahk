@@ -31,7 +31,7 @@ class MethodDecorator {
             obj := this._obj
         }
         result := obj[methodName](params*)
-        if (result == this._obj) {
+        if (result == this._obj && methodName != "_NewEnum") {
             ; Method returned `this`, which is decorated object.
             ; We have to instead return this decorator, in order for method chains to work correctly.
             ; Otherwise `WithHelpOpened(new CommandSet()).SetDescription()`
