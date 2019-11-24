@@ -1,6 +1,6 @@
 #Include %A_ScriptDir%\src\Extensions\ExtensionManager.ahk
 #Include %A_ScriptDir%\src\Extensions\Extension.ahk
-#Include %A_ScriptDir%\src\Events\CommandToSubscriber.ahk
+#Include %A_ScriptDir%\src\Events\CommandToCallback.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 #Include %A_ScriptDir%\src\Extensions\UsersExtension\Commands\ScriptInteraction\ChangeUser.ahk
@@ -40,16 +40,16 @@ class UsersExtension extends Extension {
         this._controller.GetEnvironment().Update({ settings: { user: ""}, functions: { open: Func("AsUserOpener") } })
 
         runAsSetter := new SetUserFromUserConfig()
-        this._controller.SubscribeCommandAboutToRun(CommandToSubscriber(runAsSetter, this._controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
+        this._controller.SubscribeCommandAboutToRun(CommandToCallback(runAsSetter, this._controller), {priority: this.PRIORITIES["userFromCommandConfig"]})
     }
 
     _DesktopsCompat() {
         desktopChanger := new ChangeDesktopFromUserConfig()
-        this._controller.SubscribeCommandAboutToRun(CommandToSubscriber(desktopChanger, this._controller), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
+        this._controller.SubscribeCommandAboutToRun(CommandToCallback(desktopChanger, this._controller), {priority: this.PRIORITIES["desktopFromCommandConfig"]})
         ; priority for `userSetter` must be higher (means running later) than for `desktopChanger`
         ; first change desktop, then change user based on that desktop
         userSetter := new SetUserFromDesktop()
-        this._controller.SubscribeCommandAboutToRun(CommandToSubscriber(userSetter, this._controller), {priority: this.PRIORITIES["userFromDesktop"]})
+        this._controller.SubscribeCommandAboutToRun(CommandToCallback(userSetter, this._controller), {priority: this.PRIORITIES["userFromDesktop"]})
     }
 
     _CommandsFileCompat(commandsFileExt) {

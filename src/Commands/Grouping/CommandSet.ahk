@@ -102,20 +102,20 @@ class CommandSet extends Command {
     ; Subscribe when `CommandSet` stops being active.
     ; This happens when corresponding input is disabled or destroyed.
     ; Payload is empty.
-    SubscribeNotActive(subscriber, options = "") {
-        this._eventBus.Subscribe("disabled", subscriber, options)
+    SubscribeNotActive(callback, options = "") {
+        this._eventBus.Subscribe("disabled", callback, options)
     }
 
     ; Subscribe when command was added by user or from observed commandSet.
     ; Payload: `{ added: commands }`, `commands` - map from key to command
-    SubscribeCommandsAdded(subscriber, options := "") {
-        this._eventBus.Subscribe("commandsAdded", subscriber, options)
+    SubscribeCommandsAdded(callback, options := "") {
+        this._eventBus.Subscribe("commandsAdded", callback, options)
     }
 
     ; Subscribe when command was removed by user or from observed commandSet.
     ; Payload: `{ removed: commands }`, `commands` - map from key to command
-    SubscribeCommandsRemoved(subscriber, options := "") {
-        this._eventBus.Subscribe("commandsRemoved", subscriber, options)
+    SubscribeCommandsRemoved(callback, options := "") {
+        this._eventBus.Subscribe("commandsRemoved", callback, options)
     }
 
     ; Commands are shared between original and duplicate - changes to them are visible in both.

@@ -39,13 +39,13 @@ class CommandsFile {
 
     ; Subscribe when `NewCommand` was called.
     ; Payload: `CommandDTO`
-    SubscribeCommandCreated(subscriber, options := "") {
-        this._eventBus.Subscribe("commandCreated", subscriber, options)
+    SubscribeCommandCreated(callback, options := "") {
+        this._eventBus.Subscribe("commandCreated", callback, options)
     }
 
     ; Payload: `CommandDTO`
-    SubscribeCommandDeleted(subscriber, options := "") {
-        this._eventBus.Subscribe("commandDeleted", subscriber, options)
+    SubscribeCommandDeleted(callback, options := "") {
+        this._eventBus.Subscribe("commandDeleted", callback, options)
     }
 
     _ReadFile() {

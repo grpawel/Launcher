@@ -84,13 +84,13 @@ class Controller {
     }
 
     ; Payload: `{ nextCommand: command }`
-    SubscribeCommandAboutToRun(subscriber, options = "") {
-        return this._eventBus.Subscribe("commandAboutToRun", subscriber, options)
+    SubscribeCommandAboutToRun(callback, options = "") {
+        return this._eventBus.Subscribe("commandAboutToRun", callback, options)
     }
 
     ; Payload: `{ rootCommand: command }`
-    SubscribeRootCommandAboutToRun(subscriber, options = "") {
-        return this._eventBus.Subscribe("rootCommandAboutToRun", subscriber, options)
+    SubscribeRootCommandAboutToRun(callback, options = "") {
+        return this._eventBus.Subscribe("rootCommandAboutToRun", callback, options)
     }
 
     GetBlocker() {

@@ -10,15 +10,15 @@ class EventBus {
     ; Returned value can be used to unsubscribe by calling Unsubscribe method on it.
     ;
     ; Options:
-    ; duration: "everytime" - (default) subscriber is called for events until unsubscribes
-    ;           "once" - subscriber is called only once, then automatically unsubscribed
-    ; priority: 1-32 (default: 16) - priority of subscriber. Lower priority subscribers are called earlier.
+    ; duration: "everytime" - (default) callback is called for events until unsubscribes
+    ;           "once" - callback is called only once, then automatically unsubscribed
+    ; priority: 1-32 (default: 16) - priority of subscription. Lower priority subscribers are called earlier.
     ; 
     ; Remark:
-    ; When subscriber is added or removed in response to emitted event,
-    ; the subscriber may or may not receive the event.
+    ; When subscription is added or removed in response to emitted event,
+    ; the callback may or may not be called.
     ; Do not rely on apparent behavior.
-    Subscribe(eventName, subscriber, options = "") {
+    Subscribe(eventName, callback, options = "") {
         static V := new ValidatorFactory()
         static VAL := V.Object({ "duration": V.OneOf(["everytime", "once"])
                                , "priority": V.Between(1, 32) })
@@ -34,7 +34,7 @@ class EventBus {
         ; for priority we use simple trick. AHK iterates keys alphabetically, so we can add single letter
         ; from range 48 ('0') to 79 ('O'). Object keys are case insensitive, so priority range cannot be much bigger.
         key := Chr(Asc("0") + options.priority) . key
-        sub := new Subscription(this, { eventName: eventName, key: key, duration: options.duration, callback: subscriber })
+        sub := new Subscription(this, { eventName: eventName, key: key, duration: options.duration, callback: callback })
         this._subscribers[eventName][key] := sub
         return sub
     }
@@ -50,8 +50,8 @@ class EventBus {
     ; Unsubscribe all subscribers from all events.
     UnsubscribeAll() {
         for eventName, subscriberList in this._subscribers {
-            for key, subscriber in subscriberList {
-                subscriber.Unsubscribe()
+            for key, subscription in subscriberList {
+                subscription.Unsubscribe()
             }
         }
     }
@@ -61,11 +61,11 @@ class EventBus {
             return
         }
 
-        for key, subscriber in this._subscribers[eventName].Clone() {
-            callback := subscriber._params.callback
+        for key, subscription in this._subscribers[eventName].Clone() {
+            callback := subscription._params.callback
             %callback%(payload*)
-            if (subscriber._params.duration == "once") {
-                subscriber.Unsubscribe()
+            if (subscription._params.duration == "once") {
+                subscription.Unsubscribe()
             }
         }
         ; No subscribers left - remove no more necessary list

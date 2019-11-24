@@ -191,9 +191,9 @@ class ShareControls extends Command {
         __Call(methodName, args*) {
             control := this._control
             if (StartsWith(methodName, "Subscribe")) {
-                subscriber := args[1]
+                callback := args[1]
                 options := args[2]
-                return control[methodName](subscriber, MergeArrays(options, this._subscribeOptionsOverride))
+                return control[methodName](callback, MergeArrays(options, this._subscribeOptionsOverride))
             } else if (methodName == "Disable") {
                 if (this._allowDisabling) {
                     return this._control.Disable()

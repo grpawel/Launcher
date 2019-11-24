@@ -130,8 +130,8 @@ class Gui {
 
     ; Payload: `focusedControl, name`
     ; name - name of focused control
-    SubscribeReturnPressed(subscriber, options = "") {
-        return this._eventBus.Subscribe("returnPressed", subscriber, options)
+    SubscribeReturnPressed(callback, options = "") {
+        return this._eventBus.Subscribe("returnPressed", callback, options)
     }
 
     Hide() {
@@ -175,7 +175,7 @@ class Gui {
     }
 
     ; Payload is empty
-    SubscribeGuiDestroyed(subscriber, options = "") {
-        return this._eventBus.Subscribe("guiDestroyed", subscriber, options)
+    SubscribeGuiDestroyed(callback, options = "") {
+        return this._eventBus.Subscribe("guiDestroyed", callback, options)
     }
 }

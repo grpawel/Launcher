@@ -98,8 +98,8 @@ class ListViewControl {
     }
 
     ; Payload: text from first column
-    SubscribeRowSelected(subscriber, options = "") {
-        this._eventBus.Subscribe("rowSelected", subscriber, options)
+    SubscribeRowSelected(callback, options = "") {
+        this._eventBus.Subscribe("rowSelected", callback, options)
     }
 
     NotifyReturnPressed() {
