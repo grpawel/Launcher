@@ -3,8 +3,8 @@
 
 #Include %A_ScriptDir%\src\IncludeAll.ahk
  
- ; Change this file to your copy of UserCommandsSample.ahk
-#Include %A_ScriptDir%\UserConfig\UserCommandsSample.ahk
+ ; Change this file to your copy of CommandsSample.ahk
+#Include %A_ScriptDir%\UserConfig\CommandsSample.ahk
 rootCommand := CreateCommands()
 
 main := new Controller(new Environment(), new Gui())
