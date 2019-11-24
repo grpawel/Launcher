@@ -9,8 +9,10 @@ rootCommand := CreateCommands()
 
 main := new Controller(new Environment(), new Gui())
 main.SetRootCommand(rootCommand)
-main.GetExtensionManager().AttachAll({users: {desktopToUserMap: desktopToUserMap}})
-                          .Activate()
+; Uncomment to enable extensions
+/*
+main.GetExtensionManager().AttachAll().Activate()
+*/
 
 ^/::
     main.Execute()
