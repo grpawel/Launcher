@@ -1,4 +1,4 @@
-﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
+#Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 ; Store a list of commands with their keys.
@@ -34,7 +34,7 @@ class CommandSet extends Command {
                                                             , "never" ]) })
         VAL.ValidateAndShow(this._options)
 
-        this._backend := new _CommandSetBackend()
+        this._backend := new _CommandSetBackend(this)
         this._gui := new _CommandSetGui(this, this._backend, this._options.typingMatch, this._options.destroyGuiAfter)
         this.AddTags(["composite"])
     }
@@ -44,31 +44,53 @@ class CommandSet extends Command {
     }
 
     AddCommand(key, com) {
-        this._backend.commands[key] := com
+        this._backend.AddCommand(key, com)
         return this
     }
 
     AddCommands(arr) {
         if (IsFunc(arr.GetCommands)) {
             ; arr is CommandSet or similar
-            AddAll(this._backend.commands, arr.GetCommands())
+            this._backend.AddCommands(arr.GetCommands())
         } else {
             ; arr is an array
-            AddAll(this._backend.commands, arr)
+            this._backend.AddCommands(arr)
         }
         return this
     }
 
-    GetCommands() {
-        return this._backend.commands
+    GetCommand(key) {
+        return this._backend.GetCommand(key)
     }
 
-    GetCommand(key) {
-        return this._backend.commands[key]
+    GetCommands() {
+        return this._backend.GetCommands()
     }
 
     RemoveCommand(key) {
-        this._backend.commands.Delete(key)
+        this._backend.RemoveCommand(key)
+        return this
+    }
+
+
+    ; Returns new empty `CommandSet` with commands matching filter.
+    ; `filter` is called for every command and should return `true` or `false`.
+    ; If `filter` returns `true`, then command is included.
+    ; New `CommandSet` instead of commands only is returned mostly for chaining filters.
+    FilterCommands(filter) {
+        filtered := {}
+        for name, com in this._backend.GetCommands() {
+            if (%filter%(com)) {
+                filtered[name] := com
+            }
+        }
+        filteredCommandSet := new CommandSet()
+        filteredCommandSet._backend.AddCommands(filtered)
+        return filteredCommandSet
+    }
+
+    ; Track changes in given commandSet and add commands after filtering and/or mapping.
+        this._backend.Observe(comSet, pipeline)
         return this
     }
 
@@ -83,27 +105,23 @@ class CommandSet extends Command {
         this._eventBus.Subscribe("disabled", subscriber, options)
     }
 
-    ; Returns new empty `CommandSet` with commands matching filter.
-    ; `filter` is called for every command and should return `true` or `false`.
-    ; If `filter` returns `true`, then command is included.
-    ; New `CommandSet` instead of commands only is returned mostly for chaining filters.
-    FilterCommands(filter) {
-        filtered := {}
-        for name, com in this._backend.commands {
-            if (%filter%(com)) {
-                filtered[name] := com
-            }
-        }
-        filteredCommandSet := new CommandSet()
-        filteredCommandSet._backend.commands := filtered
-        return filteredCommandSet
+    ; Subscribe when command was added by user or from observed commandSet.
+    ; Payload: `{ added: commands }`, `commands` - map from key to command
+    SubscribeCommandsAdded(subscriber, options := "") {
+        this._eventBus.Subscribe("commandsAdded", subscriber, options)
+    }
+
+    ; Subscribe when command was removed by user or from observed commandSet.
+    ; Payload: `{ removed: commands }`, `commands` - map from key to command
+    SubscribeCommandsRemoved(subscriber, options := "") {
+        this._eventBus.Subscribe("commandsRemoved", subscriber, options)
     }
 
     ; Commands are shared between original and duplicate - changes to them are visible in both.
     ; List of commands itself is not shared - adding commands adds them only to single commandSet.
     Duplicate() {
         duplicate := base.Duplicate()
-        duplicate._backend.commands := ObjClone(this._backend.commands)
+        duplicate._backend._commands := ObjClone(this._backend._commands)
         return duplicate
     }
 
@@ -172,13 +190,14 @@ class _CommandSetGui {
         }
         commandKey := this._MatchBeginningAndRun(contr, input)
         if (this._matchingMode == "onlyReturn" && commandKey != "") {
-            this._RunCommand(this._backend.commands[commandKey], contr)
+            this._RunCommand(this._backend.GetCommand(commandKey), contr)
         }
     }
 
     _MatchExactAndRun(contr, input) {
-        if (this._backend.commands.HasKey(input)) {
-            this._RunCommand(this._backend.commands[input], contr)
+        com := this._backend.GetCommand(input)
+        if (com != "") {
+            this._RunCommand(com, contr)
             return true
         }
         return false
@@ -190,7 +209,7 @@ class _CommandSetGui {
         commandKey := this._backend.FindOnlyCommandKeyStartingWith(input)
         if (commandKey != "") {
             this.inputControl.SetText(commandKey, { noEvents: true })
-            this._RunCommand(this._backend.commands[commandKey], contr)
+            this._RunCommand(this._backend.GetCommand(commandKey), contr)
             return commandKey
         }
         return ""
@@ -219,12 +238,50 @@ class _CommandSetGui {
 }
 
 class _CommandSetBackend {
-    commands := {}
+    _commands := {}
+    _observed := {}
+
+    __New(comSet) {
+        this._commandSet := comSet
+    }
+
+    AddCommand(key, com) {
+        this._commands[key] := com
+        eventPayload := {}
+        eventPayload[key] := com
+        this._commandSet._eventBus.Emit("commandsAdded", { added: eventPayload })
+    }
+
+    AddCommands(comsByKey) {
+        AddAll(this._commands, comsByKey)
+        this._commandSet._eventBus.Emit("commandsAdded", { added: comsByKey })
+    }
+
+    GetCommand(key) {
+        com := this._commands[key]
+        if (com != "") {
+            return com
+        }
+        for id, observed in this._observed {
+            if (observed.commands.HasKey(key)) {
+                return observed.commands[key]
+            }
+        }
+        return ""
+    }
+
+    GetCommands() {
+        commands := this._commands.Clone()
+        for id, observed in this._observed {
+            AddAll(commands, observed.commands)
+        }
+        return commands
+    }
 
     ; Returns command key only if exactly one key starts with given beginning.
     FindOnlyCommandKeyStartingWith(beginning) {
         matchingCommandKeys := []
-        for key, value in this.commands {
+        for key, value in this._commands {
             if (StartsWith(key, beginning)) {
                 matchingCommandKeys.Push(key)
                 if (matchingCommandKeys.Length() > 1) {
@@ -239,5 +296,47 @@ class _CommandSetBackend {
         } else {
             return ""
         }
+    }
+
+    RemoveCommand(key) {
+        removed := this._commands.Delete(key)
+        eventPayload := {}
+        eventPayload[key] := removed
+        this._commandSet._eventBus.Emit("commandsRemoved", { removed: eventPayload })
+    }
+
+    RemoveCommands(keys) {
+        removed := {}
+        for i, key in keys {
+            removed[key] := this._commands.Delete(key)
+        }
+        this._commandSet._eventBus.Emit("commandsRemoved", { removed: removed })
+    }
+
+    Observe(comSet, pipeline) {
+        id := RandomString(4)
+        observed := {}
+        observed.commands := {}
+        observed.pipeline := pipeline
+        observed.addedSub := comSet.SubscribeCommandsAdded(this._OnCommandsAdded.Bind(this, id))
+        observed.removedSub := comSet.SubscribeCommandsRemoved(this._OnCommandsRemoved.Bind(this, id))
+        this._observed[id] := observed
+        this._OnCommandsAdded(id, { added: comSet.GetCommands() })
+    }
+
+    _OnCommandsAdded(id, payload) {
+        observed := this._observed[id]
+        commands := observed.pipeline.Apply(payload.added)
+        AddAll(observed.commands, commands)
+        this._commandSet._eventBus.Emit("commandsAdded", { added: commands })
+    }
+
+    _OnCommandsRemoved(id, payload) {
+        observed := this._observed[id]
+        commands := observed.pipeline.Apply(payload.removed)
+        for key, com in commands {
+            observed.commands.Delete(key)
+        }
+        this._commandSet._eventBus.Emit("commandsRemoved", { removed: commands })
     }
 }
