@@ -11,7 +11,7 @@ InputHotstrings(hotstrings) {
     comSet := new CommandSet({ destroyGuiAfter: "never" })
     for abbrev, expanded in hotstrings {
         toType := RepeatString("{Backspace}", StrLen(abbrev)) expanded 
-        comSet.AddCommand(abbrev, new TypeText(toType, { when: "immediate" }))
+        comSet.Add(abbrev, new TypeText(toType, { when: "immediate" }))
     }
     return comSet
 }

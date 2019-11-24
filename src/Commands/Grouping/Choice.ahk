@@ -24,8 +24,8 @@ emails := { "workTime": new Web("workemail.com")
           , "freeTime": new Web("personalemail.com") }
 calendars := { "workTime": new Web("workcalendar.com")
              , "freeTime": new Web("personalcalendar.com") }
-comset.AddCommand("email", new Choice(Func("WorkOrFreeTime"), emails))
-comset.AddCommand("calen", new Choice(Func("WorkOrFreeTime"), calendars))
+comset.Add("email", new Choice(Func("WorkOrFreeTime"), emails))
+comset.Add("calen", new Choice(Func("WorkOrFreeTime"), calendars))
 */
 /*
 RandomChoice(contr, context, choices) {
@@ -45,8 +45,8 @@ searches := [ new Web("google.com")
             , new Web("yahoo.com")
             , new Web("duckduckgo.com")
             , new Web("bing.com") ]
-comset.AddCommand("rand", new Choice(Func("RandomChoice"), searches))
-comset.AddCommand("next", new Choice(Func("NextChoice"), searches))
+comset.Add("rand", new Choice(Func("RandomChoice"), searches))
+comset.Add("next", new Choice(Func("NextChoice"), searches))
 */
 class Choice extends Command {
     static _DEFAULT_OPTIONS := { defaultKey: "default" }

@@ -17,16 +17,16 @@ class RemoveCommand extends Command {
     }
 
     Run(contr, context) {
-        existingCommand := this._commandSet.GetCommand(this._key)
+        existingCommand := this._commandSet.Get(this._key)
         if (existingCommand != "") {
-            this._commandSet.RemoveCommand(this._key)
+            this._commandSet.Remove(this._key)
             this._removedCommand := existingCommand
         }
     }
 
     Revert(contr, context) {
         if (this._removedCommand != "") {
-            this._commandSet.AddCommand(this._key, this._removedCommand)
+            this._commandSet.Add(this._key, this._removedCommand)
             this._removedCommand := ""
         }
     }

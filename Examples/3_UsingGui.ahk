@@ -21,9 +21,9 @@ UsingGuiExample:                                            ; only-for-demo
     
 
     doubleClick := new CommandSet()
-    doubleClick.AddCommand("goog", new Open("https://google.com"))
-    doubleClick.AddCommand("good", new Open("https://goodreads.com"))
-    doubleClick.AddCommand("ama", new Open("https://amazon.com"))
+    doubleClick.Add("goog", new Open("https://google.com"))
+    doubleClick.Add("good", new Open("https://goodreads.com"))
+    doubleClick.Add("ama", new Open("https://amazon.com"))
     doubleClickExplanation := new Sequence([ new ShowMessage("You can select command using list on the right in many ways:"
                                                             , { textColor: Colors.YELLOW })
                                            , new ShowMessage("1. Press Tab, select with up/down arrow keys and press Enter.`n"
@@ -33,32 +33,32 @@ UsingGuiExample:                                            ; only-for-demo
     ; `Sequence()` runs all given commands.
     ; Here we reset GUI to remove what was shown before, show message and show input for doubleClick command set (with help).
     ; Help shows list of commands from given `CommandSet` object.
-    commands.addCommand("1", new Sequence([ new ResetGui()
-                                          , doubleClickExplanation
-                                          , WithHelpOpened(doubleClick) ])
-                                         .SetDescription("Use the list to the right"))
+    commands.Add("1", new Sequence([ new ResetGui()
+                                   , doubleClickExplanation
+                                   , WithHelpOpened(doubleClick) ])
+                           .SetDescription("Use the list to the right"))
 
 
     ; `{ typingMatch: "exact" }` is the default setting. It is used when you do not specify anything.
     exact := new CommandSet( { typingMatch: "exact" })
-    exact.AddCommand("google", new Open("https://google.com"))
-    exact.AddCommand("goodreads", new Open("https://goodreads.com"))
-    exact.AddCommand("amazon", new Open("https://amazon.com"))
+    exact.Add("google", new Open("https://google.com"))
+    exact.Add("goodreads", new Open("https://goodreads.com"))
+    exact.Add("amazon", new Open("https://amazon.com"))
     exactExplanation := new Sequence([ new ShowMessage("By default you have to type whole key."
                                                       , { textColor: Colors.YELLOW })
                                      , new ShowMessage("Type ""goodreads"" to run ""goodreads""."
                                                       , { textColor: Colors.AQUA }) ])
-    commands.addCommand("2", new Sequence([ new ResetGui()
-                                          , exactExplanation
-                                          , exact
-                                          , new Help(exact) ])
-                                         .SetDescription("Type whole key"))
+    commands.Add("2", new Sequence([ new ResetGui()
+                                   , exactExplanation
+                                   , exact
+                                   , new Help(exact) ])
+                           .SetDescription("Type whole key"))
 
 
     immediate := new CommandSet( { typingMatch: "immediate" })
-    immediate.AddCommand("google", new Open("https://google.com"))
-    immediate.AddCommand("goodreads", new Open("https://goodreads.com"))
-    immediate.AddCommand("amazon", new Open("https://amazon.com"))
+    immediate.Add("google", new Open("https://google.com"))
+    immediate.Add("goodreads", new Open("https://goodreads.com"))
+    immediate.Add("amazon", new Open("https://amazon.com"))
     immediateExplanation := new Sequence([ new ShowMessage("CommandSet can be configured to run a command immediately"
                                                            . "when exactly one command key starts with what you've typed."
                                                           , { textColor: Colors.YELLOW })
@@ -68,17 +68,17 @@ UsingGuiExample:                                            ; only-for-demo
     ; Note that we sometimes use `Sequence([..., comset, new Help(comset)])`
     ; and sometimes `Sequence([..., WithHelpOpened(comset)])`. 
     ; These have the same result.
-    commands.addCommand("3", new Sequence([ new ResetGui()
-                                          , immediateExplanation
-                                          , WithHelpOpened(immediate) ])
-                                         .SetDescription("Match immediately"))
+    commands.Add("3", new Sequence([ new ResetGui()
+                                   , immediateExplanation
+                                   , WithHelpOpened(immediate) ])
+                           .SetDescription("Match immediately"))
 
 
     atLeast := new CommandSet( { typingMatch: ["atLeast", 3]})
-    atLeast.AddCommand("google", new Open("https://google.com"))
-    atLeast.AddCommand("goodreads", new Open("https://goodreads.com"))
-    atLeast.AddCommand("amazon", new Open("https://amazon.com"))
-    atLeast.AddCommand("c", new Open("calc"))
+    atLeast.Add("google", new Open("https://google.com"))
+    atLeast.Add("goodreads", new Open("https://goodreads.com"))
+    atLeast.Add("amazon", new Open("https://amazon.com"))
+    atLeast.Add("c", new Open("calc"))
     atLeastExplanation := new Sequence([ new ShowMessage( "CommandSet can be configured to match a command immediately when only one matches what you typed, "
                                                           . "but if you typed at least N (N=3 here) characters.`n"
                                                           . "If command key is shorter than N, it still works."
@@ -87,18 +87,18 @@ UsingGuiExample:                                            ; only-for-demo
                                                          . "Type ""good"" to open ""goodreads"" (""goo"" matches 2 commands).`n"
                                                          . "Type ""c"" to open calc."
                                                         , { textColor: Colors.AQUA }) ])
-    commands.addCommand("4", new Sequence([ new ResetGui()
-                                          , atLeastExplanation
-                                          , atLeast
-                                          , new Help(atLeast) ])
-                                         .SetDescription("Match at least N characters"))
+    commands.Add("4", new Sequence([ new ResetGui()
+                                   , atLeastExplanation
+                                   , atLeast
+                                   , new Help(atLeast) ])
+                           .SetDescription("Match at least N characters"))
 
 
     enterShortcut := new CommandSet( { typingMatch: "exact" })
-    enterShortcut.AddCommand("goooooooooooooooogle", new Open("https://google.com"))
-    enterShortcut.AddCommand("goodreads", new Open("https://goodreads.com"))
-    enterShortcut.AddCommand("amazon", new Open("https://amazon.com"))
-    enterShortcut.AddCommand("c", new Open("calc"))
+    enterShortcut.Add("goooooooooooooooogle", new Open("https://google.com"))
+    enterShortcut.Add("goodreads", new Open("https://goodreads.com"))
+    enterShortcut.Add("amazon", new Open("https://amazon.com"))
+    enterShortcut.Add("c", new Open("calc"))
     enterShortcutExplanation := new Sequence([ new ShowMessage("This example is configured as subexample 2, where you had to type whole key.`n"
                                                                . "There's a shortcut for that: press Enter when a single command matches.`n"
                                                                . "If you want to commands matched only when you press Return, there's setting for that.`n"
@@ -106,24 +106,24 @@ UsingGuiExample:                                            ; only-for-demo
                                                               , { textColor: Colors.YELLOW })
                                              , new ShowMessage("Type ""goooo"" and press Enter to run the command."
                                                               , { textColor: Colors.AQUA }) ])
-    commands.addCommand("5", new Sequence([ new ResetGui()
-                                          , enterShortcutExplanation
-                                          , WithHelpOpened(enterShortcut) ])
-                                         .SetDescription("Use Enter to select"))
+    commands.Add("5", new Sequence([ new ResetGui()
+                                   , enterShortcutExplanation
+                                   , WithHelpOpened(enterShortcut) ])
+                           .SetDescription("Use Enter to select"))
 
 
     overlapping := new CommandSet()
-    overlapping.AddCommand("wiki", new Open("https://wikipedia.org"))
-    overlapping.AddCommand("wikimedia", new Open("https://commons.wikimedia.org/"))
+    overlapping.Add("wiki", new Open("https://wikipedia.org"))
+    overlapping.Add("wikimedia", new Open("https://commons.wikimedia.org/"))
     overlappingExplanation := new ShowMessage("If you have two commands where one key is a beginning of the other,`n"
                                               . "the only way to select longer one is by using the list on the right.`n"
                                              , { textColor: Colors.YELLOW })
-    commands.AddCommand("6", new Sequence([ new ResetGui()
-                                          , overlappingExplanation
-                                          , WithHelpOpened(overlapping) ])
-                                         .SetDescription("Overlapping command keys"))
+    commands.Add("6", new Sequence([ new ResetGui()
+                                   , overlappingExplanation
+                                   , WithHelpOpened(overlapping) ])
+                           .SetDescription("Overlapping command keys"))
 
-    commands.AddCommand("rel", new Reload())
+    commands.Add("rel", new Reload())
     contr := new Controller(new Environment(), new Gui())
     contr.SetRootCommand(WithHelpOpened(commands))
 

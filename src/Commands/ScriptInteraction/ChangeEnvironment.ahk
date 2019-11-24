@@ -4,8 +4,8 @@
 ; Those changes can be reverted to old values by calling `Revert` method (eg. using `RevertCommand`).
 ; Example:
 /*
-comset.AddCommand("fire", new ChangeEnvironment({settings: { browser: "firefox" }}))
-comset.AddCommand("chr", new ChangeEnvironment({settings: { browser: "chrome" }}))
+comset.Add("fire", new ChangeEnvironment({settings: { browser: "firefox" }}))
+comset.Add("chr", new ChangeEnvironment({settings: { browser: "chrome" }}))
 */
 
 ; Reverting changes can have unexpected results when the environment is changed in the meantime.

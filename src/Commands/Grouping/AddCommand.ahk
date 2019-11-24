@@ -11,15 +11,15 @@ class AddCommand extends Command {
     }
 
     Run(contr, context) {
-        this._oldCommand := this._commandSet.GetCommand(this._key)
-        this._commandSet.AddCommand(this._key, this._command)
+        this._oldCommand := this._commandSet.Get(this._key)
+        this._commandSet.Add(this._key, this._command)
     }
 
     Revert(contr, context) {
         if (this._oldCommand != "") {
-            this._commandSet.AddCommand(this._key, this._oldCommand)
+            this._commandSet.Add(this._key, this._oldCommand)
         } else {
-            this._commandSet.RemoveCommand(this._key)
+            this._commandSet.Remove(this._key)
         }
     }
 }

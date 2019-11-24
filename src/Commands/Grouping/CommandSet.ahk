@@ -43,15 +43,15 @@ class CommandSet extends Command {
         this._gui.Run(contr)
     }
 
-    AddCommand(key, com) {
+    Add(key, com) {
         this._backend.AddCommand(key, com)
         return this
     }
 
-    AddCommands(arr) {
-        if (IsFunc(arr.GetCommands)) {
+    AddMany(arr) {
+        if (IsFunc(arr.GetAll)) {
             ; arr is CommandSet or similar
-            this._backend.AddCommands(arr.GetCommands())
+            this._backend.AddCommands(arr.GetAll())
         } else {
             ; arr is an array
             this._backend.AddCommands(arr)
@@ -59,15 +59,15 @@ class CommandSet extends Command {
         return this
     }
 
-    GetCommand(key) {
+    Get(key) {
         return this._backend.GetCommand(key)
     }
 
-    GetCommands() {
+    GetAll() {
         return this._backend.GetCommands()
     }
 
-    RemoveCommand(key) {
+    Remove(key) {
         this._backend.RemoveCommand(key)
         return this
     }
@@ -77,7 +77,7 @@ class CommandSet extends Command {
     ; `filter` is called for every command and should return `true` or `false`.
     ; If `filter` returns `true`, then command is included.
     ; New `CommandSet` instead of commands only is returned mostly for chaining filters.
-    FilterCommands(filter) {
+    Filter(filter) {
         filtered := {}
         for name, com in this._backend.GetCommands() {
             if (%filter%(com)) {

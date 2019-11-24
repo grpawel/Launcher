@@ -93,7 +93,7 @@ class Help extends Command {
 
         _OnInputChanged(input) {
             this._guiControl.RemoveRows()
-            commands := this._commandSet.GetCommands()
+            commands := this._commandSet.GetAll()
             rows := []
             for key, value in commands {
                 if (input == "" || StartsWith(key, input)) {

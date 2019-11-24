@@ -7,9 +7,9 @@
 ; `comFile` - `CommandsFile` object
 ; Format contains lines like this one:
 /*
-comSet.AddCommand("goo", new Web("google")
-                            .SetDescription("Search google")
-                            .AddTags(["search", "web"]))
+comSet.Add("goo", new Web("google")
+                     .SetDescription("Search google")
+                     .AddTags(["search", "web"]))
 */
 class ExportFileCommands extends Command {
     __New(comFile) {
@@ -21,10 +21,10 @@ class ExportFileCommands extends Command {
     Run(contr, context) {
         dtoList := this._commandsFile.ReadCommandDTOs()
         str := ""
-        indent := RepeatString(" ", 28)
+        indent := RepeatString(" ", 21)
         for key, dto in dtoList {
             constructorArgs := Join(Wrap(dto.fields, """", """"), ", ")
-            str .= "`ncomSet.AddCommand(""" dto.key """, new " dto.name "(" constructorArgs ")"
+            str .= "`ncomSet.Add(""" dto.key """, new " dto.name "(" constructorArgs ")"
             if (dto.description != "") {
                 str .= "`n" indent ".SetDescription(""" dto.description """)"
             }

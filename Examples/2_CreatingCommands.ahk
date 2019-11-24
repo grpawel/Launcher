@@ -18,56 +18,56 @@ CreatingCommandsExample:                                    ; only-for-demo
 
     commands := new CommandSet().SetDescription("Creating commands")
     
-    ; Add command using `AddCommand` method:
-    commands.AddCommand("goo", new Open("https://google.com").SetDescription("Google"))
+    ; Add command using `Add` method:
+    commands.Add("goo", new Open("https://google.com").SetDescription("Google"))
 
     ; Store command in a variable and add it multiple times:
     openChrome := new Open("chrome")
-    commands.AddCommand("chr", openChrome)
+    commands.Add("chr", openChrome)
     ; Note that `SetDescription` method modifies the object - description of "chr" command is also changed.
-    commands.AddCommand("browser", openChrome.SetDescription("Chrome"))
+    commands.Add("browser", openChrome.SetDescription("Chrome"))
     ; You can prevent that by using "Duplicate" method - "chr" and "browser" would still have their old description.
-    commands.AddCommand("web", openChrome.Duplicate().SetDescription("Open web browser"))
+    commands.Add("web", openChrome.Duplicate().SetDescription("Open web browser"))
 
     ; Add commands from an object:
     websites := { "duck": new Open("https://duckduckgo.com")
                 , "ama": new Open("https://amazon.com") }
-    commands.AddCommands(websites)
+    commands.AddMany(websites)
     ; Be careful where you place the comma (,) - it has to be at the start of new line, not at the end of previous.
     ; See https://www.autohotkey.com/docs/Scripts.htm#continuation         
 
     ; Get specific command:
-    openDDG := commands.GetCommand("duck")
-    commands.AddCommand("ddg", openDDG)
+    openDDG := commands.Get("duck")
+    commands.Add("ddg", openDDG)
 
     ; Chain methods:
-    commands.AddCommand("calc", new Open("calc"))
-            .AddCommand("pai", new Open("C:\Windows\system32\mspaint.exe").SetDescription("MS Paint"))
+    commands.Add("calc", new Open("calc"))
+            .Add("pai", new Open("C:\Windows\system32\mspaint.exe").SetDescription("MS Paint"))
     
     
     ; Use command factory:
     ; Instead of `new Open(...)`, you can call method on the factory: `_.Open(...)`
     ; Doing that makes your script a little bit shorter.
     _ := new CommandFactory()
-    commands.AddCommand("note", _.Open("notepad"))
+    commands.Add("note", _.Open("notepad"))
     ; If you make a typo and the command is wrong, you will be notified. `new` fails silently.
     ; Uncomment and run example to test that:
     /*
-    commands.AddCommand("err1", _.ThisCommandDoesNotExist())
-    commands.AddCommand("err2", new ThisCommandDoesNotExist())
+    commands.Add("err1", _.ThisCommandDoesNotExist())
+    commands.Add("err2", new ThisCommandDoesNotExist())
     */
     
     ; Create your own command:
-    commands.AddCommand("own", _.YourOwnCommand("someewheeeeere over the rainbow").SetDescription("Your Own Command"))
+    commands.Add("own", _.YourOwnCommand("someewheeeeere over the rainbow").SetDescription("Your Own Command"))
 
     ; Use your own function:
     ; `FunctionToCommand` command takes a function object (see https://www.autohotkey.com/docs/objects/Functor.htm)
     ; and calls it.
-    commands.AddCommand("msg", _.FunctionToCommand(Func("ShowSomeMessages")).SetDescription(""))
+    commands.Add("msg", _.FunctionToCommand(Func("ShowSomeMessages")).SetDescription(""))
 
 
-    commands.AddCommand("?", _.Help(commands))
-    commands.AddCommand("rel", _.Reload())
+    commands.Add("?", _.Help(commands))
+    commands.Add("rel", _.Reload())
     contr := new Controller(new Environment(), new Gui())
     contr.SetRootCommand(WithHelpOpened(commands))
 

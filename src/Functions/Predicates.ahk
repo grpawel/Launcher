@@ -12,7 +12,7 @@ pred.Call(objA) ; == true
 pred.Call(objC) ; == false
 */
 /*
-comSet2.AddCommands(comSet1.FilterCommands(HasTag(["web"])))
+comSet2.AddMany(comSet1.Filter(HasTag(["web"])))
 */
 /*
 new BlockCommands(HasTag(["entertainment"], )

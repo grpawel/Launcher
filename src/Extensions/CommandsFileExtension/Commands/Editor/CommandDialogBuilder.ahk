@@ -138,7 +138,7 @@ class _CommandDialogBuilder_SelectExisting extends _CommandDialogBuilder_Step {
         for key, dto in dtoList {
             dto.base := CommandDTO
             nextStep := this._nextStep
-            commands.AddCommand(dto.key, %nextStep%(dto).SetDescription(dto.description))
+            commands.Add(dto.key, %nextStep%(dto).SetDescription(dto.description))
         }
         contr.RunCommand(WithHelpOpened(commands))
     }
@@ -155,7 +155,7 @@ class _CommandDialogBuilder_SelectCommandClass extends _CommandDialogBuilder_Ste
             dto := this._dto.Clone()
             dto.name := commandName
             nextStep := this._nextStep
-            commandList.AddCommand(commandName, %nextStep%(dto).SetDescription(settings.comment))
+            commandList.Add(commandName, %nextStep%(dto).SetDescription(settings.comment))
         }
         contr.RunCommand(WithHelpOpened(commandList))
         if (this._dto.name != "") {

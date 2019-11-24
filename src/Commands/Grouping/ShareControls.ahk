@@ -30,8 +30,8 @@ new ShareControls([ new ShowMessage("Use multiple search engines")
 /*
 ; Add "hotstrings" to search
 searchHotstrings := new CommandSet({ destroyGuiAfter: "never" })
-searchHotstrings.AddCommand("ahk", new TypeText("{Backspace}{Backspace}{Backspace}AutoHotkey ", { when: "immediate" }))
-searchHotstrings.AddCommand("w10", new TypeText("{Backspace}{Backspace}{Backspace}Windows 10 ", { when: "immediate" }))
+searchHotstrings.Add("ahk", new TypeText("{Backspace}{Backspace}{Backspace}AutoHotkey ", { when: "immediate" }))
+searchHotstrings.Add("w10", new TypeText("{Backspace}{Backspace}{Backspace}Windows 10 ", { when: "immediate" }))
 
 new ShareControls([ _.Search("google.com/search?q=REPLACEME").SetDescription("Search Google")
                   , searchHotstrings ]

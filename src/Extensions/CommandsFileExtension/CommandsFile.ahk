@@ -14,7 +14,7 @@ class CommandsFile {
         this._filePath := filePath
     }
 
-    ; Returns map with command keys as keys (as in `CommandSet.AddCommands()` method).
+    ; Returns map with command keys as keys (as in `CommandSet.AddMany()` method).
     ; Map values have same structure as `CommandDTO` object, but `base` is not set.
     ReadCommandDTOs() {
         settings := this._ReadFile()

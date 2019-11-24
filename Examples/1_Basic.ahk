@@ -22,25 +22,25 @@ BasicExample:                                                   ; only-for-demo
     commands := new CommandSet().SetDescription("Basic example")
     
     ; Add command: "when user types `goo`, open https://google.com"
-    commands.AddCommand("goo", new Open("https://google.com").SetDescription("Google"))
-    commands.AddCommand("ama", new Open("https://amazon.com"))
+    commands.Add("goo", new Open("https://google.com").SetDescription("Google"))
+    commands.Add("ama", new Open("https://amazon.com"))
     ; You can open websites, programs, files and other things.
-    commands.AddCommand("calc", new Open("calc"))
-    commands.AddCommand("hosts", new Open("C:\Windows\system32\drivers\etc\hosts").SetDescription("hosts file"))
+    commands.Add("calc", new Open("calc"))
+    commands.Add("hosts", new Open("C:\Windows\system32\drivers\etc\hosts").SetDescription("hosts file"))
 
     ; Show additional input, then open website with REPLACEME replaced
-    commands.AddCommand("d ", new Search("https://duckduckgo.com?q=REPLACEME").SetDescription("Search in DuckDuckGo"))
+    commands.Add("d ", new Search("https://duckduckgo.com?q=REPLACEME").SetDescription("Search in DuckDuckGo"))
 
     ; Add commands in a loop. These would open folders for drives in your computer.
     for letter in RangeAscii("C", "F") {
-        commands.AddCommand(letter "/", new Open(letter ":\"))
+        commands.Add(letter "/", new Open(letter ":\"))
     }
 
     ; Typing `?` will show or hide help - side window listing all available commands.
-    commands.AddCommand("?", new Help(commands))
+    commands.Add("?", new Help(commands))
     ; Typing `rel` will reload script.
     ; Reloading is necessary when you added a new command in a file and want to use it.
-    commands.AddCommand("rel", new Reload())
+    commands.Add("rel", new Reload())
 
     ; `WithHelpOpened` returns the same CommandSet, but it will have Help opened by default.
     commands := WithHelpOpened(commands)

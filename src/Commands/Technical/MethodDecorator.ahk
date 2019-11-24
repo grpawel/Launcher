@@ -11,11 +11,11 @@
 ; (1)
 ; nested := new CommandSet()
 ; nested.AddTags(...)
-; commands.AddCommand(WithHelpOpened(nested))
+; commands.Add(WithHelpOpened(nested))
 ; (2)
 ; nested := WithHelpOpened(new CommandSet())
 ; nested.AddTags(...)
-; commands.AddCommand(nested)
+; commands.Add(nested)
 class MethodDecorator {
     __New(obj, decorator, decoratedMethodNames) {
         this._obj := obj

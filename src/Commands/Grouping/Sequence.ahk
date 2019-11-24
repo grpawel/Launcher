@@ -14,7 +14,7 @@ class Sequence extends Command {
         return result
     }
 
-    GetCommands() {
+    GetAll() {
         return this._commands
     }
 
