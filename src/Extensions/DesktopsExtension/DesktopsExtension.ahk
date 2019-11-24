@@ -1,4 +1,4 @@
-#Include <windows-desktop-switcher/functions>
+#Include *i <windows-desktop-switcher/functions>
 
 #Include %A_ScriptDir%\src\Extensions\ExtensionManager.ahk
 #Include %A_ScriptDir%\src\Extensions\Extension.ahk

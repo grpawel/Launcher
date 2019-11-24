@@ -1,9 +1,12 @@
+#Include *i <windows-desktop-switcher/functions>
+
 GetDesktop() {
     return Func("GetDesktopFunction")
 }
 
 GetDesktopFunction() {
-    mapDesktopsFromRegistry()
+    static MAP_DESKTOPS_FUNC := Func("mapDesktopsFromRegistry")
+    MAP_DESKTOPS_FUNC.Call()
     global CurrentDesktop
     return CurrentDesktop
 }
@@ -13,7 +16,8 @@ GetTotalDesktops() {
 }
 
 GetTotalDesktopsFunction() {
-    mapDesktopsFromRegistry()
+    static MAP_DESKTOPS_FUNC := Func("mapDesktopsFromRegistry")
+    MAP_DESKTOPS_FUNC.Call()
     global DesktopCount
     return DesktopCount
 }
