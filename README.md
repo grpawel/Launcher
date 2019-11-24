@@ -112,5 +112,8 @@ Many source files contain comments.
 - Mappers
 - Save some changed settings to file
 - Fuzzy matching
+- Automatic detection of installed programs
+- Rename project
 - Tests
+- Logging
 - Internationalization
