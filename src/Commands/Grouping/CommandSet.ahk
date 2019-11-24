@@ -1,4 +1,4 @@
-#Include %A_ScriptDir%\src\Commands\Command.ahk
+﻿#Include %A_ScriptDir%\src\Commands\Command.ahk
 #Include %A_ScriptDir%\src\Utils\ObjectUtils.ahk
 
 ; Store a list of commands with their keys.
@@ -90,6 +90,7 @@ class CommandSet extends Command {
     }
 
     ; Track changes in given commandSet and add commands after filtering and/or mapping.
+    Observe(comSet, pipeline = "") {
         this._backend.Observe(comSet, pipeline)
         return this
     }
@@ -313,11 +314,14 @@ class _CommandSetBackend {
         this._commandSet._eventBus.Emit("commandsRemoved", { removed: removed })
     }
 
-    Observe(comSet, pipeline) {
+    Observe(comSet, pipe) {
         id := RandomString(4)
         observed := {}
         observed.commands := {}
-        observed.pipeline := pipeline
+        if (pipe == "") {
+            pipe := new Pipeline()
+        }
+        observed.pipeline := pipe
         observed.addedSub := comSet.SubscribeCommandsAdded(this._OnCommandsAdded.Bind(this, id))
         observed.removedSub := comSet.SubscribeCommandsRemoved(this._OnCommandsRemoved.Bind(this, id))
         this._observed[id] := observed
