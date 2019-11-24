@@ -73,20 +73,31 @@ class CommandSet extends Command {
     }
 
 
-    ; Returns new empty `CommandSet` with commands matching filter.
-    ; `filter` is called for every command and should return `true` or `false`.
-    ; If `filter` returns `true`, then command is included.
-    ; New `CommandSet` instead of commands only is returned mostly for chaining filters.
-    Filter(filter) {
-        filtered := {}
-        for name, com in this._backend.GetCommands() {
-            if (%filter%(com)) {
-                filtered[name] := com
-            }
-        }
-        filteredCommandSet := new CommandSet()
-        filteredCommandSet._backend.AddCommands(filtered)
-        return filteredCommandSet
+    ; Returns new `CommandSet` with commands passed through pipeline.
+    ; Description and tags are empty.
+    ; Commands from observed CommandSets are included, but no longer observed.
+    ; Example:
+    /*
+    comSet2 := comSet.Transform(new Pipeline().Filter(HasTag(...)))
+    ; equivalent to:
+    comSet2 := new CommandSet.AddCommands(new Pipeline.Filter(HasTag(...)).Apply(comSet.GetCommands()))
+    */
+    Transform(pipeline) {
+        newCommands := pipeline.Apply(this._backend.GetCommands())
+        newCommandSet := new CommandSet()
+        newCommandSet._backend.AddCommands(newCommands)
+        return newCommandSet
+    }
+
+    ; Shortcut for transforming with pipeline containing one filter.
+    ; Example:
+    /*
+    comSet2 := comSet.Filter(HasTag(...))
+    ; equivalent to:
+    comSet2 := comSet.Transform(new Pipeline().Filter(HasTag(...)))
+    */
+    Filter(predicate) {
+        return this.Transform(new Pipeline().Filter(predicate))
     }
 
     ; Track changes in given commandSet and add commands after filtering and/or mapping.
