@@ -23,7 +23,7 @@ class BlockCommands extends Command {
 
     Revert(contr, context) {
         this._EnsureRuleNameIsSet()
-        new UnblockCommands(this._blockerOptions.name).Run(contr, context)
+        contr.RunCommand(new UnblockCommands(this._blockerOptions.name, context))
     }
 
     _EnsureRuleNameIsSet() {

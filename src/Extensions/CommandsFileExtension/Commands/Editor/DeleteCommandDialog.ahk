@@ -12,13 +12,13 @@ class DeleteCommandDialog extends Command {
     }
 
     Run(contr, context) {
-        new CommandDialogBuilder()
-            .SelectExisting(this._commandsFile)
-            .ShowSummary("Deleting command: Close GUI to cancel")
-            .DeleteFromFile(this._commandsFile)
-            .ShowSummary("Command deleted!")
-            .Build()
-            .Run(contr, context)
+        contr.RunCommand(new CommandDialogBuilder()
+                          .SelectExisting(this._commandsFile)
+                          .ShowSummary("Deleting command: Close GUI to cancel")
+                          .DeleteFromFile(this._commandsFile)
+                          .ShowSummary("Command deleted!")
+                          .Build()
+                        , context)
     }
 
     DoesNeedGui() {

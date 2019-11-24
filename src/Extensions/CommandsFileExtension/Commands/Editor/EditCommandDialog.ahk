@@ -14,16 +14,16 @@ class EditCommandDialog extends Command {
     }
 
     Run(contr, context) {
-        new CommandDialogBuilder()
-            .SelectExisting(this._commandsFile)
-            .ShowSummary("Editing command: (if you change key, command will be duplicated)")
-            .SelectCommandClass()
-            .ConstructorFields()
-            .KeyDescriptionTags()
-            .SaveToFile(this._commandsFile)
-            .ShowSummary("Command edited!")
-            .Build()
-            .Run(contr, context)
+        contr.RunCommand(new CommandDialogBuilder()
+                          .SelectExisting(this._commandsFile)
+                          .ShowSummary("Editing command: (if you change key, command will be duplicated)")
+                          .SelectCommandClass()
+                          .ConstructorFields()
+                          .KeyDescriptionTags()
+                          .SaveToFile(this._commandsFile)
+                          .ShowSummary("Command edited!")
+                          .Build()
+                        , context)
     }
 
     DoesNeedGui() {

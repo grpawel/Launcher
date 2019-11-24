@@ -13,14 +13,14 @@ class CreateCommandDialog extends Command {
     }
 
     Run(contr, context) {
-        new CommandDialogBuilder()
-            .SelectCommandClass()
-            .ConstructorFields()
-            .KeyDescriptionTags()
-            .SaveToFile(this._commandsFile)
-            .ShowSummary("Command created!")
-            .Build()
-            .Run(contr, context)
+        contr.RunCommand( new CommandDialogBuilder()
+                           .SelectCommandClass()
+                           .ConstructorFields()
+                           .KeyDescriptionTags()
+                           .SaveToFile(this._commandsFile)
+                           .ShowSummary("Command created!")
+                           .Build()
+                        , context)
     }
 
     DoesNeedGui() {

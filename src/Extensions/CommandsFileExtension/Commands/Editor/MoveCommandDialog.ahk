@@ -13,14 +13,14 @@ class MoveCommandDialog extends Command {
     }
 
     Run(contr, context) {
-        new CommandDialogBuilder()
-            .SelectExisting(this._fromFile)
-            .ShowSummary("Moving command: Close GUI to cancel")
-            .DeleteFromFile(this._fromFile)
-            .SaveToFile(this._toFile)
-            .ShowSummary("Command moved!")
-            .Build()
-            .Run(contr, context)
+        contr.RunCommand(new CommandDialogBuilder()
+                          .SelectExisting(this._fromFile)
+                          .ShowSummary("Moving command: Close GUI to cancel")
+                          .DeleteFromFile(this._fromFile)
+                          .SaveToFile(this._toFile)
+                          .ShowSummary("Command moved!")
+                          .Build()
+                        , context)
     }
 
     DoesNeedGui() {
