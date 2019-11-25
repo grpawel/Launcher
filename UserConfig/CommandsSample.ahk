@@ -11,8 +11,12 @@ CreateCommands() {
     commands.Add("b ", new Search("https://bing.com/search?q=REPLACEME"))
     commands.Add("ama", new Web("https://amazon.com"))
     commands.Add("face", new Web("https://facebook.com"))
-    commands.Add("red", new Web("https://reddit.com"))
-    commands.Add("/", new Search("https://reddit.com/r/REPLACEME").SetDescription("Subreddit"))
+    commands.Add("red", new Web("https://reddit.com").AddTag("entertainment"))
+    commands.Add("/", new Search("https://reddit.com/r/REPLACEME").SetDescription("Subreddit").AddTag("entertainment"))
+    commands.Add("yout", new Web("https://youtube.com").SetDescription("YouTube").AddTag("entertainment"))
+    commands.Add("yt", new Search("https://duckduckgo.com/?q=!ducky+youtube+REPLACEME")
+                            .SetDescription("Open first YouTube result from DuckDuckGo")
+                            .AddTag("entertainment"))
     commands.Add("calc", new Open("calc"))
     commands.Add("pai", new Open("paint"))
     commands.Add("note", new Open("notepad"))
@@ -69,6 +73,12 @@ CreateCommands() {
                                              , { noDestroyCommands: 1 })
                                 .SetDescription("Search multiple websites")
                                 .AddTags(["Web"]))
+
+    ; Block all commands having "entertainment" tag
+    ; run "block" -> run "yout" -> does not work
+    blocker := new BlockCommands(HasTag("entertainment"), { fallbackReason: "no entertainment for you" })
+    commands.Add("block", blocker.SetDescription("Block entertainment commands"))
+    commands.Add("unblock", new RevertCommand(blocker))
 
     commands.Add("?", new Help())
     commands.Add("rel", new Reload())
