@@ -11,7 +11,7 @@ class Search extends Command {
 
     Run(contr, context) {
         gui := contr.GetGui()
-        if (this.GetDescription() != "") {
+        if (this.GetDescription() != "Search " this._urlTemplate && this.GetDescription() != "") {
             gui.AddText({ text: this.GetDescription() })
         }
         guiControl := gui.AddTextInput()
