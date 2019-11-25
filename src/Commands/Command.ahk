@@ -23,6 +23,11 @@ class Command {
         return this
     }
 
+    AddTag(tag) {
+        this._tags.Push(tag)
+        return this
+    }
+
     GetTags() {
         return this._tags
     }
