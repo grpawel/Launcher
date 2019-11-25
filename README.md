@@ -1,5 +1,7 @@
 # Launcher
 
+![version](https://img.shields.io/github/v/tag/grpawel/Launcher)
+
 An utility for launching various things.
 Designed to be as flexible as possible.
 
