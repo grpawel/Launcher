@@ -36,4 +36,4 @@
 #Include %A_ScriptDir%\src\Commands\Wrappers\WithCommandsBlocked.ahk
 #Include %A_ScriptDir%\src\Commands\Wrappers\WithCommandThenReverted.ahk
 #Include %A_ScriptDir%\src\Commands\Wrappers\WithEnvironment.ahk
-#Include %A_ScriptDir%\src\Commands\Wrappers\WithHelpOpened.ahk
+#Include %A_ScriptDir%\src\Commands\Wrappers\WithHelp.ahk

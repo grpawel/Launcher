@@ -11,9 +11,9 @@
 ; (1)
 ; nested := new CommandSet()
 ; nested.AddTags(...)
-; commands.Add(WithHelpOpened(nested))
+; commands.Add(WithHelp(nested))
 ; (2)
-; nested := WithHelpOpened(new CommandSet())
+; nested := WithHelp(new CommandSet())
 ; nested.AddTags(...)
 ; commands.Add(nested)
 class MethodDecorator {
@@ -34,7 +34,7 @@ class MethodDecorator {
         if (result == this._obj && methodName != "_NewEnum") {
             ; Method returned `this`, which is decorated object.
             ; We have to instead return this decorator, in order for method chains to work correctly.
-            ; Otherwise `WithHelpOpened(new CommandSet()).SetDescription()`
+            ; Otherwise `WithHelp(new CommandSet()).SetDescription()`
             ; would return `CommandSet` object and not `MethodDecorator`.
             result := this
         }

@@ -18,7 +18,7 @@ EnvironmentExample:                                         ; only-for-demo
     MsgBox, Press`nCtrl + Shift + /`nto open GUI.           ; only-for-demo
 
     commands := new CommandSet().SetDescription("Environment")
-    commands := WithHelpOpened(commands)
+    commands := WithHelp(commands)
 
 
     ; ====== 1. COMMANDS ======
@@ -77,7 +77,7 @@ EnvironmentExample:                                         ; only-for-demo
     ; If you only want to show commands that use `browser` setting, make a new `CommandSet` with only some commands:
     webCommands := commands.Filter(IsCommand([ "Web", "Search" ]))
     commands.Add("withchr", WithEnvironment({ settings: { browser: "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" } }
-                                                   , WithHelpOpened(webCommands))
+                                                   , WithHelp(webCommands))
                                                   .SetDescription("Run next command using Chrome browser"))
 
 
@@ -132,7 +132,7 @@ EnvironmentExample:                                         ; only-for-demo
         commands.Add("use" program[1], new ChangeEnvironment({ settings: { "textFile": program[3]}})
                                             .SetDescription("Use " program[2] " for opening text files"))
         commands.Add("with" program[1], WithEnvironment({ settings: { "textFile": program[3] } }
-                                                       , WithHelpOpened(textCommands)
+                                                       , WithHelp(textCommands)
                                                        , { wrapper: "opaque" } )
                                          .SetDescription("Open text file using " program[2]))
     }

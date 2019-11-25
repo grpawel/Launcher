@@ -42,8 +42,8 @@ BasicExample:                                                   ; only-for-demo
     ; Reloading is necessary when you added a new command in a file and want to use it.
     commands.Add("rel", new Reload())
 
-    ; `WithHelpOpened` returns the same CommandSet, but it will have Help opened by default.
-    commands := WithHelpOpened(commands)
+    ; `WithHelp` returns the same CommandSet, but it will have Help opened by default.
+    commands := WithHelp(commands)
     ; These two next lines are required for everything to work.
     contr := new Controller(new Environment(), new Gui())
     contr.SetRootCommand(commands)

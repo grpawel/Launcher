@@ -16,7 +16,7 @@ ComposingExample:                                           ; only-for-demo
     MsgBox, Press`nCtrl + Shift + /`nto open GUI.           ; only-for-demo
 
     commands := new CommandSet().SetDescription("Composing")
-    commands := WithHelpOpened(commands)
+    commands := WithHelp(commands)
 
 
 
@@ -31,7 +31,7 @@ ComposingExample:                                           ; only-for-demo
     entertainment.Add("yt", new Web("https://youtube.com"))
     entertainment.Add("red", new Web("https://reddit.com"))
     entertainment.Add("/", new Search("https://reddit.com/r/REPLACEME").SetDescription("Subreddit"))
-    commands.Add("nested", WithHelpOpened(entertainment))
+    commands.Add("nested", WithHelp(entertainment))
 
     ; There's no limit to depth of nesting and loops are allowed:
     commands.Add("com", commands)
@@ -56,10 +56,10 @@ ComposingExample:                                           ; only-for-demo
     ; You can still add commands to `observing` as usual.
     ; `observing` can track changes from multiple CommandSets.
 
-    commands.Add("obs", WithHelpOpened(new CommandSet()
-                         .Add("0", WithHelpOpened(observed).SetDescription("All commands"))
-                         .Add("1", WithHelpOpened(filtering).SetDescription("Filtered"))
-                         .Add("2", WithHelpOpened(observing).SetDescription("Observed"))
+    commands.Add("obs", WithHelp(new CommandSet()
+                         .Add("0", WithHelp(observed).SetDescription("All commands"))
+                         .Add("1", WithHelp(filtering).SetDescription("Filtered"))
+                         .Add("2", WithHelp(observing).SetDescription("Observed"))
                          .SetDescription("1.2 Observing CommandSets") ))
 
 
@@ -128,7 +128,7 @@ ComposingExample_SkipDefinition2_2_a:                       ; only-for-demo
 
     ; Options do not have to be simple commands:
     commands.Add("ent", new Choice(Func("DoYouReally")
-                                  , { 1: new Sequence([ new ShowMessage("Time for fun!"), WithHelpOpened(entertainment) ])
+                                  , { 1: new Sequence([ new ShowMessage("Time for fun!"), WithHelp(entertainment) ])
                                     , 0: new ShowMessage("You did not entertain yourself") })
                              .SetDescription("Entertainment?"))
 
@@ -213,7 +213,7 @@ ComposingExample_SkipDefinition2_2_b:                       ; only-for-demo
                                          , new Search("google.com/search?q=REPLACEME")
                                          , new Search("duckduckgo.com/?q=REPLACEME")
                                          , new Search("bing.com/search?q=REPLACEME")
-                                         , WithHelpOpened(searchHotstrings) ]
+                                         , WithHelp(searchHotstrings) ]
                                          , { allowDisabling: false, noDestroyCommands: 2 })
                              .SetDescription("Search multiple sites with visible hotstrings"))
 
@@ -226,7 +226,7 @@ ComposingExample_SkipDefinition2_2_b:                       ; only-for-demo
     ; You can find them in src/Functions/Predicates.ahk file.
     
     ; They are used for example in filtering CommandSets.
-    predicateExamples := WithHelpOpened(new CommandSet()).SetDescription("3.1. Predicates examples")
+    predicateExamples := WithHelp(new CommandSet()).SetDescription("3.1. Predicates examples")
     commands.Add("pred", predicateExamples)
 
     ; Some sample commands 
@@ -244,8 +244,8 @@ ComposingExample_SkipDefinition2_2_b:                       ; only-for-demo
                                    .AddMany({ "web": webYoutube
                                             , "search": searchYoutube })
                                     .SetDescription("CommandSet, tags: []"))
-    sampleCommands.Add("withHelp", WithHelpOpened(new CommandSet())
-                                    .SetDescription("WithHelpOpened(CommandSet), tags: []"))
+    sampleCommands.Add("withHelp", WithHelp(new CommandSet())
+                                    .SetDescription("WithHelp(CommandSet), tags: []"))
 
 
     predicateExamples.Add("0", sampleCommands.SetDescription("All commands"))
@@ -262,8 +262,8 @@ ComposingExample_SkipDefinition2_2_b:                       ; only-for-demo
                                                . "`n=`n``IsClass([""Web"", ""Search""]``"))
 
     ; Here you would expect "set" and "withHelp" commands, but there's only "set" command.
-    ; `IsClass` does not work for wrapped commands, like WithHelpOpened(comSet).
-    ; Technically `WithHelpOpened(new CommandSet())` returns `MethodDecorator` object,
+    ; `IsClass` does not work for wrapped commands, like WithHelp(comSet).
+    ; Technically `WithHelp(new CommandSet())` returns `MethodDecorator` object,
     ; so checking `__Class` does not work here.
     predicateExamples.Add("3", sampleCommands.Filter(IsClass("CommandSet"))
                                 .SetDescription("Commands with ""CommandSet"" class"
@@ -297,7 +297,7 @@ ComposingExample_SkipDefinition2_2_b:                       ; only-for-demo
     ; Add help and "back" commands
     for key, example in predicateExamples.GetAll() {
         example.Add("b", new Sequence([ new ResetGui(), predicateExamples ]).SetDescription("← Go back to examples"))
-        predicateExamples.Add(key, WithHelpOpened(example))
+        predicateExamples.Add(key, WithHelp(example))
     }
 
 
@@ -305,7 +305,7 @@ ComposingExample_SkipDefinition2_2_b:                       ; only-for-demo
     ; ====== 4. WRAPPERS ======
     
     ; Wrappers add some functionality.
-    ; We already used `WithHelpOpened` and `WithEnvironment`.
+    ; We already used `WithHelp` and `WithEnvironment`.
     ; It was said that they return the same command, but it works slightly differently.
     ; They create `Sequence` internally with some commands,
     ; then wrap that sequence in a special object that passes all method calls to given command, except for `Run`.

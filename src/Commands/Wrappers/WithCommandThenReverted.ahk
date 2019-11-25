@@ -19,7 +19,7 @@
 ;                                    so in most other places behaves like `wrapped`.
 ; wrapper: "opaque" - returns new command. Description, tags etc. must be set again.
 ;
-; For explanation how it works, see also `WithHelpOpened` and `MethodDecorator` docs.
+; For explanation how it works, see also `WithHelp` and `MethodDecorator` docs.
 WithCommandThenReverted(commandToRevert, wrapped, options = "") {
     static V := new ValidatorFactory()
     static VAL := V.Object({ "mode": V.OneOf(["forCommand", "permanent", "untilGuiDestroyed"])

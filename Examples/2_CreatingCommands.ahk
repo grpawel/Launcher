@@ -69,7 +69,7 @@ CreatingCommandsExample:                                    ; only-for-demo
     commands.Add("?", _.Help(commands))
     commands.Add("rel", _.Reload())
     contr := new Controller(new Environment(), new Gui())
-    contr.SetRootCommand(WithHelpOpened(commands))
+    contr.SetRootCommand(WithHelp(commands))
 
     activeExample := "creatingCommands"                     ; only-for-demo
     return                                                  ; only-for-demo

@@ -1,4 +1,4 @@
-﻿; Sample file with commands.
+; Sample file with commands.
 ; Copy it and fill with your commands.
 ; See examples in Examples folder.
 CreateCommands() {
@@ -17,5 +17,5 @@ CreateCommands() {
     commands.Add("?", new Help(commands))
     commands.Add("rel", new Reload())
 
-    return WithHelpOpened(commands)
+    return WithHelp(commands)
 }

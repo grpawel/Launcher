@@ -140,7 +140,7 @@ class _CommandDialogBuilder_SelectExisting extends _CommandDialogBuilder_Step {
             nextStep := this._nextStep
             commands.Add(dto.key, %nextStep%(dto).SetDescription(dto.description))
         }
-        contr.RunCommand(WithHelpOpened(commands))
+        contr.RunCommand(WithHelp(commands))
     }
 }
 
@@ -157,7 +157,7 @@ class _CommandDialogBuilder_SelectCommandClass extends _CommandDialogBuilder_Ste
             nextStep := this._nextStep
             commandList.Add(commandName, %nextStep%(dto).SetDescription(settings.comment))
         }
-        contr.RunCommand(WithHelpOpened(commandList))
+        contr.RunCommand(WithHelp(commandList))
         if (this._dto.name != "") {
             commandList.GetGuiControl().SetText(this._dto.name)
         }

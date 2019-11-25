@@ -35,7 +35,7 @@ UsingGuiExample:                                            ; only-for-demo
     ; Help shows list of commands from given `CommandSet` object.
     commands.Add("1", new Sequence([ new ResetGui()
                                    , doubleClickExplanation
-                                   , WithHelpOpened(doubleClick) ])
+                                   , WithHelp(doubleClick) ])
                            .SetDescription("Use the list to the right"))
 
 
@@ -66,11 +66,11 @@ UsingGuiExample:                                            ; only-for-demo
                                                            . "Type ""a"" to run ""amazon""."
                                                           , { textColor: Colors.AQUA }) ])
     ; Note that we sometimes use `Sequence([..., comset, new Help(comset)])`
-    ; and sometimes `Sequence([..., WithHelpOpened(comset)])`. 
+    ; and sometimes `Sequence([..., WithHelp(comset)])`. 
     ; These have the same result.
     commands.Add("3", new Sequence([ new ResetGui()
                                    , immediateExplanation
-                                   , WithHelpOpened(immediate) ])
+                                   , WithHelp(immediate) ])
                            .SetDescription("Match immediately"))
 
 
@@ -108,7 +108,7 @@ UsingGuiExample:                                            ; only-for-demo
                                                               , { textColor: Colors.AQUA }) ])
     commands.Add("5", new Sequence([ new ResetGui()
                                    , enterShortcutExplanation
-                                   , WithHelpOpened(enterShortcut) ])
+                                   , WithHelp(enterShortcut) ])
                            .SetDescription("Use Enter to select"))
 
 
@@ -120,12 +120,12 @@ UsingGuiExample:                                            ; only-for-demo
                                              , { textColor: Colors.YELLOW })
     commands.Add("6", new Sequence([ new ResetGui()
                                    , overlappingExplanation
-                                   , WithHelpOpened(overlapping) ])
+                                   , WithHelp(overlapping) ])
                            .SetDescription("Overlapping command keys"))
 
     commands.Add("rel", new Reload())
     contr := new Controller(new Environment(), new Gui())
-    contr.SetRootCommand(WithHelpOpened(commands))
+    contr.SetRootCommand(WithHelp(commands))
 
     activeExample := "usingGui"                             ; only-for-demo
     return                                                  ; only-for-demo
