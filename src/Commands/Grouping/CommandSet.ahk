@@ -80,7 +80,7 @@ class CommandSet extends Command {
     /*
     comSet2 := comSet.Transform(new Pipeline().Filter(HasTag(...)))
     ; equivalent to:
-    comSet2 := new CommandSet.AddCommands(new Pipeline.Filter(HasTag(...)).Apply(comSet.GetCommands()))
+    comSet2 := new CommandSet.AddCommands(new Pipeline.Filter(HasTag(...)).Apply(comSet.GetAll()))
     */
     Transform(pipeline) {
         newCommands := pipeline.Apply(this._backend.GetCommands())
@@ -336,7 +336,7 @@ class _CommandSetBackend {
         observed.addedSub := comSet.SubscribeCommandsAdded(this._OnCommandsAdded.Bind(this, id))
         observed.removedSub := comSet.SubscribeCommandsRemoved(this._OnCommandsRemoved.Bind(this, id))
         this._observed[id] := observed
-        this._OnCommandsAdded(id, { added: comSet.GetCommands() })
+        this._OnCommandsAdded(id, { added: comSet.GetAll() })
     }
 
     _OnCommandsAdded(id, payload) {
